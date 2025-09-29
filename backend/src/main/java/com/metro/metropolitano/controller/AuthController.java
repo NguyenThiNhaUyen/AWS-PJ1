@@ -3,8 +3,9 @@ package com.metro.metropolitano.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.net.URLDecoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -37,8 +39,6 @@ public class AuthController {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     @Autowired
     private OAuth2UserServiceImpl oauth2UserService;
@@ -51,6 +51,27 @@ public class AuthController {
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret:}")
     private String googleClientSecret;
+
+    @GetMapping("/oauth2/authorize")
+    public ResponseEntity<Map<String, String>> getAuthorizationUrl(@RequestParam String provider, @RequestParam String redirectUri) {
+        if (!"google".equalsIgnoreCase(provider)) {
+            throw new IllegalArgumentException("Only google provider supported");
+        }
+
+        String base = "https://accounts.google.com/o/oauth2/v2/auth";
+        String scope = "openid email profile";
+        StringBuilder sb = new StringBuilder(base);
+        sb.append("?client_id=").append(URLEncoder.encode(googleClientId, StandardCharsets.UTF_8));
+        sb.append("&redirect_uri=").append(URLEncoder.encode(redirectUri, StandardCharsets.UTF_8));
+        sb.append("&response_type=code");
+        sb.append("&scope=").append(URLEncoder.encode(scope, StandardCharsets.UTF_8));
+        sb.append("&access_type=offline");
+        sb.append("&include_granted_scopes=true");
+        sb.append("&prompt=consent");
+
+        return ResponseEntity.ok(Map.of("url", sb.toString()));
+    }
+    
 
     
     @PostMapping("/register")
@@ -73,8 +94,20 @@ public class AuthController {
         HttpClient client = HttpClient.newHttpClient();
         URI tokenUri = URI.create("https://oauth2.googleapis.com/token");
 
+        // If client sent an URL-encoded code (contains % or +), decode it first to avoid double-encoding
+        String incoming = req.getCode();
+        String codeValue = incoming;
+        if (codeValue != null && (codeValue.contains("%") || codeValue.contains("+"))) {
+            try {
+                codeValue = URLDecoder.decode(codeValue, StandardCharsets.UTF_8);
+            } catch (IllegalArgumentException ex) {
+                // fallback to original if decode fails for any reason
+                codeValue = incoming;
+            }
+        }
+
         Map<String, String> form = new HashMap<>();
-        form.put("code", req.getCode());
+        form.put("code", codeValue);
         form.put("client_id", googleClientId);
         form.put("client_secret", googleClientSecret);
         form.put("redirect_uri", req.getRedirectUri());

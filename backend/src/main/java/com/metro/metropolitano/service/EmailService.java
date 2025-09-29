@@ -138,7 +138,7 @@ public class EmailService {
                         </div>
                         <div class="content">
                             <p>Chào <strong>%s</strong>,</p>
-                            <p>Bạn đã yêu cầu đặt lại mật khẩu cho tài khoản GameTracker của mình.</p>
+                            <p>Bạn đã yêu cầu đặt lại mật khẩu cho tài khoản Metro Politano của mình.</p>
                             <p>Vui lòng sử dụng mã xác nhận 6 chữ số bên dưới:</p>
                             
                             <div class="code-box">
