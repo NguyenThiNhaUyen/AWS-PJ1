@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore local application properties (sensitive credentials)
+src/main/resources/application.properties

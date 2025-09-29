@@ -1,0 +1,37 @@
+# Root .gitignore for the metropolitano workspace
+
+# Maven / build
+**/target/
+**/build/
+
+# Backend maven wrapper
+/backend/.mvn/wrapper/maven-wrapper.jar
+
+# Ignore backend build artifacts
+/backend/target/
+
+# Ignore local application properties (sensitive credentials)
+/backend/src/main/resources/application.properties
+/backend/src/main/resources/application-*.properties
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Java
+*.class
+
+# Environment files
+.env
+.env.local
+
+# Optional: ignore the frontend/node_modules if frontend added later
+frontend/node_modules/
