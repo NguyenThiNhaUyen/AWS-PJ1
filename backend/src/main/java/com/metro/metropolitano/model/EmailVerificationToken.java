@@ -1,5 +1,6 @@
 package com.metro.metropolitano.model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -112,6 +113,6 @@ public class EmailVerificationToken {
         if (LocalDateTime.now().isAfter(canResendAt)) {
             return 0;
         }
-        return java.time.Duration.between(LocalDateTime.now(), canResendAt).getSeconds();
+    return Duration.between(LocalDateTime.now(), canResendAt).getSeconds();
     }
 }

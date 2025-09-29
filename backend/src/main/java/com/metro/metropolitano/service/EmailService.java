@@ -36,22 +36,22 @@ public class EmailService {
             
             helper.setFrom(fromEmail);
             helper.setTo(to);
-            helper.setSubject("Xác thực tài khoản GameTracker");
+            helper.setSubject("Xác thực tài khoản Metro Politano");
             
             String verificationUrl = backendUrl + "/api/auth/verify-email?token=" + token;
             
             String htmlContent = """
                 <html>
                 <body>
-                    <h2>Chào mừng bạn đến với GameTracker!</h2>
-                    <p>Cảm ơn bạn đã đăng ký tài khoản. Vui lòng click vào link bên dưới để xác thực email của bạn:</p>
-                    <p><a href="%s" style="background-color: #4CAF50; color: white; padding: 14px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">Xác thực Email</a></p>
-                    <p>Hoặc copy và paste link sau vào trình duyệt:</p>
+                    <h2>Chào mừng bạn đến với Metro Politano!</h2>
+                    <p>Cảm ơn bạn đã đăng ký tài khoản. Vui lòng bấm vào nút bên dưới để xác thực email và kích hoạt đầy đủ quyền sử dụng:</p>
+                    <p><a href="%s" style="background-color: #0066cc; color: white; padding: 14px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">Xác thực Email</a></p>
+                    <p>Hoặc copy và dán link sau vào trình duyệt:</p>
                     <p>%s</p>
                     <p>Link này sẽ hết hạn sau 24 giờ.</p>
                     <br>
                     <p>Trân trọng,<br>
-                    Đội ngũ GameTracker</p>
+                    Đội ngũ Metro Politano</p>
                 </body>
                 </html>
                 """.formatted(verificationUrl, verificationUrl);
@@ -75,23 +75,24 @@ public class EmailService {
             
             helper.setFrom(fromEmail);
             helper.setTo(to);
-            helper.setSubject("Chào mừng bạn đến với GameTracker!");
+            helper.setSubject("Chào mừng bạn đến với Metro Politano!");
             
             String htmlContent = """
                 <html>
                 <body>
                     <h2>Chào %s!</h2>
                     <p>Tài khoản của bạn đã được xác thực thành công!</p>
-                    <p>Bây giờ bạn có thể:</p>
+                    <p>Bây giờ bạn có thể sử dụng Metro Politano để:</p>
                     <ul>
-                        <li>Tìm kiếm trang phục cosplay phù hợp</li>
-                        <li>Nhận gợi ý pose chụp ảnh từ AI</li>
-                        <li>Khám phá thế giới cosplay đầy màu sắc</li>
+                        <li>Xem lịch trình và tình trạng chạy tàu theo thời gian thực</li>
+                        <li>Tra cứu tuyến, điểm dừng và thời gian di chuyển</li>
+                        <li>Nhận thông báo trễ, sự cố hoặc thay đổi lịch trình</li>
+                        <li>Mua và quản lý vé điện tử (nếu có)</li>
                     </ul>
-                    <p>Chúc bạn có những trải nghiệm tuyệt vời!</p>
+                    <p>Chúc bạn có những hành trình thuận tiện và an toàn!</p>
                     <br>
                     <p>Trân trọng,<br>
-                    Đội ngũ GameTracker</p>
+                    Đội ngũ Metro Politano</p>
                 </body>
                 </html>
                 """.formatted(fullName);
@@ -115,7 +116,7 @@ public class EmailService {
             
             helper.setFrom(fromEmail);
             helper.setTo(to);
-            helper.setSubject("Đặt lại mật khẩu - GameTracker");
+            helper.setSubject("Đặt lại mật khẩu - Metro Politano");
             
             String htmlContent = """
                 <html>
@@ -132,7 +133,7 @@ public class EmailService {
                 <body>
                     <div class="container">
                         <div class="header">
-                            <h1>🎭 GameTracker</h1>
+                            <h1>🚆 Metro Politano</h1>
                             <h2>Đặt lại mật khẩu</h2>
                         </div>
                         <div class="content">
@@ -154,8 +155,8 @@ public class EmailService {
                             
                             <p>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này và tài khoản của bạn vẫn sẽ an toàn.</p>
                         </div>
-                        <div class="footer">
-                            <p>© 2025 GameTracker - Nền tảng gợi ý cosplay thông minh</p>
+                            <div class="footer">
+                            <p>© 2025 Metro Politano - Ứng dụng quản lý và theo dõi tuyến metro</p>
                             <p>Email này được gửi tự động, vui lòng không trả lời.</p>
                         </div>
                     </div>
@@ -171,6 +172,47 @@ public class EmailService {
         } catch (MessagingException e) {
             logger.error("Failed to send password reset email to: {}", to, e);
             throw new RuntimeException("Failed to send password reset email", e);
+        }
+    }
+
+    @Async
+    public void sendCredentialsEmail(String to, String fullName, String username, String rawPassword) {
+        logger.info("Sending credentials email to: {}", to);
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(fromEmail);
+            helper.setTo(to);
+            helper.setSubject("Thông tin đăng nhập Metro Politano");
+
+            String htmlContent = """
+                <html>
+                <body>
+                    <h2>Chào %s!</h2>
+                    <p>Tài khoản của bạn đã được tạo qua Google OAuth. Dưới đây là thông tin đăng nhập tạm thời:</p>
+                    <ul>
+                        <li><strong>Username:</strong> %s</li>
+                        <li><strong>Password (tạm thời):</strong> %s</li>
+                    </ul>
+                    <p>Vì lý do bảo mật, bạn nên đổi mật khẩu ngay sau khi đăng nhập bằng tính năng "Đổi mật khẩu" hoặc sử dụng chức năng "Quên mật khẩu" để đặt mật khẩu mới.</p>
+                    <p>Nếu bạn không yêu cầu tạo tài khoản này, vui lòng liên hệ bộ phận hỗ trợ.</p>
+                    <br>
+                    <p>Trân trọng,<br>
+                    Đội ngũ Metro Politano</p>
+                </body>
+                </html>
+                """.formatted(fullName, username, rawPassword);
+
+            helper.setText(htmlContent, true);
+
+            mailSender.send(message);
+            logger.info("Credentials email sent successfully to: {}", to);
+
+        } catch (MessagingException e) {
+            logger.error("Failed to send credentials email to: {}", to, e);
+            // don't throw to avoid breaking authentication flow; just log
         }
     }
 }

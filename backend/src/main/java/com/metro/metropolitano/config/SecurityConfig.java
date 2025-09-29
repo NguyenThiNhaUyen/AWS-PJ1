@@ -21,6 +21,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.metro.metropolitano.service.UserDetailsServiceImpl;
+// OAuth2 redirect handlers removed - using API-first code exchange flow
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +33,8 @@ public class SecurityConfig {
     
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
+
+    // No oauth2 redirect handlers for API-first flow
     
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.metro.metropolitano.model.Account;
+import com.metro.metropolitano.model.Provider;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
@@ -18,6 +19,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByUsername(String username);
 
     Optional<Account> findByEmail(String email);
+
+    Optional<Account> findByProviderAndProviderId(Provider provider, String providerId);
 
     boolean existsByUsername(String username);
 
