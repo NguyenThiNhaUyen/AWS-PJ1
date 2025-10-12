@@ -1,0 +1,367 @@
+/* Metro Futuristic - Urban Night Glow Design System */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #0a0c20;
+  color: #ffffff;
+  line-height: 1.6;
+  overflow-x: hidden;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Futuristic Color Palette */
+:root {
+  /* Primary Dark Colors */
+  --primary-dark: #0a0c20;
+  --primary-medium: #11152e;
+  --primary-light: #1a1f3a;
+  --surface-glass: rgba(17, 21, 46, 0.8);
+  
+  /* Neon Accent Colors */
+  --accent-blue: #4d86be;
+  --accent-bright: #6aa9ff;
+  --accent-glow: #7db4ff;
+  --accent-dark: #3a6fa0;
+  
+  /* Text Colors */
+  --text-white: #ffffff;
+  --text-light: #e8eaed;
+  --text-muted: #9aa0a6;
+  --text-accent: var(--accent-bright);
+  
+  /* Neon Glow Effects */
+  --glow-sm: 0 0 10px rgba(106, 169, 255, 0.3);
+  --glow-md: 0 0 20px rgba(106, 169, 255, 0.5);
+  --glow-lg: 0 0 30px rgba(106, 169, 255, 0.7);
+  --glow-xl: 0 0 50px rgba(106, 169, 255, 0.9);
+  
+  /* Box Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 12px 60px rgba(0, 0, 0, 0.7);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-bright) 100%);
+  --gradient-button: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-bright) 50%, var(--accent-glow) 100%);
+  --gradient-hero: linear-gradient(135deg, rgba(10, 12, 32, 0.85) 0%, rgba(77, 134, 190, 0.6) 100%);
+  --gradient-login: linear-gradient(135deg, rgba(10, 12, 32, 0.9) 0%, rgba(26, 31, 58, 0.8) 100%);
+  
+  /* Border Gradients */
+  --border-glow: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent-blue) 50%, var(--accent-bright) 100%);
+  
+  /* Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-glow: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-scale: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+h1 { 
+  font-size: 3.5rem; 
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--text-white) 0%, var(--accent-bright) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2 { 
+  font-size: 2.5rem; 
+  font-weight: 800;
+}
+
+h3 { 
+  font-size: 1.8rem; 
+  font-weight: 700;
+}
+
+p {
+  color: var(--text-light);
+  margin-bottom: 1rem;
+  font-weight: 400;
+}
+
+/* Futuristic Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  background: var(--gradient-button);
+  color: var(--text-white);
+  text-decoration: none;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition-glow);
+  box-shadow: var(--shadow-md), var(--glow-sm);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-lg), var(--glow-md);
+  filter: brightness(1.1);
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-large {
+  padding: 18px 36px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 16px;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--accent-blue);
+  color: var(--accent-bright);
+  box-shadow: var(--shadow-sm), inset var(--glow-sm);
+}
+
+.btn-outline:hover {
+  background: var(--gradient-accent);
+  color: var(--text-white);
+  border-color: var(--accent-bright);
+  box-shadow: var(--shadow-lg), var(--glow-md);
+}
+
+/* Futuristic Card Styles */
+.card {
+  background: var(--surface-glass);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(77, 134, 190, 0.2);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--border-glow);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-xl), var(--glow-md);
+  border-color: var(--accent-blue);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-label {
+  display: block;
+  color: var(--text-light);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(26, 31, 58, 0.6);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(77, 134, 190, 0.3);
+  border-radius: 12px;
+  color: var(--text-white);
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  transition: var(--transition-glow);
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: var(--glow-md), inset var(--glow-sm);
+  background: rgba(26, 31, 58, 0.8);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-accent { color: var(--text-accent); }
+.mb-1 { margin-bottom: 1rem; }
+.mb-2 { margin-bottom: 2rem; }
+.mt-1 { margin-top: 1rem; }
+.mt-2 { margin-top: 2rem; }
+
+/* Animation Classes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: var(--glow-sm); }
+  50% { box-shadow: var(--glow-md); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.glow-animation {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.pulse-animation {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Loading Spinner */
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid transparent;
+  border-top: 3px solid var(--accent-bright);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.5rem; }
+  
+  .btn {
+    padding: 12px 24px;
+    font-size: 0.9rem;
+  }
+  
+  .btn-large {
+    padding: 16px 32px;
+    font-size: 1.1rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
+  
+  .btn-large {
+    padding: 14px 28px;
+    font-size: 1rem;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+  
+  .form-input {
+    padding: 14px 16px;
+  }
+}

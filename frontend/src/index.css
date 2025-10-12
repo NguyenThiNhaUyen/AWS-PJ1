@@ -1,0 +1,298 @@
+/* Reset và Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-white);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Professional Theme Variants */
+.theme-light {
+  background-color: var(--bg-light);
+  color: var(--text-black);
+}
+
+.theme-professional {
+  background-color: var(--bg-white);
+  color: var(--text-dark);
+}
+
+/* CSS Variables - Professional Color Scheme */
+:root {
+  /* Primary Colors */
+  --primary-dark: #0a0c20;    /* Xanh đen đậm - background chính */
+  --accent-blue: #4d86be;     /* Xanh dương sáng - accent color */
+  --hover-blue: #5da0de;      /* Hover state cho accent */
+  
+  /* Professional Neutrals */
+  --pure-white: #ffffff;      /* Trắng tinh khiết */
+  --pure-black: #000000;      /* Đen tinh khiết */
+  --off-white: #f8f9fa;       /* Trắng kem nhẹ */
+  --charcoal: #1a1a1a;        /* Đen than chì */
+  --dark-grey: #2c2c2c;       /* Xám đen */
+  --medium-grey: #4a4a4a;     /* Xám trung */
+  --light-grey: #6c757d;      /* Xám nhạt */
+  --soft-grey: #e9ecef;       /* Xám mềm */
+  
+  /* Text Colors */
+  --text-white: #ffffff;      /* Text trắng chính */
+  --text-black: #212529;      /* Text đen chính */
+  --text-light: #cfd8dc;      /* Text xanh nhạt */
+  --text-muted: #6c757d;      /* Text xám muted */
+  --text-dark: #343a40;       /* Text đen đậm */
+  
+  /* Background Colors */
+  --bg-primary: #0a0c20;      /* Background chính */
+  --bg-secondary: #11152e;    /* Background phụ */
+  --bg-light: #f8f9fa;        /* Background sáng */
+  --bg-white: #ffffff;        /* Background trắng */
+  --bg-dark: #1a1a1a;         /* Background đen */
+  --bg-card: #11152e;         /* Background card */
+  --bg-card-light: #ffffff;   /* Background card sáng */
+  
+  /* Border Colors */
+  --border-color: #2a2f45;    /* Border tối */
+  --border-light: #dee2e6;    /* Border sáng */
+  --border-medium: #adb5bd;   /* Border trung */
+  
+  /* Shadows */
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.2);
+  --shadow-white: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --shadow-professional: 0 4px 6px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.06);
+  
+  /* Status Colors */
+  --success: #28a745;
+  --danger: #dc3545;
+  --warning: #ffc107;
+  --info: #17a2b8;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: var(--text-white);
+  margin-bottom: 1rem;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+
+p {
+  color: var(--text-light);
+  margin-bottom: 1rem;
+}
+
+/* Button Base Styles */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: var(--accent-blue);
+  color: var(--text-white);
+  text-decoration: none;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-light);
+}
+
+.btn:hover {
+  filter: brightness(1.2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.btn-outline:hover {
+  background-color: var(--accent-blue);
+  color: var(--text-white);
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Card Styles */
+.card {
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(77, 134, 190, 0.2);
+}
+
+/* Professional Card Variants */
+.card-light {
+  background-color: var(--bg-card-light);
+  color: var(--text-dark);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-professional);
+}
+
+.card-light:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-professional {
+  background-color: var(--bg-white);
+  color: var(--text-black);
+  border: 2px solid var(--soft-grey);
+  box-shadow: var(--shadow-white);
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  color: var(--text-white);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: transparent;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-white);
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(77, 134, 190, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--text-light);
+  opacity: 0.7;
+}
+
+/* Professional Form Variants */
+.form-input-light {
+  background-color: var(--bg-white);
+  border: 2px solid var(--border-light);
+  color: var(--text-black);
+}
+
+.form-input-light::placeholder {
+  color: var(--text-muted);
+}
+
+.form-input-light:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(77, 134, 190, 0.1);
+}
+
+.form-input-professional {
+  background-color: var(--off-white);
+  border: 1px solid var(--border-medium);
+  color: var(--text-dark);
+  box-shadow: var(--shadow-professional);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-accent { color: var(--accent-blue); }
+.mb-1 { margin-bottom: 1rem; }
+.mb-2 { margin-bottom: 2rem; }
+.mt-1 { margin-top: 1rem; }
+.mt-2 { margin-top: 2rem; }
+
+/* Loading Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid var(--text-white);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
