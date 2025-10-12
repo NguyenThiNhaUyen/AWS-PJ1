@@ -1,0 +1,378 @@
+/* Two Column Register Design */
+.register-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Poppins', 'Inter', sans-serif;
+}
+
+/* Left Side - Form */
+.register-left {
+  flex: 1;
+  background: #0a0c20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.register-form-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.register-header h1 {
+  color: #cfd8dc;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.register-header p {
+  color: rgba(207, 216, 220, 0.7);
+  font-size: 0.95rem;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: rgba(17, 21, 46, 0.8);
+  border: 2px solid rgba(77, 134, 190, 0.2);
+  border-radius: 8px;
+  color: #cfd8dc;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-input::placeholder {
+  color: rgba(207, 216, 220, 0.5);
+}
+
+.form-input:focus {
+  border-color: #4d86be;
+  background: rgba(17, 21, 46, 0.9);
+  box-shadow: 0 0 0 3px rgba(77, 134, 190, 0.2);
+}
+
+.register-button {
+  background: linear-gradient(135deg, #4d86be 0%, #6aa9ff 100%);
+  color: white;
+  border: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 15px rgba(77, 134, 190, 0.2);
+}
+
+.register-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(77, 134, 190, 0.3);
+}
+
+.register-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.register-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: rgba(207, 216, 220, 0.6);
+  font-size: 0.85rem;
+}
+
+.register-footer span {
+  margin-right: 0.5rem;
+}
+
+.login-link {
+  color: #4d86be;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.login-link:hover {
+  color: #6aa9ff;
+}
+
+.error-message {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  color: #ff6b6b;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Right Side - Information */
+.register-right {
+  flex: 1;
+  background: linear-gradient(135deg, #4d86be 0%, #6aa9ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.register-right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.info-content {
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+}
+
+.metro-logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logo-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: white;
+  margin-right: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #cfd8dc;
+}
+
+.info-content h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #cfd8dc;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.intro-text {
+  font-size: 1.1rem;
+  color: rgba(207, 216, 220, 0.8);
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+
+.benefits {
+  margin-bottom: 3rem;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.benefit-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-right: 1rem;
+  flex-shrink: 0;
+  backdrop-filter: blur(10px);
+}
+
+.benefit-text h4 {
+  color: #cfd8dc;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.benefit-text p {
+  color: rgba(207, 216, 220, 0.8);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.stat {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(17, 21, 46, 0.3);
+  border-radius: 12px;
+  border: 1px solid rgba(77, 134, 190, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #cfd8dc;
+  margin-bottom: 0.25rem;
+}
+
+/* Special highlight for key numbers */
+.stat-number.highlight {
+  color: #fdd835;
+  text-shadow: 0 0 8px rgba(253, 216, 53, 0.3);
+}
+
+/* Highlight accent for special text */
+.highlight-accent {
+  color: #fdd835;
+  font-weight: 700;
+}
+
+.stat-label {
+  color: rgba(207, 216, 220, 0.8);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .register-right {
+    padding: 2rem;
+  }
+  
+  .info-content h2 {
+    font-size: 1.8rem;
+  }
+  
+  .intro-text {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .register-container {
+    flex-direction: column;
+  }
+  
+  .register-left {
+    order: 2;
+    padding: 1.5rem;
+    background: #0a0c20;
+  }
+  
+  .register-right {
+    order: 1;
+    min-height: 40vh;
+    padding: 2rem 1.5rem;
+  }
+  
+  .info-content {
+    text-align: center;
+  }
+  
+  .metro-logo {
+    justify-content: center;
+  }
+  
+  .benefit-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .benefit-icon {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  .stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  
+  .stat {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .stat-number {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-left {
+    padding: 1rem;
+  }
+  
+  .register-right {
+    padding: 1.5rem 1rem;
+  }
+  
+  .register-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .info-content h2 {
+    font-size: 1.6rem;
+  }
+  
+  .intro-text {
+    font-size: 0.95rem;
+  }
+  
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
