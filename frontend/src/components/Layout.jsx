@@ -1,12 +1,12 @@
 import React from 'react'
-import MetroHeader from './MetroHeader'
+import Header from './Header'
 import Footer from './Footer'
 import './Layout.css'
 
 const Layout = ({ children }) => {
   return (
     <div className="layout">
-      <MetroHeader />
+      <Header />
       <main className="main-content">
         {children}
       </main>
