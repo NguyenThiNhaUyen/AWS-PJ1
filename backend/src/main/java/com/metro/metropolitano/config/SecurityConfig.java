@@ -67,7 +67,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> 
                 auth
-                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/auth/**","/api/stations/**","/api/tickets/**").permitAll()
                     .requestMatchers("/api/account/avatar/**").permitAll()
                     .requestMatchers("/static/**").permitAll()
                     .requestMatchers("/api/account/upload-avatar").authenticated()
