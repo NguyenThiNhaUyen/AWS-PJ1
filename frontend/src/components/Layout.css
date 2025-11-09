@@ -1,0 +1,18 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--primary-dark);
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 1rem;
+  }
+}
