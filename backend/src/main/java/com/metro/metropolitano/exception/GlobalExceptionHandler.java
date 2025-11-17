@@ -48,6 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(RuntimeException ex) {
         logger.error("Runtime error: {}", ex.getMessage());
+        ex.printStackTrace();   // 🔥 thêm dòng này
         return ResponseEntity.badRequest()
             .body(ApiResponse.error(ex.getMessage()));
     }
@@ -56,6 +57,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGenericException(Exception ex) {
         logger.error("Unexpected error: {}", ex.getMessage(), ex);
+        ex.printStackTrace();   // 🔥 thêm dòng này
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ApiResponse.error("An unexpected error occurred. Please try again later."));
     }

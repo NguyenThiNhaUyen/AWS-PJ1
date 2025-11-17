@@ -1,0 +1,18 @@
+{
+  "lineName": "Line 1",
+  "type": "weekday",
+  "items": [
+    {
+      "departureTime": "06:00",
+      "arrivalTime": "06:35",
+      "fromStation": "Ben Thanh",
+      "toStation": "BX Suoi Tien"
+    },
+    {
+      "departureTime": "06:15",
+      "arrivalTime": "06:50",
+      "fromStation": "Ben Thanh",
+      "toStation": "BX Suoi Tien"
+    }
+  ]
+}

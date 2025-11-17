@@ -34,3 +34,8 @@ build/
 
 # Ignore local application properties (sensitive credentials)
 src/main/resources/application.properties
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

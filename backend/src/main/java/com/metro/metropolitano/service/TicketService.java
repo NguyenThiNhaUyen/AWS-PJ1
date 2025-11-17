@@ -1,11 +1,9 @@
 package com.metro.metropolitano.service;
 
 
+import com.metro.metropolitano.dto.PurchaseRequestDTO;
 import com.metro.metropolitano.model.*;
-import com.metro.metropolitano.repository.PaymentRepository;
-import com.metro.metropolitano.repository.StationRepository;
-import com.metro.metropolitano.repository.TicketRepository;
-import com.metro.metropolitano.repository.TicketTypeRepository;
+import com.metro.metropolitano.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +29,32 @@ public class TicketService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Transactional
+    public Ticket createTicket(PurchaseRequestDTO request, double fare) {
+        Account account = accountRepository.findById(request.getAccountId()).orElseThrow(() -> new RuntimeException("Account not found"));
+
+        TicketType ticketType = ticketTypeRepository.findByName(request.getTicketTypeName()).orElseThrow(() -> new RuntimeException("Ticket type not found"));
+
+        Station start = stationRepository.findByName(request.getStartStation()).orElseThrow(() -> new RuntimeException("Station not found"));
+
+        Station end = stationRepository.findByName(request.getEndStation()).orElseThrow(() -> new RuntimeException("Station not found"));
+
+        Ticket ticket = new Ticket();
+        ticket.setAccount(account);
+        ticket.setTicketType(ticketType);
+        ticket.setStartStation(start);
+        ticket.setEndStation(end);
+        ticket.setPrice(fare);
+        ticket.setStatus("PENDING");
+
+        ticket.setActivationTime(null);
+        ticket.setExpirationTime(null);
+        return  ticketRepository.save(ticket);
+    }
 
     @Transactional
     public Ticket purchaseRouteTicket(Account account, String startName, String endName,
