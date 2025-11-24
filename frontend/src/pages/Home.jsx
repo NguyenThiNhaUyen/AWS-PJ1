@@ -1,8 +1,12 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import Layout from '../components/Layout'
 import './Home.css'
 
 const Home = () => {
+  const { isAuthenticated } = useAuth()
+  
   return (
     <Layout>
       {/* Hero Section */}
@@ -19,12 +23,18 @@ const Home = () => {
               Smart, Fast, Sustainable Urban Mobility System for Ho Chi Minh City
             </p>
             <div className="hero-buttons">
-              <a href="/register" className="btn-primary">
-                Get Started
-              </a>
-              <a href="/routes" className="btn-secondary">
+              {isAuthenticated ? (
+                <Link to="/book-ticket" className="btn-primary">
+                  Đặt Vé Ngay
+                </Link>
+              ) : (
+                <Link to="/register" className="btn-primary">
+                  Get Started
+                </Link>
+              )}
+              <Link to="/routes" className="btn-secondary">
                 Explore Routes
-              </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -108,4 +108,73 @@ export const accountAPI = {
   }
 }
 
+// Metro API functions
+export const metroAPI = {
+  // Get all stations
+  getStations: async () => {
+    const response = await api.get('/stations')
+    return response.data
+  },
+
+  // Get all routes
+  getRoutes: async () => {
+    const response = await api.get('/routes')
+    return response.data
+  },
+
+  // Get stations by route
+  getStationsByRoute: async (lineName) => {
+    const response = await api.get(`/routes/${lineName}/stations`)
+    return response.data
+  },
+
+  // Calculate fare
+  calculateFare: async (start, end) => {
+    const response = await api.get(`/fares?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`)
+    return response.data
+  }
+}
+
+// Ticket API functions
+export const ticketAPI = {
+  // Get ticket by ID
+  getTicket: async (id) => {
+    const response = await api.get(`/tickets/${id}`)
+    return response.data
+  },
+
+  // Purchase ticket (old method)
+  purchaseRoute: async (purchaseData) => {
+    const response = await api.post('/tickets/purchase-route', purchaseData)
+    return response.data
+  },
+
+  // Activate ticket
+  activateTicket: async (ticketCode, station) => {
+    const response = await api.post(`/tickets/activate/${ticketCode}?station=${encodeURIComponent(station)}`)
+    return response.data
+  },
+
+  // Scan at destination
+  scanDestination: async (ticketCode, station) => {
+    const response = await api.post(`/tickets/scan-destination/${ticketCode}?station=${encodeURIComponent(station)}`)
+    return response.data
+  }
+}
+
+// Payment API functions
+export const paymentAPI = {
+  // Create VNPay payment
+  createVNPayPayment: async (purchaseData) => {
+    const response = await api.post('/payments/vnpay/create', purchaseData)
+    return response.data
+  },
+
+  // Handle VNPay return (for reference, usually handled by backend)
+  handleVNPayReturn: async (returnData) => {
+    const response = await api.get('/payments/vnpay/return', { params: returnData })
+    return response.data
+  }
+}
+
 export default api

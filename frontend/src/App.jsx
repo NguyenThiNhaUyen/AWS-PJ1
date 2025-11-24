@@ -6,6 +6,13 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import BookTicket from './pages/BookTicket'
+import PaymentSuccess from './pages/PaymentSuccess'
+import PaymentFailed from './pages/PaymentFailed'
+import MyTickets from './pages/MyTickets'
+import Help from './pages/Help'
+import ResetPassword from './pages/ResetPassword'
+import Timetable from './pages/Timetable'
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -80,7 +87,39 @@ function App() {
           />
           
           {/* Protected Routes - Only accessible when logged in */}
-          {/* Add your protected routes here */}
+          {/* TEMP: Removed protection to test UI without login */}
+          <Route 
+            path="/book-ticket" 
+            element={<BookTicket />}
+          />
+          {/* 
+          <Route 
+            path="/book-ticket" 
+            element={
+              <ProtectedRoute>
+                <BookTicket />
+              </ProtectedRoute>
+            } 
+          />
+          */}
+
+          {/* Payment Result Pages */}
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
+
+          {/* My Tickets - TEMP: Removed protection for UI testing */}
+          <Route path="/my-tickets" element={<MyTickets />} />
+          {/* 
+          <Route 
+            path="/my-tickets" 
+            element={<ProtectedRoute><MyTickets /></ProtectedRoute>} 
+          />
+          */}
+
+          {/* Public Routes */}
+          <Route path="/timetable" element={<Timetable />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           
           {/* Catch all route */}
           <Route path="*" element={<Navigate to="/" replace />} />
