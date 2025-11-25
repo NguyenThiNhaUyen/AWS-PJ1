@@ -112,7 +112,12 @@ public class TicketService {
 
     @Transactional
     public Ticket purchaseRouteTicket(Account account, String startName, String endName,
-                                 String ticketTypeName, String paymentMethod) {
+                                      String ticketTypeName, String paymentMethod) {
+
+        // Normalize chỉ để dùng trong if/else
+        String normTicketType = normalize(ticketTypeName);
+
+        // Lấy từ DB bằng tên gốc (đúng như đang seed)
         TicketType type = ticketTypeRepository.findByName(ticketTypeName)
                 .orElseThrow(() -> new RuntimeException("Ticket type not found: " + ticketTypeName));
 
@@ -121,63 +126,60 @@ public class TicketService {
         t.setAccount(account);
         t.setTicketType(type);
         t.setStatus("NOT_ACTIVATED");
-        t.setActivationTime(null);
-        t.setExpirationTime(null);
 
         double price;
 
+        if (normTicketType.equals("ve tuyen")) {
 
-        if (ticketTypeName.equalsIgnoreCase("Ve tuyen")) {
-
+            // station: cũng lấy bằng tên gốc
             Station start = stationRepository.findByName(startName)
                     .orElseThrow(() -> new RuntimeException("Start station not found"));
             Station end = stationRepository.findByName(endName)
                     .orElseThrow(() -> new RuntimeException("End station not found"));
 
-            price = fareService.calculateFare(startName, endName);
+            // tính giá, nên dùng tên/ID từ Station luôn cho chắc
+            price = fareService.calculateFare(start.getName(), end.getName());
 
             t.setStartStation(start);
             t.setEndStation(end);
             t.setPrice(price);
-            t.setExpirationTime(null);
 
-        } else if (ticketTypeName.equalsIgnoreCase("Ve 1 ngay")) {
+        } else if (normTicketType.equals("ve 1 ngay")) {
             price = 40000;
             t.setPrice(price);
             t.setExpirationTime(LocalDateTime.now().plusDays(1));
 
-        } else if (ticketTypeName.equalsIgnoreCase("Ve 3 ngay")) {
+        } else if (normTicketType.equals("ve 3 ngay")) {
             price = 90000;
             t.setPrice(price);
             t.setExpirationTime(LocalDateTime.now().plusDays(3));
 
-        } else if (ticketTypeName.equalsIgnoreCase("Ve thang")) {
+        } else if (normTicketType.equals("ve thang")) {
             price = 300000;
             t.setPrice(price);
             t.setExpirationTime(LocalDateTime.now().plusMonths(1));
 
-        } else if (ticketTypeName.equalsIgnoreCase("Ve thang HSSV")) {
+        } else if (normTicketType.equals("ve thang hssv")) {
             price = 150000;
             t.setPrice(price);
             t.setExpirationTime(LocalDateTime.now().plusMonths(1));
 
         } else {
-            throw new RuntimeException("Unsupported ticket type: " + ticketTypeName);
+            throw new RuntimeException("Unsupported ticket type: " + normTicketType);
         }
-
 
         ticketRepository.save(t);
 
-
-        Payment payment = new Payment();
-        payment.setAmount(price);
-        payment.setPaymentMethod(paymentMethod);
-        payment.setPaymentTime(LocalDateTime.now());
-        payment.setTicket(t);
-        paymentRepository.save(payment);
+        Payment p = new Payment();
+        p.setAmount(price);
+        p.setPaymentMethod(paymentMethod);
+        p.setPaymentTime(LocalDateTime.now());
+        p.setTicket(t);
+        paymentRepository.save(p);
 
         return t;
     }
+
 
     @Transactional
     public Ticket activateTicket(String ticketCode, String atStationName) {
