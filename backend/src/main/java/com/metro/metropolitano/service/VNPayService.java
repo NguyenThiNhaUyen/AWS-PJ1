@@ -1,6 +1,7 @@
 package com.metro.metropolitano.service;
 
 import com.metro.metropolitano.model.Payment;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,20 @@ public class VNPayService {
 
     @Value("${vnp.pay_url}")     String payUrl;
     @Value("${vnp.return_url}")  String returnUrl;
+
+    public Map<String, String> extractParams(HttpServletRequest request) {
+        Map<String, String> params = new HashMap<>();
+        var names = request.getParameterNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            String value = request.getParameter(name);
+            if (value != null) {
+                params.put(name, value);
+            }
+        }
+        return params;
+    }
+
 
     /** NEW: nhận Payment thay vì orderId + amount */
     public String createPaymentUrl(Payment payment, String ip) {
@@ -70,7 +85,7 @@ public class VNPayService {
         return secureHash.equalsIgnoreCase(calc);
     }
 
-    private static String buildQuery(Map<String,String> params) {
+    public static String buildQuery(Map<String,String> params) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String,String> e : params.entrySet()) {
             String key   = e.getKey();
@@ -86,7 +101,7 @@ public class VNPayService {
         return URLEncoder.encode(s, StandardCharsets.UTF_8);
     }
 
-    private static String hmacSHA512(String key, String data) {
+    public static String hmacSHA512(String key, String data) {
         try {
             javax.crypto.Mac mac = javax.crypto.Mac.getInstance("HmacSHA512");
             mac.init(new javax.crypto.spec.SecretKeySpec(

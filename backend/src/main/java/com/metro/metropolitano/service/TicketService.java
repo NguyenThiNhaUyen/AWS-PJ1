@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.Normalizer;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,6 +33,59 @@ public class TicketService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Transactional
+    public Ticket activateTicketById(Long ticketId){
+        Ticket t = ticketRepository.findById(ticketId).orElseThrow(() -> new RuntimeException("Ticket not found " + ticketId));
+
+        if("ACTIVATED".equalsIgnoreCase(t.getStatus()) || "ACTIVE".equalsIgnoreCase(t.getStatus())){
+            return t;
+        }
+
+        if("USED".equalsIgnoreCase(t.getStatus()) || "EXPIRED".equalsIgnoreCase(t.getStatus())){
+            throw new RuntimeException("Ticket already used or expired");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        t.setActivationTime(now);
+
+        String normalizedType = normalize(t.getTicketType().getName());
+        LocalDateTime expiration;
+
+        switch(normalizedType){
+            case "ve tuyen":
+                expiration = now.plusHours(2);
+                break;
+            case "ve 1 ngay":
+                expiration = now.plusDays(1);
+                break;
+            case "ve 3 ngay":
+                expiration = now.plusDays(3);
+                break;
+            case "ve thang":
+            case "ve thang hssv":
+                expiration = now.plusMonths(1);
+                break;
+            default:
+                throw new RuntimeException("Unsupported ticket type for activation: " + t.getTicketType().getName());
+        }
+
+        t.setExpirationTime(expiration);
+        t.setStatus("ACTIVE");
+
+        return ticketRepository.save(t);
+
+    }
+
+    @Transactional
+    public List<Ticket> getTicketsForAccount(Long accountId) {
+        return ticketRepository.findByAccount_IdOrderByIdDesc(accountId);
+    }
+
+    @Transactional
+    public List<Ticket> getTicketsForUser(String username) {
+        return ticketRepository.findByAccount_UsernameOrderByIdDesc(username);
+    }
 
     @Transactional
     public Ticket createTicket(PurchaseRequestDTO request, double fare) {

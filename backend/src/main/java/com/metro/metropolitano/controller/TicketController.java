@@ -2,6 +2,7 @@ package com.metro.metropolitano.controller;
 
 
 import com.metro.metropolitano.dto.PurchaseRequestDTO;
+import com.metro.metropolitano.dto.TicketSummaryDTO;
 import com.metro.metropolitano.model.Account;
 import com.metro.metropolitano.model.Ticket;
 import com.metro.metropolitano.repository.AccountRepository;
@@ -9,7 +10,14 @@ import com.metro.metropolitano.repository.TicketRepository;
 import com.metro.metropolitano.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/tickets")
@@ -22,6 +30,61 @@ public class TicketController {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @PostMapping("/activate")
+    public ResponseEntity<Map<String, Object>> activateTicket(@RequestParam Long ticketId){
+        Ticket t = ticketService.activateTicketById(ticketId);
+
+        return ResponseEntity.ok(Map.of(
+                "ticketId", t.getId(),
+                "activationTime", t.getActivationTime(),
+                "expirationTime", t.getExpirationTime(),
+                "status", t.getStatus()
+        ));
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<TicketSummaryDTO>> getMyTickets(@RequestParam Long accountId) {
+
+        List<Ticket> tickets = ticketService.getTicketsForAccount(accountId);
+
+        List<TicketSummaryDTO> dtos = tickets.stream()
+                .map(t -> new TicketSummaryDTO(
+                        t.getId(),
+                        t.getTicketType() != null ? t.getTicketType().getName() : null,
+                        t.getStartStation() != null ? t.getStartStation().getName() : null,
+                        t.getEndStation() != null ? t.getEndStation().getName() : null,
+                        t.getPrice(),
+                        t.getStatus(),
+                        t.getActivationTime(),
+                        t.getExpirationTime()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(dtos);
+    }
+
+//    @GetMapping("/my")
+//    @PreAuthorize("isAuthenticated()")
+//    public ResponseEntity<List<TicketSummaryDTO>> getMyTickets(Authentication authentication) {
+//        String username = authentication.getName();
+//
+//        List<Ticket> tickets = ticketService.getTicketsForUser(username);
+//
+//        List<TicketSummaryDTO> dtos = tickets.stream()
+//                .map(t -> new TicketSummaryDTO(
+//                        t.getId(),
+//                        t.getTicketType() != null ? t.getTicketType().getName() : null,
+//                        t.getStartStation() != null ? t.getStartStation().getName() : null,
+//                        t.getEndStation() != null ? t.getEndStation().getName() : null,
+//                        t.getPrice(),
+//                        t.getStatus(),
+//                        t.getActivationTime(),
+//                        t.getExpirationTime()
+//                ))
+//                .collect(Collectors.toList());
+//        return  ResponseEntity.ok(dtos);
+//    }
 
     @PostMapping("/purchase-route")
     public ResponseEntity<?> purchaseRoute(@RequestBody PurchaseRequestDTO dto){

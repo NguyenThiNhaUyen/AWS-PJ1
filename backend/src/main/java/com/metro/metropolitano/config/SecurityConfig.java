@@ -58,33 +58,52 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(e -> e.authenticationEntryPoint(unauthorizedHandler))
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
-                        // ==== Public APIs ====
+                        // ======= PUBLIC (NO LOGIN) =======
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/stations/**").permitAll()
-                        .requestMatchers("/api/tickets/**").permitAll()
                         .requestMatchers("/api/routes/**").permitAll()
-                        .requestMatchers("/api/account/avatar/**").permitAll()
-                        .requestMatchers("/api/fares").permitAll()
-                        .requestMatchers("/static/**").permitAll()
+                        .requestMatchers("/api/fares/**").permitAll()
+                        .requestMatchers("/api/admin/trips/monitor").permitAll()
+                        .requestMatchers("/api/admin/delays/**").permitAll()
+                        .requestMatchers(
+                               "/api/payments/vnpay/create",
+                               "/api/payments/vnpay/return",
+                               "/api/payments/vnpay/ipn"
+                        ).permitAll()
+                                .requestMatchers("/api/dev/**").permitAll()
 
-                        // ==== VNPay APIs (must be public) ====
+
+
+
+                                // Public Trips endpoints
+                        .requestMatchers("/api/trips/public/**").permitAll()
+                        .requestMatchers("/api/trips/arrivals/**").permitAll()
+
+                        // VNPay callbacks must be PUBLIC
                         .requestMatchers(
                                 "/api/payments/vnpay/create",
                                 "/api/payments/vnpay/return",
                                 "/api/payments/vnpay/ipn"
                         ).permitAll()
 
-                        // ==== Protected APIs ====
+                        // ======= USER (REQUIRES TOKEN) =======
+                        .requestMatchers("/api/tickets/my").authenticated()
+                        .requestMatchers("/api/tickets/activate/**").authenticated()
+                        .requestMatchers("/api/tickets/scan/**").authenticated()
                         .requestMatchers("/api/account/upload-avatar").authenticated()
 
-                        // all others → require token
+                        // ======= ADMIN AREA =======
+//                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // Default: require auth
                         .anyRequest().authenticated()
                 );
 
@@ -94,16 +113,17 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(false);
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOriginPatterns(Arrays.asList("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 }

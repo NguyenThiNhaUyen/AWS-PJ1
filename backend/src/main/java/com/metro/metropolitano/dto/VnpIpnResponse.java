@@ -1,0 +1,12 @@
+package com.metro.metropolitano.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class VnpIpnResponse {
+    private String RspCode;
+    private String Message;
+
+}

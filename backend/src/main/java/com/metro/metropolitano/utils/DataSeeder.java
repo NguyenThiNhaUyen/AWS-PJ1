@@ -5,6 +5,7 @@ import com.metro.metropolitano.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -22,6 +23,8 @@ public class DataSeeder implements CommandLineRunner {
     private final FareRuleRepository fareRuleRepository;
     private final TicketTypeRepository ticketTypeRepository;
     private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
     public void run(String... args) {
@@ -118,12 +121,13 @@ public class DataSeeder implements CommandLineRunner {
         Account admin = new Account(
                 "Admin",
                 "admin",
-                "adminpass",
+                passwordEncoder.encode("adminpass"),
                 "admin@metro.local",
                 Role.ADMIN,
                 Provider.LOCAL
         );
         accountRepository.save(admin);
+
 
         Account demo = new Account(
                 "Nguyen Van A",
