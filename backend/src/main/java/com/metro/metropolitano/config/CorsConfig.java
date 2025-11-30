@@ -13,7 +13,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(@org.springframework.lang.NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")
+                        .allowedOrigins("http://localhost:5173")
                         .allowCredentials(true)
                         .maxAge(3600)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

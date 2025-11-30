@@ -20,7 +20,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
     
-    @Value("${spring.mail.from}")
+    @Value("${spring.mail.properties.mail.from}")
     private String fromEmail;
     
     @Value("${app.backend.url:http://localhost:8080}")
