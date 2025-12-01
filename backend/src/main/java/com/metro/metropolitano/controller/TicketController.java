@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.metro.metropolitano.dto.PurchaseRequestDTO;
 import com.metro.metropolitano.dto.TicketSummaryDTO;
-import com.metro.metropolitano.enums.TicketPriceEnum;
 import com.metro.metropolitano.model.Account;
+import com.metro.metropolitano.model.FareRule;
 import com.metro.metropolitano.model.Ticket;
 import com.metro.metropolitano.repository.AccountRepository;
+import com.metro.metropolitano.repository.FareRuleRepository;
 import com.metro.metropolitano.repository.TicketRepository;
 import com.metro.metropolitano.service.TicketService;
 
@@ -35,6 +36,9 @@ public class TicketController {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private FareRuleRepository fareRuleRepository;
 
     @PostMapping("/activate")
     public ResponseEntity<Map<String, Object>> activateTicket(@RequestParam Long ticketId){
@@ -116,11 +120,20 @@ public class TicketController {
     }
 
     @GetMapping("/ticket-prices")
-    public Map<String, int[]> getTicketPrices() {
-        Map<String, int[]> prices = new HashMap<>();
-        for (TicketPriceEnum station : TicketPriceEnum.values()) {
-            prices.put(station.name(), station.getPrices());
+    public ResponseEntity<?> getTicketPrices() {
+        List<FareRule> fareRules = fareRuleRepository.findAll();
+        
+        Map<String, Map<String, Double>> priceMatrix = new HashMap<>();
+        
+        for (FareRule rule : fareRules) {
+            String startStation = rule.getStartStation().getName();
+            String endStation = rule.getEndStation().getName();
+            Double price = rule.getPrice();
+            
+            priceMatrix.computeIfAbsent(startStation, k -> new HashMap<>())
+                      .put(endStation, price);
         }
-        return prices;
+        
+        return ResponseEntity.ok(priceMatrix);
     }
 }

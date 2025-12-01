@@ -8,6 +8,7 @@ const PaymentSuccess = () => {
   const [searchParams] = useSearchParams()
   const [ticket, setTicket] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [countdown, setCountdown] = useState(10)
   
   const ticketId = searchParams.get('ticketId')
   const responseCode = searchParams.get('vnp_ResponseCode')
@@ -19,6 +20,21 @@ const PaymentSuccess = () => {
       setLoading(false)
     }
   }, [ticketId])
+
+  // Auto redirect to homepage after 10 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          navigate('/')
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [])
 
   const fetchTicketDetails = async () => {
     try {
@@ -67,6 +83,9 @@ const PaymentSuccess = () => {
           <h1 className="success-title">Thanh toán thành công!</h1>
           <p className="success-subtitle">
             Vé của bạn đã được kích hoạt. Thông tin chi tiết đã được gửi về email.
+          </p>
+          <p className="auto-redirect-notice">
+            Tự động chuyển về trang chủ sau <strong>{countdown}</strong> giây...
           </p>
 
           {/* Ticket Details */}

@@ -1,17 +1,27 @@
 package com.metro.metropolitano.service;
 
 
-import com.metro.metropolitano.dto.PurchaseRequestDTO;
-import com.metro.metropolitano.model.*;
-import com.metro.metropolitano.repository.*;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.metro.metropolitano.dto.PurchaseRequestDTO;
+import com.metro.metropolitano.model.Account;
+import com.metro.metropolitano.model.Payment;
+import com.metro.metropolitano.model.Station;
+import com.metro.metropolitano.model.Ticket;
+import com.metro.metropolitano.model.TicketType;
+import com.metro.metropolitano.repository.AccountRepository;
+import com.metro.metropolitano.repository.PaymentRepository;
+import com.metro.metropolitano.repository.StationRepository;
+import com.metro.metropolitano.repository.TicketRepository;
+import com.metro.metropolitano.repository.TicketTypeRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class TicketService {
@@ -114,11 +124,13 @@ public class TicketService {
     public Ticket purchaseRouteTicket(Account account, String startName, String endName,
                                       String ticketTypeName, String paymentMethod) {
 
-        // Normalize chỉ để dùng trong if/else
+        // Normalize để so sánh
         String normTicketType = normalize(ticketTypeName);
 
-        // Lấy từ DB bằng tên gốc (đúng như đang seed)
-        TicketType type = ticketTypeRepository.findByName(ticketTypeName)
+        // Tìm TicketType từ DB bằng cách so sánh normalized
+        TicketType type = ticketTypeRepository.findAll().stream()
+                .filter(tt -> normalize(tt.getName()).equals(normTicketType))
+                .findFirst()
                 .orElseThrow(() -> new RuntimeException("Ticket type not found: " + ticketTypeName));
 
         Ticket t = new Ticket();
@@ -129,7 +141,7 @@ public class TicketService {
 
         double price;
 
-        if (normTicketType.equals("ve tuyen")) {
+        if (normTicketType.equals("ve luot")) {
 
             // station: cũng lấy bằng tên gốc
             Station start = stationRepository.findByName(startName)
