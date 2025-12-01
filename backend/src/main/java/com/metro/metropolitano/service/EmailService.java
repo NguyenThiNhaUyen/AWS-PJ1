@@ -23,7 +23,7 @@ public class EmailService {
     @Value("${spring.mail.properties.mail.from}")
     private String fromEmail;
     
-    @Value("${app.backend.url:http://localhost:8080}")
+    @Value("${app.backend.url:http://localhost:8081}")
     private String backendUrl;
     
     @Async
