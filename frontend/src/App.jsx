@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Tickets from './pages/user/Tickets'
 import MyTickets from './pages/user/MyTickets'
+import AdminDashboard from './pages/admin/AdminDashboard'
 
 
 // Protected Route Component
@@ -98,6 +99,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <MyTickets />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />

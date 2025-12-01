@@ -102,7 +102,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/account/upload-avatar").authenticated()
 
                         // ======= ADMIN AREA =======
-//                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         // Default: require auth
                         .anyRequest().authenticated()
