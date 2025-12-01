@@ -9,7 +9,12 @@ import Register from './pages/Register'
 import Tickets from './pages/user/Tickets'
 import MyTickets from './pages/user/MyTickets'
 import AdminDashboard from './pages/admin/AdminDashboard'
-
+import BookTicket from './pages/BookTicket'
+import PaymentSuccess from './pages/PaymentSuccess'
+import PaymentFailed from './pages/PaymentFailed'
+import Help from './pages/Help'
+import ResetPassword from './pages/ResetPassword'
+import Timetable from './pages/Timetable'
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -84,7 +89,6 @@ function App() {
           />
 
           {/* Protected Routes - Only accessible when logged in */}
-          {/* Add your protected routes here */}
           <Route
             path="/tickets"
             element={
@@ -93,7 +97,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/my-tickets"
             element={
@@ -102,7 +105,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/dashboard"
             element={
@@ -111,6 +113,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Additional Routes */}
+          <Route path="/book-ticket" element={<BookTicket />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/timetable" element={<Timetable />} />
 
           {/* Catch all route */}
           <Route path="*" element={<Navigate to="/" replace />} />
