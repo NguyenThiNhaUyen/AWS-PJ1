@@ -68,6 +68,7 @@ public class SecurityConfig {
 
                         // ======= PUBLIC (NO LOGIN) =======
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/tickets/ticket-prices").permitAll()
                         .requestMatchers("/api/stations/**").permitAll()
                         .requestMatchers("/api/routes/**").permitAll()
                         .requestMatchers("/api/fares/**").permitAll()

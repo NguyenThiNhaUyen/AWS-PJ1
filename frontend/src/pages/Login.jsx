@@ -47,7 +47,12 @@ const Login = () => {
       })
       
       if (success) {
-        navigate('/')
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user?.role === 'admin') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/');
+        }
       }
     } catch (err) {
       console.error('Login error:', err)
@@ -72,13 +77,13 @@ const Login = () => {
             
             <div className="form-group">
               <input
-                type="email"
-                id="email"
+                type="text"
+                id="usernameOrEmail"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                placeholder="Email"
+                placeholder="Username or Email"
                 className="form-input"
                 disabled={loading}
               />
