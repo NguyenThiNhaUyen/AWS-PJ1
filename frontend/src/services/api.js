@@ -46,7 +46,9 @@ export const authAPI = {
 
   // Register
   register: async (userData) => {
+    console.log('Register request payload:', userData)
     const response = await api.post('/auth/register', userData)
+    console.log('Register response:', response.data)
     return response.data
   },
 
