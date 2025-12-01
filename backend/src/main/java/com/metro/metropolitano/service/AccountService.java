@@ -104,36 +104,61 @@ public class AccountService {
     public LoginResponse login(LoginRequest request) {
         logger.info("Attempting login for user: {}", request.getUsernameOrEmail());
         
-        // Find account. Try username/email original, and if not found try the verified-form email (email + "_V").
-        Optional<Account> accountOpt = accountRepository.findByUsernameOrEmail(request.getUsernameOrEmail());
-        if (accountOpt.isEmpty()) {
-            accountOpt = accountRepository.findByEmail(request.getUsernameOrEmail() + "_V");
-        }
-        if (accountOpt.isEmpty()) {
+        try {
+            // Authenticate user - this will use UserDetailsService which handles _V suffix
+            logger.debug("Starting authentication process...");
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsernameOrEmail(), request.getPassword())
+            );
+            
+            logger.debug("Authentication successful, setting security context...");
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            
+            // Find account after successful authentication
+            logger.debug("Finding account in database...");
+            Optional<Account> accountOpt = accountRepository.findByUsernameOrEmail(request.getUsernameOrEmail());
+            if (accountOpt.isEmpty()) {
+                // Try with _V suffix if email
+                if (request.getUsernameOrEmail().contains("@")) {
+                    logger.debug("Trying with _V suffix for email...");
+                    accountOpt = accountRepository.findByEmail(request.getUsernameOrEmail() + "_V");
+                }
+            }
+            
+            if (accountOpt.isEmpty()) {
+                logger.error("Account not found after successful authentication!");
+                throw new RuntimeException("Account not found after authentication!");
+            }
+            
+            Account account = accountOpt.get();
+            logger.debug("Account found: {}", account.getUsername());
+            
+            // Check if account is active (not banned/disabled)
+            if (!account.getIsActive()) {
+                logger.warn("Account {} is disabled", account.getUsername());
+                throw new RuntimeException("Account is disabled. Please contact administrator!");
+            }
+            
+            // Generate JWT token
+            logger.debug("Generating JWT token...");
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            logger.debug("JWT token generated successfully");
+            
+            logger.info("User {} logged in successfully", account.getUsername());
+            
+            // Return original email (without _V suffix)
+            String originalEmail = getOriginalEmail(account.getEmail());
+            
+            return new LoginResponse(jwt, account.getId(), account.getUsername(), 
+                                   account.getFullName(), originalEmail, account.getRole());
+                                   
+        } catch (org.springframework.security.core.AuthenticationException e) {
+            logger.error("Authentication failed for user: {}", request.getUsernameOrEmail(), e);
             throw new RuntimeException("Invalid username/email or password!");
+        } catch (Exception e) {
+            logger.error("Unexpected error during login for user: {}", request.getUsernameOrEmail(), e);
+            throw new RuntimeException("Login failed: " + e.getMessage(), e);
         }
-
-        Account account = accountOpt.get();
-        
-        // Check if account is active (not banned/disabled)
-        if (!account.getIsActive()) {
-            throw new RuntimeException("Account is disabled. Please contact administrator!");
-        }
-        
-        // Authenticate user (email verification is optional for login)
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getUsernameOrEmail(), request.getPassword())
-        );
-        
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        
-        // Generate JWT token
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        
-        logger.info("User {} logged in successfully", account.getUsername());
-        
-        return new LoginResponse(jwt, account.getId(), account.getUsername(), 
-                               account.getFullName(), account.getEmail(), account.getRole());
     }
     
     public boolean verifyEmail(String token) {

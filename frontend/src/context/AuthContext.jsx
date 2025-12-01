@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token')
       const savedUser = localStorage.getItem('user')
-      
+
       if (token && savedUser) {
         // Verify token is still valid by making a request
         const userData = await accountAPI.getMe()
@@ -50,49 +50,59 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await authAPI.login(credentials)
+      console.log('Attempting login with:', { usernameOrEmail: credentials.usernameOrEmail })
+      const data = await authAPI.login(credentials)
       
-      if (response.success && response.data) {
-        const { token, user: userData } = response.data
-        
+      console.log('Login response received:', data)
+
+      if (data && data.accessToken) {
+        const { accessToken, ...userData } = data
+
         // Save to localStorage
-        localStorage.setItem('token', token)
+        localStorage.setItem('token', accessToken)
         localStorage.setItem('user', JSON.stringify(userData))
-        
+
         // Update state
         setUser(userData)
         setIsAuthenticated(true)
-        
+
+        console.log('Login successful, user data saved')
         return true
       } else {
-        throw new Error(response.message || 'Đăng nhập thất bại')
+        console.error('Invalid login response:', data)
+        throw new Error('Login failed: Invalid response from server')
       }
     } catch (error) {
-      console.error('Login error:', error)
-      
+      console.error('Login error details:', error)
+      console.error('Error response:', error.response)
+
       // Handle different error types
-      if (error.response?.data?.message) {
+      if (error.response?.status === 401) {
+        throw new Error('Invalid email/username or password')
+      } else if (error.response?.status === 403) {
+        throw new Error('Your account has been disabled. Please contact administrator.')
+      } else if (error.response?.data?.message) {
         throw new Error(error.response.data.message)
       } else if (error.message) {
         throw new Error(error.message)
       } else {
-        throw new Error('Đăng nhập thất bại. Vui lòng thử lại.')
+        throw new Error('Login failed. Please try again.')
       }
     }
   }
 
   const register = async (userData) => {
     try {
-      const response = await authAPI.register(userData)
-      
-      if (response.success) {
+      const data = await authAPI.register(userData)
+
+      if (data && data.id) {
         return true
       } else {
-        throw new Error(response.message || 'Đăng ký thất bại')
+        throw new Error('Đăng ký thất bại')
       }
     } catch (error) {
       console.error('Register error:', error)
-      
+
       // Handle different error types
       if (error.response?.data?.message) {
         throw new Error(error.response.data.message)
@@ -109,14 +119,14 @@ export const AuthProvider = ({ children }) => {
       // Clear localStorage
       localStorage.removeItem('token')
       localStorage.removeItem('user')
-      
+
       // Update state
       setUser(null)
       setIsAuthenticated(false)
-      
+
       // Optional: Call server logout endpoint
       // authAPI.logout().catch(console.error)
-      
+
       return true
     } catch (error) {
       console.error('Logout error:', error)

@@ -6,8 +6,8 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Tickets from './pages/Tickets'
-import MyTickets from './pages/MyTickets'
+import Tickets from './pages/user/Tickets'
+import MyTickets from './pages/user/MyTickets'
 
 
 // Protected Route Component
