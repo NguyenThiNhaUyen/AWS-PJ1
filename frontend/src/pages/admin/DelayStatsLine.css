@@ -1,0 +1,221 @@
+/* Delay Statistics Line Styles */
+.delay-stats-line {
+  min-height: 100vh;
+  background: #0a0c20;
+  font-family: 'Courier New', 'Monaco', monospace;
+}
+
+.stats-line-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.stats-line-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed rgba(77, 134, 190, 0.3);
+}
+
+.stats-line-title {
+  color: #cfd8dc;
+  font-size: 1.2rem;
+  font-weight: 400;
+  font-family: 'Courier New', monospace;
+}
+
+/* Section Styles */
+.line-selector-section,
+.results-section,
+.realtime-section,
+.api-section {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px dashed rgba(77, 134, 190, 0.3);
+}
+
+.api-section {
+  border-bottom: none;
+}
+
+.section-title {
+  color: #cfd8dc;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.subsection-title {
+  color: rgba(207, 216, 220, 0.8);
+  font-size: 0.95rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  font-family: 'Courier New', monospace;
+}
+
+/* Line Selector */
+.selector-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+  background: rgba(17, 21, 46, 0.6);
+  border: 1px dashed rgba(77, 134, 190, 0.3);
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+
+.selector-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.selector-label {
+  color: rgba(207, 216, 220, 0.8);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.selector-dropdown,
+.selector-input {
+  padding: 0.5rem 0.75rem;
+  background: rgba(10, 12, 32, 0.8);
+  border: 1px solid rgba(77, 134, 190, 0.3);
+  border-radius: 4px;
+  color: #cfd8dc;
+  font-size: 0.85rem;
+  font-family: 'Courier New', monospace;
+  min-width: 180px;
+}
+
+.selector-dropdown:focus,
+.selector-input:focus {
+  outline: none;
+  border-color: #4d86be;
+}
+
+/* Results Section */
+.result-header {
+  margin-bottom: 1.5rem;
+}
+
+.result-header p {
+  color: rgba(207, 216, 220, 0.8);
+  font-size: 0.95rem;
+}
+
+.stats-summary {
+  background: rgba(17, 21, 46, 0.6);
+  border: 1px dashed rgba(77, 134, 190, 0.3);
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed rgba(77, 134, 190, 0.1);
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-label {
+  color: rgba(207, 216, 220, 0.7);
+  font-size: 0.9rem;
+}
+
+.summary-value {
+  color: #cfd8dc;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* Realtime Section */
+.realtime-content {
+  background: rgba(17, 21, 46, 0.6);
+  border: 1px dashed rgba(77, 134, 190, 0.3);
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+
+.realtime-content p {
+  color: rgba(207, 216, 220, 0.8);
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.realtime-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* API Section */
+.api-content {
+  background: rgba(17, 21, 46, 0.6);
+  border: 1px dashed rgba(77, 134, 190, 0.3);
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+
+.api-content p {
+  color: rgba(207, 216, 220, 0.8);
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.api-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Loading State */
+.loading-state {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.loading-state .spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(77, 134, 190, 0.2);
+  border-top-color: #4d86be;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1.5rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-state p {
+  color: rgba(207, 216, 220, 0.7);
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stats-line-container {
+    padding: 2rem 1rem;
+  }
+
+  .selector-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .selector-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .selector-dropdown,
+  .selector-input {
+    width: 100%;
+  }
+}
