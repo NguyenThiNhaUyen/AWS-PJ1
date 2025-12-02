@@ -38,7 +38,6 @@ const Header = () => {
           <div className="auth-section">
             {user ? (
               <div className="user-menu">
-                <span className="user-name">Xin chào, {user.fullName || user.username}</span>
                 <button onClick={handleLogout} className="btn btn-outline">
                   Đăng xuất
                 </button>
