@@ -52,7 +52,7 @@ const Login = () => {
         if (user?.role === 'ADMIN') {
           navigate('/admin/dashboard');
         } else {
-          navigate('/');
+          navigate('/dashboard');
         }
       }
     } catch (err) {

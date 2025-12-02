@@ -6,10 +6,10 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Tickets from './pages/user/Tickets'
-import MyTickets from './pages/user/MyTickets'
-import AdminDashboard from './pages/admin/AdminDashboard'
 import BookTicket from './pages/BookTicket'
+import MyTickets from './pages/user/MyTickets'
+import UserDashboard from './pages/user/UserDashboard'
+import AdminDashboard from './pages/admin/AdminDashboard'
 import PaymentSuccess from './pages/PaymentSuccess'
 import PaymentFailed from './pages/PaymentFailed'
 import Help from './pages/Help'
@@ -93,7 +93,15 @@ function App() {
             path="/tickets"
             element={
               <ProtectedRoute>
-                <Tickets />
+                <BookTicket />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/book-ticket"
+            element={
+              <ProtectedRoute>
+                <BookTicket />
               </ProtectedRoute>
             }
           />
@@ -102,6 +110,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <MyTickets />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <UserDashboard />
               </ProtectedRoute>
             }
           />

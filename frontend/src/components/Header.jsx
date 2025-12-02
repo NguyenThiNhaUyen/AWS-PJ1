@@ -27,11 +27,14 @@ const Header = () => {
           {/* Navigation */}
           <nav className="nav">
             <Link to="/" className="nav-link">Home</Link>
-            <Link to="/routes" className="nav-link">Routes</Link>
+            {user && (
+              <Link to={user.role === 'ADMIN' ? '/admin/dashboard' : '/dashboard'} className="nav-link">
+                Dashboard
+              </Link>
+            )}
             <Link to="/book-ticket" className="nav-link">Tickets</Link>
             <Link to="/timetable" className="nav-link">Timetable</Link>
             <Link to="/help" className="nav-link">Help</Link>
-            <Link to="/contact" className="nav-link">Contact</Link>
           </nav>
 
           {/* Auth Section */}
