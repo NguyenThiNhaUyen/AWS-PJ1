@@ -3,12 +3,10 @@
 
 .timetable-container {
   min-height: 100vh;
-  background: #EAF0F6;
+  background: #FFFFFF;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   color: #1A1A1A;
-  padding: 2rem 1rem;
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 2rem 10%;
   animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
