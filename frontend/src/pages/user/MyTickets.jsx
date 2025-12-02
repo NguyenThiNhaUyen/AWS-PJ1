@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { ticketAPI } from '../../services/api'
+import { ticketAPI, scheduleAPI } from '../../services/api'
 import Layout from '../../components/Layout'
 import './MyTickets.css'
 
@@ -10,11 +10,13 @@ const MyTickets = () => {
   const { user } = useAuth()
   const [selectedTicket, setSelectedTicket] = useState(null)
   const [tickets, setTickets] = useState([])
+  const [upcomingSchedules, setUpcomingSchedules] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     fetchTickets()
+    fetchSchedules()
   }, [])
 
   const fetchTickets = async () => {
@@ -34,7 +36,7 @@ const MyTickets = () => {
       const mappedTickets = data.map(ticket => ({
         id: ticket.id,
         type: ticket.ticketTypeName || 'Vé lượt',
-        line: 'Line 1', // You may need to add this to backend
+        line: 'Bến Thành - Bến xe Suối Tiên',
         departure: ticket.startStation || 'N/A',
         arrival: ticket.endStation || 'N/A',
         price: ticket.price || 0,
@@ -53,41 +55,16 @@ const MyTickets = () => {
     }
   }
 
-  const upcomingSchedules = [
-    {
-      station: 'Bến Thành',
-      line: 'Line 1',
-      status: 'ACTIVE',
-      time: '10:00'
-    },
-    {
-      station: 'Nhà Hát TP',
-      line: 'Line 1',
-      status: 'PRICING',
-      time: '10:55'
-    },
-    {
-      station: 'Vạn Thành',
-      line: 'Line 1',
-      status: 'ACTIVE',
-      time: '8:12'
-    },
-    {
-      station: 'Ba Son',
-      line: 'Line 2',
-      time: '10:32'
-    },
-    {
-      station: 'Tân Cảng',
-      line: 'Line 2',
-      time: '10:43'
-    },
-    {
-      station: 'Thủ Thiêm',
-      line: 'Line 3',
-      time: '10:28'
+  const fetchSchedules = async () => {
+    try {
+      const data = await scheduleAPI.getUpcomingSchedules(6)
+      setUpcomingSchedules(data)
+    } catch (err) {
+      console.error('Error fetching schedules:', err)
+      // Keep empty array if API fails
+      setUpcomingSchedules([])
     }
-  ]
+  }
 
   const getStatusText = (status) => {
     switch (status) {

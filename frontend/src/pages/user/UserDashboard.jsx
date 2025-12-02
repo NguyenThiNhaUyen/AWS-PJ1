@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { userStatsAPI } from '../../services/api'
 import Layout from '../../components/Layout'
 import './UserDashboard.css'
 
@@ -22,37 +23,14 @@ const UserDashboard = () => {
       setLoading(true)
       setError(null)
       
-      // Mock data - replace with actual API calls
-      setStats({
-        totalTickets: 12,
-        activeTickets: 4,
-        usedTickets: 8,
-        totalSpent: 180000
-      })
-
-      setTickets([
-        {
-          id: 1,
-          route: 'Line 1: Bến Thành - Suối Tiên',
-          price: 15000,
-          status: 'PAID',
-          purchaseDate: '01/12/2025'
-        },
-        {
-          id: 2,
-          route: 'Line 1: Ba Son - Thủ Đức',
-          price: 12000,
-          status: 'ACTIVE',
-          purchaseDate: '30/11/2025'
-        },
-        {
-          id: 3,
-          route: 'Line 2: Bến Thành - Tham Lương',
-          price: 18000,
-          status: 'USED',
-          purchaseDate: '28/11/2025'
-        }
+      // Call API endpoints
+      const [statsData, ticketsData] = await Promise.all([
+        userStatsAPI.getStats(user.id),
+        userStatsAPI.getRecentTickets(user.id, 3)
       ])
+      
+      setStats(statsData)
+      setTickets(ticketsData)
     } catch (err) {
       setError(err.message || 'Không thể tải dữ liệu')
       console.error('Error fetching dashboard data:', err)

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { adminStatsAPI } from '../../services/api'
 import Layout from '../../components/Layout'
 import './AdminDashboard.css'
 
@@ -20,27 +21,27 @@ const AdminDashboard = () => {
     try {
       setLoading(true)
       setError(null)
+      
+      // Call API endpoints - Backend already exists!
+      const [summary, revenueData] = await Promise.all([
+        adminStatsAPI.getSummary(),
+        adminStatsAPI.getRevenueByDay(7) // Backend expects ?days=7, not date range
+      ])
+      
+      // Map backend response to frontend format
+      const mappedRevenue = revenueData.map(day => ({
+        date: new Date(day.date).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }),
+        amount: day.revenue
+      }))
+      
       setStats({
-        totalTickets: 12450,
-        paidTickets: 10822,
-        totalRevenue: 5234000000,
-        totalAccounts: 4221,
-        todayTickets: 243,
-        todayRevenue: 352000,
-        weeklyRevenue: [
-          { date: '19/11', amount: 1200000 },
-          { date: '20/11', amount: 900000 },
-          { date: '21/11', amount: 3000000 },
-          { date: '22/11', amount: 1100000 },
-          { date: '23/11', amount: 800000 }
-        ],
-        topRoutes: [
-          { line: 'Line 1', count: 892 },
-          { line: 'Line 2', count: 640 },
-          { line: 'Line 3', count: 512 },
-          { line: 'Line 5', count: 230 },
-          { line: 'Line 8', count: 112 }
-        ]
+        totalTickets: summary.totalTickets,
+        paidTickets: summary.totalPaidTickets,
+        totalRevenue: summary.totalRevenue,
+        totalAccounts: summary.totalAccounts,
+        todayTickets: summary.todayTickets,
+        todayRevenue: summary.todayRevenue,
+        weeklyRevenue: mappedRevenue
       })
     } catch (err) {
       setError(err.message || 'Không thể tải thống kê')
@@ -113,13 +114,6 @@ const AdminDashboard = () => {
             </button>
             
             <button 
-              className={`sidebar-item ${activeMenu === 'routes' ? 'active' : ''}`}
-              onClick={() => setActiveMenu('routes')}
-            >
-              <span className="item-text">Quản lý Tuyến</span>
-            </button>
-            
-            <button 
               className={`sidebar-item ${activeMenu === 'revenue' ? 'active' : ''}`}
               onClick={() => setActiveMenu('revenue')}
             >
@@ -170,7 +164,6 @@ const AdminDashboard = () => {
               {activeMenu === 'dashboard' && 'Dashboard'}
               {activeMenu === 'tickets' && 'Quản lý Vé'}
               {activeMenu === 'users' && 'Quản lý Người dùng'}
-              {activeMenu === 'routes' && 'Quản lý Tuyến'}
               {activeMenu === 'revenue' && 'Báo cáo Doanh thu'}
               {activeMenu === 'payments' && 'Quản lý Thanh toán'}
               {activeMenu === 'fares' && 'Quản lý Giá vé'}
@@ -254,26 +247,6 @@ const AdminDashboard = () => {
                   })}
                 </div>
               </div>
-
-              <div className="top-routes-section">
-                <h2 className="section-title">Top tuyến được mua nhiều vé nhất</h2>
-                
-                <div className="routes-list">
-                  {(stats?.topRoutes || [
-                    { line: 'Line 1', count: 892 },
-                    { line: 'Line 2', count: 640 },
-                    { line: 'Line 3', count: 512 },
-                    { line: 'Line 5', count: 230 },
-                    { line: 'Line 8', count: 112 }
-                  ]).map((route, index) => (
-                    <div key={index} className="route-item">
-                      <span className="route-rank">{index + 1})</span>
-                      <span className="route-name">{route.line}</span>
-                      <span className="route-count">- {route.count} vé</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </>
           )}
 
@@ -308,9 +281,9 @@ const AdminDashboard = () => {
                     <tr>
                       <td>TK-001234</td>
                       <td>Nguyễn Văn A</td>
-                      <td>Line 1: Bến Thành - Suối Tiên</td>
-                      <td>Người lớn</td>
-                      <td>15.000 VND</td>
+                      <td>Bến Thành → Thảo Điền</td>
+                      <td>Vé lượt</td>
+                      <td>9.000 VND</td>
                       <td><span className="badge badge-success">Đã thanh toán</span></td>
                       <td>01/12/2025</td>
                       <td>
@@ -371,36 +344,7 @@ const AdminDashboard = () => {
             </div>
           )}
 
-          {/* Routes Management */}
-          {activeMenu === 'routes' && (
-            <div className="management-section">
-              <div className="management-toolbar">
-                <button className="btn-action btn-primary">+ Thêm tuyến mới</button>
-              </div>
-              
-              <div className="routes-grid">
-                {['Line 1', 'Line 2', 'Line 3', 'Line 4', 'Line 5', 'Line 6', 'Line 7', 'Line 8', 'Line 9'].map((line, index) => (
-                  <div key={index} className="route-card">
-                    <div className="route-card-header">
-                      <h3>{line}</h3>
-                      <span className="badge badge-success">Hoạt động</span>
-                    </div>
-                    <div className="route-card-body">
-                      <p className="route-info">Số ga: 12</p>
-                      <p className="route-info">Vé bán: 892</p>
-                      <p className="route-info">Doanh thu: 13.380.000 VND</p>
-                    </div>
-                    <div className="route-card-footer">
-                      <button className="btn-small">Xem chi tiết</button>
-                      <button className="btn-small">Sửa</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* {Revenue Report} */}
+          {/* Revenue Report */}
           {activeMenu === 'revenue' && (
             <div className="management-section">
               <div className="management-toolbar">
