@@ -139,6 +139,12 @@ export const metroAPI = {
 
 // Ticket API functions
 export const ticketAPI = {
+  // Get my tickets
+  getMyTickets: async (accountId) => {
+    const response = await api.get(`/tickets/my?accountId=${accountId}`)
+    return response.data
+  },
+
   // Get ticket by ID
   getTicket: async (id) => {
     const response = await api.get(`/tickets/${id}`)
