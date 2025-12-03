@@ -8,7 +8,7 @@ const Header = () => {
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    if (window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+    if (window.confirm('Are you sure you want to logout?')) {
       logout()
       navigate('/')
     }
@@ -42,7 +42,7 @@ const Header = () => {
             {user ? (
               <div className="user-menu">
                 <button onClick={handleLogout} className="btn btn-outline">
-                  Đăng xuất
+                  Logout
                 </button>
               </div>
             ) : (

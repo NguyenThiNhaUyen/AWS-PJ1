@@ -5,70 +5,70 @@ import './Help.css'
 const Help = () => {
   const faqs = [
     {
-      category: 'Mua vé',
+      category: 'Buying Tickets',
       questions: [
         {
-          q: 'Làm thế nào để mua vé Metro?',
-          a: 'Bạn có thể mua vé trực tuyến qua website hoặc app, hoặc mua trực tiếp tại các ga Metro. Chọn loại vé phù hợp, thanh toán qua VNPay, và nhận vé điện tử ngay lập tức.'
+          q: 'How do I purchase Metro tickets?',
+          a: 'You can buy tickets online via our website or app, or purchase directly at Metro stations. Choose your ticket type, pay via VNPay, and receive your e-ticket instantly.'
         },
         {
-          q: 'Có những loại vé nào?',
-          a: 'Chúng tôi cung cấp: Vé tuyến (theo khoảng cách), Vé 1 ngày (40,000đ), Vé 3 ngày (90,000đ), Vé tháng (300,000đ), và Vé tháng sinh viên (150,000đ).'
+          q: 'What types of tickets are available?',
+          a: 'We offer: Single Trip (distance-based), 1-Day Pass (40,000 VND), 3-Day Pass (90,000 VND), Monthly Pass (300,000 VND), and Student Monthly Pass (150,000 VND).'
         },
         {
-          q: 'Thanh toán như thế nào?',
-          a: 'Hiện tại chúng tôi chấp nhận thanh toán qua VNPay. Bạn có thể thanh toán bằng thẻ ATM nội địa, thẻ tín dụng, hoặc ví điện tử.'
+          q: 'What payment methods do you accept?',
+          a: 'Currently we accept payments via VNPay. You can pay with domestic ATM cards, credit cards, or e-wallets.'
         }
       ]
     },
     {
-      category: 'Sử dụng vé',
+      category: 'Using Tickets',
       questions: [
         {
-          q: 'Làm sao để kích hoạt vé?',
-          a: 'Vé sẽ tự động được kích hoạt khi bạn quét QR code lần đầu tiên tại cổng soát vé ở ga Metro. Vé tuyến có thời hạn 2 giờ, các vé khác có thời hạn theo loại vé.'
+          q: 'How do I activate my ticket?',
+          a: 'Tickets are automatically activated when you scan the QR code for the first time at the ticket gate. Single trip tickets are valid for 2 hours, other tickets are valid according to their type.'
         },
         {
-          q: 'Vé có thể sử dụng nhiều lần không?',
-          a: 'Vé tuyến chỉ dùng 1 lần. Vé 1 ngày, 3 ngày, và vé tháng có thể sử dụng không giới hạn số lần trong thời hạn.'
+          q: 'Can tickets be used multiple times?',
+          a: 'Single trip tickets can only be used once. Day passes, 3-day passes, and monthly passes can be used unlimited times within their validity period.'
         },
         {
-          q: 'Nếu quên mang vé thì sao?',
-          a: 'Vé điện tử được lưu trong tài khoản của bạn. Bạn có thể truy cập mục "Vé của tôi" để xem lại mã QR và quét tại ga.'
+          q: 'What if I forget my ticket?',
+          a: 'E-tickets are saved in your account. You can access "My Tickets" to view your QR code and scan it at the station.'
         }
       ]
     },
     {
-      category: 'Hoàn tiền & Hủy vé',
+      category: 'Refunds & Cancellations',
       questions: [
         {
-          q: 'Có thể hủy vé và hoàn tiền không?',
-          a: 'Vé chưa kích hoạt có thể được hoàn tiền trong vòng 24 giờ kể từ khi mua với phí xử lý 10%. Vé đã kích hoạt không được hoàn tiền.'
+          q: 'Can I cancel my ticket and get a refund?',
+          a: 'Unactivated tickets can be refunded within 24 hours of purchase with a 10% processing fee. Activated tickets are non-refundable.'
         },
         {
-          q: 'Vé hết hạn có được hoàn tiền?',
-          a: 'Rất tiếc, vé đã hết hạn hoặc đã sử dụng không được hoàn tiền.'
+          q: 'Are expired tickets refundable?',
+          a: 'Unfortunately, expired or used tickets are not eligible for refunds.'
         },
         {
-          q: 'Thời gian xử lý hoàn tiền?',
-          a: 'Yêu cầu hoàn tiền sẽ được xử lý trong vòng 5-7 ngày làm việc. Tiền sẽ được hoàn về tài khoản thanh toán ban đầu.'
+          q: 'How long does refund processing take?',
+          a: 'Refund requests are processed within 5-7 business days. Funds will be returned to your original payment method.'
         }
       ]
     },
     {
-      category: 'Tài khoản',
+      category: 'Account',
       questions: [
         {
-          q: 'Quên mật khẩu phải làm sao?',
-          a: 'Nhấn "Quên mật khẩu" ở trang đăng nhập, nhập email đã đăng ký. Chúng tôi sẽ gửi mã xác nhận 6 số để bạn đặt lại mật khẩu.'
+          q: 'What if I forgot my password?',
+          a: 'Click "Forgot Password" on the login page and enter your registered email. We will send you a 6-digit verification code to reset your password.'
         },
         {
-          q: 'Làm sao để thay đổi thông tin cá nhân?',
-          a: 'Đăng nhập và vào mục "Hồ sơ". Bạn có thể cập nhật họ tên, email, và đổi mật khẩu.'
+          q: 'How do I change my personal information?',
+          a: 'Log in and go to "Profile". You can update your name, email, and change your password.'
         },
         {
-          q: 'Email xác thực không nhận được?',
-          a: 'Kiểm tra thư mục spam/junk. Nếu vẫn không thấy, vào trang đăng ký và chọn "Gửi lại email xác thực".'
+          q: 'I did not receive the verification email?',
+          a: 'Check your spam/junk folder. If still not found, go to the registration page and select "Resend verification email".'
         }
       ]
     }
@@ -78,12 +78,12 @@ const Help = () => {
     <Layout>
       <div className="help-container">
         <div className="help-header">
-          <h1>Trung tâm hỗ trợ</h1>
-          <p>Chúng tôi luôn sẵn sàng giúp đỡ bạn</p>
+          <h1>Support Center</h1>
+          <p>We're here to help you</p>
         </div>
 
         <div className="faq-section">
-          <h2>Câu hỏi thường gặp</h2>
+          <h2>Frequently Asked Questions</h2>
           
           {faqs.map((category, index) => (
             <div key={index} className="faq-category">
@@ -105,37 +105,6 @@ const Help = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="feedback-section">
-          <h2>Gửi phản hồi</h2>
-          <form className="feedback-form">
-            <div className="form-row">
-              <div className="form-group">
-                <label>Họ tên</label>
-                <input type="text" placeholder="Nhập họ tên của bạn" required />
-              </div>
-              <div className="form-group">
-                <label>Email</label>
-                <input type="email" placeholder="email@example.com" required />
-              </div>
-            </div>
-            <div className="form-group">
-              <label>Chủ đề</label>
-              <select required>
-                <option value="">Chọn chủ đề</option>
-                <option>Góp ý dịch vụ</option>
-                <option>Báo lỗi kỹ thuật</option>
-                <option>Yêu cầu hỗ trợ</option>
-                <option>Khác</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Nội dung</label>
-              <textarea rows="5" placeholder="Nhập nội dung phản hồi..." required></textarea>
-            </div>
-            <button type="submit" className="btn-submit">Gửi phản hồi</button>
-          </form>
         </div>
       </div>
     </Layout>

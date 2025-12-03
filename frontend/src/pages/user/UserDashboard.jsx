@@ -52,7 +52,7 @@ const UserDashboard = () => {
         <div className="user-dashboard">
           <div className="loading-state">
             <div className="spinner"></div>
-            <p>Đang tải dữ liệu...</p>
+            <p>Loading data...</p>
           </div>
         </div>
       </Layout>
@@ -66,7 +66,7 @@ const UserDashboard = () => {
           <div className="error-state">
             <p>{error}</p>
             <button className="btn-retry" onClick={fetchDashboardData}>
-              Thử lại
+              Retry
             </button>
           </div>
         </div>
@@ -91,35 +91,35 @@ const UserDashboard = () => {
               className={`sidebar-item ${activeMenu === 'tickets' ? 'active' : ''}`}
               onClick={() => navigate('/my-tickets')}
             >
-              <span className="item-text">Vé của tôi</span>
+              <span className="item-text">My Tickets</span>
             </button>
             
             <button 
               className={`sidebar-item ${activeMenu === 'buy' ? 'active' : ''}`}
               onClick={() => navigate('/book-ticket')}
             >
-              <span className="item-text">Mua vé mới</span>
+              <span className="item-text">Buy New Ticket</span>
             </button>
             
             <button 
               className={`sidebar-item ${activeMenu === 'timetable' ? 'active' : ''}`}
               onClick={() => navigate('/timetable')}
             >
-              <span className="item-text">Lịch trình</span>
+              <span className="item-text">Schedule</span>
             </button>
             
             <button 
               className={`sidebar-item ${activeMenu === 'profile' ? 'active' : ''}`}
               onClick={() => setActiveMenu('profile')}
             >
-              <span className="item-text">Tài khoản</span>
+              <span className="item-text">Account</span>
             </button>
             
             <button 
               className={`sidebar-item ${activeMenu === 'help' ? 'active' : ''}`}
               onClick={() => navigate('/help')}
             >
-              <span className="item-text">Hỗ trợ</span>
+              <span className="item-text">Help</span>
             </button>
           </nav>
           
@@ -140,9 +140,9 @@ const UserDashboard = () => {
               <div className="greeting-card">
                 <div className="greeting-icon">👋</div>
                 <div className="greeting-content">
-                  <h3 className="greeting-title">Xin chào!</h3>
+                  <h3 className="greeting-title">Hello!</h3>
                   <p className="greeting-name">{user.fullName || user.username}</p>
-                  <p className="greeting-message">Chào mừng bạn quay trở lại</p>
+                  <p className="greeting-message">Welcome back</p>
                 </div>
               </div>
             </div>
@@ -151,7 +151,7 @@ const UserDashboard = () => {
           <div className="dashboard-header">
             <h1 className="dashboard-title">
               {activeMenu === 'dashboard' && 'Dashboard'}
-              {activeMenu === 'profile' && 'Thông tin Tài khoản'}
+              {activeMenu === 'profile' && 'Account Information'}
             </h1>
           </div>
 
@@ -160,26 +160,26 @@ const UserDashboard = () => {
             <>
               {/* Stats Section */}
               <div className="stats-section">
-                <h2 className="section-title">Thống kê</h2>
+                <h2 className="section-title">Statistics</h2>
                 
                 <div className="stats-grid">
                   <div className="stat-card">
-                    <div className="stat-label">Tổng số vé:</div>
+                    <div className="stat-label">Total Tickets:</div>
                     <div className="stat-value">{stats?.totalTickets || 0}</div>
                   </div>
 
                   <div className="stat-card">
-                    <div className="stat-label">Vé đang có:</div>
+                    <div className="stat-label">Active Tickets:</div>
                     <div className="stat-value">{stats?.activeTickets || 0}</div>
                   </div>
 
                   <div className="stat-card">
-                    <div className="stat-label">Vé đã sử dụng:</div>
+                    <div className="stat-label">Used Tickets:</div>
                     <div className="stat-value">{stats?.usedTickets || 0}</div>
                   </div>
 
                   <div className="stat-card">
-                    <div className="stat-label">Tổng chi tiêu:</div>
+                    <div className="stat-label">Total Spent:</div>
                     <div className="stat-value highlight">
                       {stats?.totalSpent ? formatCurrency(stats.totalSpent) : '0 VND'}
                     </div>
@@ -189,7 +189,7 @@ const UserDashboard = () => {
 
               {/* Recent Tickets */}
               <div className="recent-tickets-section">
-                <h2 className="section-title">Vé gần đây</h2>
+                <h2 className="section-title">Recent Tickets</h2>
                 
                 <div className="tickets-list">
                   {tickets.map((ticket) => (
@@ -197,18 +197,18 @@ const UserDashboard = () => {
                       <div className="ticket-header">
                         <h3>{ticket.route}</h3>
                         <span className={`badge badge-${ticket.status.toLowerCase()}`}>
-                          {ticket.status === 'PAID' && 'Đã thanh toán'}
-                          {ticket.status === 'ACTIVE' && 'Đang hoạt động'}
-                          {ticket.status === 'USED' && 'Đã sử dụng'}
+                          {ticket.status === 'PAID' && 'Paid'}
+                          {ticket.status === 'ACTIVE' && 'Active'}
+                          {ticket.status === 'USED' && 'Used'}
                         </span>
                       </div>
                       <div className="ticket-body">
                         <div className="ticket-info">
-                          <span className="info-label">Giá vé:</span>
+                          <span className="info-label">Price:</span>
                           <span className="info-value">{formatCurrency(ticket.price)}</span>
                         </div>
                         <div className="ticket-info">
-                          <span className="info-label">Ngày mua:</span>
+                          <span className="info-label">Purchase Date:</span>
                           <span className="info-value">{ticket.purchaseDate}</span>
                         </div>
                       </div>
@@ -223,15 +223,15 @@ const UserDashboard = () => {
           {activeMenu === 'profile' && (
             <div className="profile-section">
               <div className="profile-card">
-                <h2 className="section-title">Thông tin cá nhân</h2>
+                <h2 className="section-title">Personal Information</h2>
                 
                 <div className="profile-info">
                   <div className="info-row">
-                    <span className="info-label">Tên đăng nhập:</span>
+                    <span className="info-label">Username:</span>
                     <span className="info-value">{user?.username}</span>
                   </div>
                   <div className="info-row">
-                    <span className="info-label">Họ và tên:</span>
+                    <span className="info-label">Full Name:</span>
                     <span className="info-value">{user?.fullName}</span>
                   </div>
                   <div className="info-row">
@@ -239,14 +239,14 @@ const UserDashboard = () => {
                     <span className="info-value">{user?.email}</span>
                   </div>
                   <div className="info-row">
-                    <span className="info-label">Vai trò:</span>
+                    <span className="info-label">Role:</span>
                     <span className="info-value badge badge-customer">Customer</span>
                   </div>
                 </div>
 
                 <div className="profile-actions">
-                  <button className="btn-action btn-primary">Cập nhật thông tin</button>
-                  <button className="btn-action">Đổi mật khẩu</button>
+                  <button className="btn-action btn-primary">Update Information</button>
+                  <button className="btn-action">Change Password</button>
                 </div>
               </div>
             </div>

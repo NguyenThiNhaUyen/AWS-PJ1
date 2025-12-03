@@ -64,7 +64,7 @@ const PaymentSuccess = () => {
       <Layout>
         <div className="payment-loading">
           <div className="spinner"></div>
-          <p>Đang tải thông tin vé...</p>
+          <p>Loading ticket information...</p>
         </div>
       </Layout>
     )
@@ -80,32 +80,32 @@ const PaymentSuccess = () => {
           </div>
 
           {/* Success Message */}
-          <h1 className="success-title">Thanh toán thành công!</h1>
+          <h1 className="success-title">Payment Successful!</h1>
           <p className="success-subtitle">
-            Vé của bạn đã được kích hoạt. Thông tin chi tiết đã được gửi về email.
+            Your ticket has been activated. Details have been sent to your email.
           </p>
           <p className="auto-redirect-notice">
-            Tự động chuyển về trang chủ sau <strong>{countdown}</strong> giây...
+            Automatically redirecting to homepage in <strong>{countdown}</strong> seconds...
           </p>
 
           {/* Ticket Details */}
           {ticket && (
             <div className="ticket-details">
-              <h3>Thông tin vé</h3>
+              <h3>Ticket Information</h3>
               
               <div className="detail-row">
-                <span className="label">Mã vé:</span>
+                <span className="label">Ticket ID:</span>
                 <span className="value ticket-code">{ticket.ticketCode || `TICKET-${ticketId}`}</span>
               </div>
 
               <div className="detail-row">
-                <span className="label">Loại vé:</span>
+                <span className="label">Ticket Type:</span>
                 <span className="value">{ticket.ticketType?.name || 'N/A'}</span>
               </div>
 
               {ticket.startStation && ticket.endStation && (
                 <div className="detail-row">
-                  <span className="label">Tuyến:</span>
+                  <span className="label">Route:</span>
                   <span className="value">
                     {ticket.startStation.name} → {ticket.endStation.name}
                   </span>
@@ -113,22 +113,22 @@ const PaymentSuccess = () => {
               )}
 
               <div className="detail-row">
-                <span className="label">Giá tiền:</span>
+                <span className="label">Price:</span>
                 <span className="value price">{formatPrice(ticket.price)} VND</span>
               </div>
 
               <div className="detail-row">
-                <span className="label">Trạng thái:</span>
+                <span className="label">Status:</span>
                 <span className={`value status ${ticket.status?.toLowerCase()}`}>
-                  {ticket.status === 'PENDING' ? 'Chờ kích hoạt' : 
-                   ticket.status === 'NOT_ACTIVATED' ? 'Chưa kích hoạt' :
-                   ticket.status === 'ACTIVATED' ? 'Đã kích hoạt' : ticket.status}
+                  {ticket.status === 'PENDING' ? 'Pending Activation' : 
+                   ticket.status === 'NOT_ACTIVATED' ? 'Not Activated' :
+                   ticket.status === 'ACTIVATED' ? 'Activated' : ticket.status}
                 </span>
               </div>
 
               {ticket.expirationTime && (
                 <div className="detail-row">
-                  <span className="label">Hết hạn:</span>
+                  <span className="label">Expires:</span>
                   <span className="value">{formatDate(ticket.expirationTime)}</span>
                 </div>
               )}
@@ -138,17 +138,17 @@ const PaymentSuccess = () => {
           {/* Transaction Info */}
           {responseCode && (
             <div className="transaction-info">
-              <h4>Thông tin giao dịch</h4>
-              <p><strong>Mã giao dịch:</strong> <span>{ticketId || 'N/A'}</span></p>
-              <p><strong>Phương thức:</strong> <span>VNPay</span></p>
-              <p><strong>Trạng thái:</strong> <span>Thành công</span></p>
+              <h4>Transaction Information</h4>
+              <p><strong>Transaction ID:</strong> <span>{ticketId || 'N/A'}</span></p>
+              <p><strong>Payment Method:</strong> <span>VNPay</span></p>
+              <p><strong>Status:</strong> <span>Success</span></p>
             </div>
           )}
 
           {/* QR Code Section */}
           {ticket && (
             <div className="qr-code-section">
-              <h4>Mã QR vé của bạn</h4>
+              <h4>Your Ticket QR Code</h4>
               <div className="qr-code-placeholder">
                 <svg width="200" height="200" viewBox="0 0 200 200">
                   <rect width="200" height="200" fill="#f3f4f6"/>
@@ -160,7 +160,7 @@ const PaymentSuccess = () => {
                   </text>
                 </svg>
               </div>
-              <p className="qr-instruction">Quét mã này tại cổng soát vé</p>
+              <p className="qr-instruction">Scan this code at the ticket gate</p>
             </div>
           )}
 
@@ -170,30 +170,30 @@ const PaymentSuccess = () => {
               className="btn-primary"
               onClick={() => navigate('/my-tickets')}
             >
-              Xem vé của tôi
+              View My Tickets
             </button>
             <button 
               className="btn-secondary"
               onClick={() => navigate('/book-ticket')}
             >
-              Đặt vé khác
+              Book Another Ticket
             </button>
             <button 
               className="btn-outline"
               onClick={() => navigate('/')}
             >
-              Về trang chủ
+              Go to Homepage
             </button>
           </div>
 
           {/* Additional Info */}
           <div className="additional-info">
-            <h3>📧 Lưu ý</h3>
+            <h3>📧 Important Notes</h3>
             <ul>
-              <li>Thông tin vé đã được gửi về email của bạn</li>
-              <li>Vui lòng kích hoạt vé tại ga trước khi sử dụng</li>
-              <li>Vé có thời hạn sử dụng, vui lòng kiểm tra ngày hết hạn</li>
-              <li>Mang theo CMND/CCCD khi sử dụng vé tháng sinh viên</li>
+              <li>Ticket information has been sent to your email</li>
+              <li>Please activate your ticket at the station before use</li>
+              <li>Check the expiration date - tickets have a validity period</li>
+              <li>Bring your ID/Passport when using student monthly passes</li>
             </ul>
           </div>
         </div>

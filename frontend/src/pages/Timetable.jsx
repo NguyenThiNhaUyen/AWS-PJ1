@@ -12,7 +12,7 @@ const Timetable = () => {
   const [loading, setLoading] = useState(false)
 
   const lines = [
-    { id: 'Line1', name: 'Tuyến 1', route: 'Bến Thành - Suối Tiên' }
+    { id: 'Line1', name: 'Line 1', route: 'Ben Thanh - Suoi Tien' }
   ]
 
   useEffect(() => {
@@ -71,14 +71,14 @@ const Timetable = () => {
     <Layout>
       <div className="timetable-container">
         <div className="timetable-header">
-          <h1>Lịch trình Metro</h1>
-          <p>Tra cứu giờ chạy tàu theo từng ga</p>
+          <h1>Metro Schedule</h1>
+          <p>Check train times for each station</p>
         </div>
 
         {/* Controls */}
         <div className="timetable-controls">
           <div className="control-group">
-            <label>Tuyến</label>
+            <label>Line</label>
             <select 
               value={selectedLine} 
               onChange={(e) => setSelectedLine(e.target.value)}
@@ -92,31 +92,31 @@ const Timetable = () => {
           </div>
 
           <div className="control-group">
-            <label>Loại lịch</label>
+            <label>Schedule Type</label>
             <div className="toggle-buttons">
               <button 
                 className={scheduleType === 'weekday' ? 'active' : ''}
                 onClick={() => setScheduleType('weekday')}
               >
-                Ngày thường
+                Weekday
               </button>
               <button 
                 className={scheduleType === 'weekend' ? 'active' : ''}
                 onClick={() => setScheduleType('weekend')}
               >
-                Cuối tuần
+                Weekend
               </button>
             </div>
           </div>
 
           <div className="control-group">
-            <label>Chiều</label>
+            <label>Direction</label>
             <select 
               value={direction} 
               onChange={(e) => setDirection(e.target.value)}
             >
-              <option value="ben-thanh-suoi-tien">Bến Thành → Suối Tiên</option>
-              <option value="suoi-tien-ben-thanh">Suối Tiên → Bến Thành</option>
+              <option value="ben-thanh-suoi-tien">Ben Thanh → Suoi Tien</option>
+              <option value="suoi-tien-ben-thanh">Suoi Tien → Ben Thanh</option>
             </select>
           </div>
         </div>
@@ -127,21 +127,21 @@ const Timetable = () => {
             <div className="info-card">
               <div className="info-icon">🚇</div>
               <div className="info-content">
-                <div className="info-label">Chuyến đầu</div>
+                <div className="info-label">First Train</div>
                 <div className="info-value">{timetable.firstTrain}</div>
               </div>
             </div>
             <div className="info-card">
               <div className="info-icon">🌙</div>
               <div className="info-content">
-                <div className="info-label">Chuyến cuối</div>
+                <div className="info-label">Last Train</div>
                 <div className="info-value">{timetable.lastTrain}</div>
               </div>
             </div>
             <div className="info-card">
               <div className="info-icon">⏱️</div>
               <div className="info-content">
-                <div className="info-label">Tần suất</div>
+                <div className="info-label">Frequency</div>
                 <div className="info-value">{timetable.frequency}</div>
               </div>
             </div>
@@ -150,7 +150,7 @@ const Timetable = () => {
 
         {/* Timetable Grid */}
         {loading ? (
-          <div className="loading">Đang tải lịch trình...</div>
+          <div className="loading">Loading schedule...</div>
         ) : timetable ? (
           <div className="timetable-grid">
             {timetable.stations.map((station, index) => (
@@ -174,12 +174,12 @@ const Timetable = () => {
 
         {/* Notes */}
         <div className="timetable-notes">
-          <h3>📌 Lưu ý</h3>
+          <h3>📌 Important Notes</h3>
           <ul>
-            <li>Lịch trình có thể thay đổi vào các ngày lễ, tết</li>
-            <li>Thời gian chạy tàu có thể điều chỉnh tùy theo tình hình thực tế</li>
-            <li>Vui lòng đến ga trước giờ tàu chạy ít nhất 5 phút</li>
-            <li>Liên hệ hotline 1900 6688 để biết thông tin chi tiết</li>
+            <li>Schedule may change during holidays and Tet</li>
+            <li>Train times may be adjusted based on actual conditions</li>
+            <li>Please arrive at the station at least 5 minutes before departure</li>
+            <li>Contact hotline 1900 6688 for detailed information</li>
           </ul>
         </div>
       </div>
