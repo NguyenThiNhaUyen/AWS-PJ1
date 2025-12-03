@@ -1,18 +1,33 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { userStatsAPI } from '../../services/api'
+import { userStatsAPI, accountAPI } from '../../services/api'
 import Layout from '../../components/Layout'
 import './UserDashboard.css'
 
 const UserDashboard = () => {
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user, updateUser } = useAuth()
   const [stats, setStats] = useState(null)
   const [tickets, setTickets] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [activeMenu, setActiveMenu] = useState('dashboard')
+  
+  // Profile edit states
+  const [isEditingProfile, setIsEditingProfile] = useState(false)
+  const [profileData, setProfileData] = useState({
+    fullName: user?.fullName || '',
+    email: user?.email || ''
+  })
+  
+  // Change password states
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  })
 
   useEffect(() => {
     fetchDashboardData()
@@ -44,6 +59,51 @@ const UserDashboard = () => {
       style: 'currency',
       currency: 'VND'
     }).format(amount)
+  }
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault()
+    try {
+      setLoading(true)
+      const updatedUser = await accountAPI.updateProfile(profileData)
+      updateUser(updatedUser) // Update user in context
+      alert('Profile updated successfully!')
+      setIsEditingProfile(false)
+    } catch (err) {
+      alert(err.response?.data || 'Failed to update profile')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault()
+    
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      alert('New password and confirm password do not match')
+      return
+    }
+    
+    if (passwordData.newPassword.length < 6) {
+      alert('Password must be at least 6 characters')
+      return
+    }
+
+    try {
+      setLoading(true)
+      await accountAPI.changePassword({
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+        confirmPassword: passwordData.confirmPassword
+      })
+      alert('Password changed successfully!')
+      setIsChangingPassword(false)
+      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' })
+    } catch (err) {
+      alert(err.response?.data || 'Failed to change password')
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (loading) {
@@ -225,29 +285,124 @@ const UserDashboard = () => {
               <div className="profile-card">
                 <h2 className="section-title">Personal Information</h2>
                 
-                <div className="profile-info">
-                  <div className="info-row">
-                    <span className="info-label">Username:</span>
-                    <span className="info-value">{user?.username}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="info-label">Full Name:</span>
-                    <span className="info-value">{user?.fullName}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="info-label">Email:</span>
-                    <span className="info-value">{user?.email}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="info-label">Role:</span>
-                    <span className="info-value badge badge-customer">Customer</span>
-                  </div>
-                </div>
+                {!isEditingProfile && !isChangingPassword && (
+                  <>
+                    <div className="profile-info">
+                      <div className="info-row">
+                        <span className="info-label">Username:</span>
+                        <span className="info-value">{user?.username}</span>
+                      </div>
+                      <div className="info-row">
+                        <span className="info-label">Full Name:</span>
+                        <span className="info-value">{user?.fullName}</span>
+                      </div>
+                      <div className="info-row">
+                        <span className="info-label">Email:</span>
+                        <span className="info-value">{user?.email}</span>
+                      </div>
+                      <div className="info-row">
+                        <span className="info-label">Role:</span>
+                        <span className="info-value badge badge-customer">Customer</span>
+                      </div>
+                    </div>
 
-                <div className="profile-actions">
-                  <button className="btn-action btn-primary">Update Information</button>
-                  <button className="btn-action">Change Password</button>
-                </div>
+                    <div className="profile-actions">
+                      <button className="btn-action btn-primary" onClick={() => setIsEditingProfile(true)}>
+                        Update Information
+                      </button>
+                      <button className="btn-action" onClick={() => setIsChangingPassword(true)}>
+                        Change Password
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {isEditingProfile && (
+                  <form onSubmit={handleUpdateProfile} className="profile-form">
+                    <div className="form-group">
+                      <label>Full Name</label>
+                      <input
+                        type="text"
+                        value={profileData.fullName}
+                        onChange={(e) => setProfileData({ ...profileData, fullName: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Email</label>
+                      <input
+                        type="email"
+                        value={profileData.email}
+                        onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="form-actions">
+                      <button type="submit" className="btn-action btn-primary" disabled={loading}>
+                        {loading ? 'Saving...' : 'Save Changes'}
+                      </button>
+                      <button 
+                        type="button" 
+                        className="btn-action" 
+                        onClick={() => {
+                          setIsEditingProfile(false)
+                          setProfileData({ fullName: user?.fullName || '', email: user?.email || '' })
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {isChangingPassword && (
+                  <form onSubmit={handleChangePassword} className="profile-form">
+                    <div className="form-group">
+                      <label>Current Password</label>
+                      <input
+                        type="password"
+                        value={passwordData.currentPassword}
+                        onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>New Password</label>
+                      <input
+                        type="password"
+                        value={passwordData.newPassword}
+                        onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                        required
+                        minLength={6}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Confirm New Password</label>
+                      <input
+                        type="password"
+                        value={passwordData.confirmPassword}
+                        onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                        required
+                        minLength={6}
+                      />
+                    </div>
+                    <div className="form-actions">
+                      <button type="submit" className="btn-action btn-primary" disabled={loading}>
+                        {loading ? 'Changing...' : 'Change Password'}
+                      </button>
+                      <button 
+                        type="button" 
+                        className="btn-action" 
+                        onClick={() => {
+                          setIsChangingPassword(false)
+                          setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' })
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                )}
               </div>
             </div>
           )}

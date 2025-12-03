@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { ticketAPI, scheduleAPI } from '../../services/api'
+import { ticketAPI } from '../../services/api'
 import Layout from '../../components/Layout'
 import './MyTickets.css'
 
@@ -10,13 +10,13 @@ const MyTickets = () => {
   const { user } = useAuth()
   const [selectedTicket, setSelectedTicket] = useState(null)
   const [tickets, setTickets] = useState([])
-  const [upcomingSchedules, setUpcomingSchedules] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [filterStatus, setFilterStatus] = useState('ALL') // ALL, ACTIVE, USED
+  const [stats, setStats] = useState({ active: 0, used: 0, total: 0 })
 
   useEffect(() => {
     fetchTickets()
-    fetchSchedules()
   }, [])
 
   const fetchTickets = async () => {
@@ -32,8 +32,13 @@ const MyTickets = () => {
 
       const data = await ticketAPI.getMyTickets(user.id)
 
+      // Filter only ACTIVE and USED tickets (exclude PENDING and EXPIRED)
+      const activeAndUsedTickets = data.filter(ticket => 
+        ticket.status === 'ACTIVE' || ticket.status === 'USED'
+      )
+
       // Map backend data to UI format
-      const mappedTickets = data.map(ticket => ({
+      const mappedTickets = activeAndUsedTickets.map(ticket => ({
         id: ticket.id,
         type: ticket.ticketTypeName || 'Single Trip',
         line: 'Ben Thanh - Suoi Tien',
@@ -47,22 +52,20 @@ const MyTickets = () => {
       }))
 
       setTickets(mappedTickets)
+      
+      // Calculate statistics
+      const activeCount = mappedTickets.filter(t => t.status === 'ACTIVE').length
+      const usedCount = mappedTickets.filter(t => t.status === 'USED').length
+      setStats({
+        active: activeCount,
+        used: usedCount,
+        total: mappedTickets.length
+      })
     } catch (err) {
       setError(err.message || 'Cannot load ticket list')
       console.error('Error fetching tickets:', err)
     } finally {
       setLoading(false)
-    }
-  }
-
-  const fetchSchedules = async () => {
-    try {
-      const data = await scheduleAPI.getUpcomingSchedules(6)
-      setUpcomingSchedules(data)
-    } catch (err) {
-      console.error('Error fetching schedules:', err)
-      // Keep empty array if API fails
-      setUpcomingSchedules([])
     }
   }
 
@@ -124,6 +127,57 @@ const MyTickets = () => {
               </button>
             </div>
 
+            {/* Statistics Section */}
+            {!loading && !error && (
+              <div className="tickets-stats">
+                <div className="stat-card">
+                  <div className="stat-icon">📊</div>
+                  <div className="stat-info">
+                    <div className="stat-label">Total Tickets</div>
+                    <div className="stat-value">{stats.total}</div>
+                  </div>
+                </div>
+                <div className="stat-card active">
+                  <div className="stat-icon">🎫</div>
+                  <div className="stat-info">
+                    <div className="stat-label">Active Tickets</div>
+                    <div className="stat-value">{stats.active}</div>
+                  </div>
+                </div>
+                <div className="stat-card used">
+                  <div className="stat-icon">✅</div>
+                  <div className="stat-info">
+                    <div className="stat-label">Used Tickets</div>
+                    <div className="stat-value">{stats.used}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Filter Tabs */}
+            {!loading && !error && tickets.length > 0 && (
+              <div className="filter-tabs">
+                <button 
+                  className={`filter-tab ${filterStatus === 'ALL' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('ALL')}
+                >
+                  All ({stats.total})
+                </button>
+                <button 
+                  className={`filter-tab ${filterStatus === 'ACTIVE' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('ACTIVE')}
+                >
+                  Active ({stats.active})
+                </button>
+                <button 
+                  className={`filter-tab ${filterStatus === 'USED' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('USED')}
+                >
+                  Used ({stats.used})
+                </button>
+              </div>
+            )}
+
             {loading && (
               <div className="loading-state">
                 <div className="spinner"></div>
@@ -145,8 +199,8 @@ const MyTickets = () => {
                 <svg width="120" height="120" viewBox="0 0 24 24" fill="none">
                   <path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h16v11z" fill="rgba(77, 134, 190, 0.3)" />
                 </svg>
-                <h3>No tickets yet</h3>
-                <p>You haven't purchased any tickets. Start your journey now!</p>
+                <h3>No active or used tickets</h3>
+                <p>You don't have any active or used tickets yet. Purchase a ticket to start traveling!</p>
                 <button className="btn-buy-new" onClick={handleBuyNewTicket}>
                   Buy Ticket Now
                 </button>
@@ -155,7 +209,9 @@ const MyTickets = () => {
 
             {!loading && !error && tickets.length > 0 && (
               <div className="tickets-list">
-                {tickets.map((ticket) => (
+                {tickets
+                  .filter(ticket => filterStatus === 'ALL' || ticket.status === filterStatus)
+                  .map((ticket) => (
                   <div key={ticket.id} className="ticket-card">
                     <div className="ticket-header">
                       <div className="ticket-id">
@@ -205,7 +261,13 @@ const MyTickets = () => {
                           </div>
                         </>
                       )}
-                      {ticket.expiryDate && ticket.expiryDate !== '-' && (
+                      {ticket.status === 'USED' && (
+                        <div className="ticket-row">
+                          <span className="row-label">Used on:</span>
+                          <span className="row-value">{ticket.expiryDate}</span>
+                        </div>
+                      )}
+                      {ticket.expiryDate && ticket.expiryDate !== '-' && ticket.status === 'ACTIVE' && (
                         <div className="ticket-row">
                           <span className="row-label">Expires:</span>
                           <span className="row-value">{ticket.expiryDate}</span>
@@ -214,15 +276,6 @@ const MyTickets = () => {
                     </div>
 
                     <div className="ticket-footer">
-                      {ticket.status === 'PENDING' && (
-                        <button
-                          className="btn-activate"
-                          onClick={() => handleActivateTicket(ticket.id)}
-                          disabled={loading}
-                        >
-                          {loading ? 'Processing...' : 'Activate Ticket'}
-                        </button>
-                      )}
                       {ticket.status === 'ACTIVE' && (
                         <button
                           className="btn-view-details"
@@ -231,13 +284,10 @@ const MyTickets = () => {
                           View Details
                         </button>
                       )}
-                      {ticket.status === 'EXPIRED' && (
-                        <button
-                          className="btn-expired"
-                          disabled
-                        >
-                          Expired
-                        </button>
+                      {ticket.status === 'USED' && (
+                        <div className="ticket-used-badge">
+                          <span>✓ Ticket Used</span>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -246,27 +296,67 @@ const MyTickets = () => {
             )}
           </div>
 
-          <div className="schedule-sidebar">
-            <div className="schedule-card">
-              <h3 className="schedule-title">Upcoming Schedule</h3>
+          <div className="tips-sidebar">
+            <div className="tips-card">
+              <h3 className="tips-title">💡 Tips & Reminders</h3>
 
-              <div className="schedule-list">
-                {upcomingSchedules.map((schedule, index) => (
-                  <div key={index} className="schedule-item">
-                    <div className="schedule-info">
-                      <div className="station-name">{schedule.station}</div>
-                      <div className="station-line">{schedule.line}</div>
-                    </div>
-                    <div className="schedule-status">
-                      {schedule.status && (
-                        <span className={`status-badge ${schedule.status.toLowerCase()}`}>
-                          {schedule.status}
-                        </span>
-                      )}
-                      <span className="time">{schedule.time}</span>
-                    </div>
+              <div className="tips-list">
+                <div className="tip-item">
+                  <div className="tip-icon">🎫</div>
+                  <div className="tip-content">
+                    <h4>How to Activate Tickets</h4>
+                    <p>Scan your ticket QR code at the station gate. Tickets activate automatically on first use.</p>
                   </div>
-                ))}
+                </div>
+
+                <div className="tip-item">
+                  <div className="tip-icon">⏰</div>
+                  <div className="tip-content">
+                    <h4>Validity Period</h4>
+                    <p>Single trip tickets are valid for 2 hours. Pass tickets are valid according to their duration (1 day, 3 days, or 30 days).</p>
+                  </div>
+                </div>
+
+                <div className="tip-item">
+                  <div className="tip-icon">📱</div>
+                  <div className="tip-content">
+                    <h4>Keep Ticket Ready</h4>
+                    <p>Save your ticket QR code for quick access. You can find all tickets in "My Tickets" section.</p>
+                  </div>
+                </div>
+
+                <div className="tip-item">
+                  <div className="tip-icon">🎓</div>
+                  <div className="tip-content">
+                    <h4>Student Pass</h4>
+                    <p>Bring your student ID when using student monthly passes. Required for verification at gates.</p>
+                  </div>
+                </div>
+
+                <div className="tip-item">
+                  <div className="tip-icon">💳</div>
+                  <div className="tip-content">
+                    <h4>Refund Policy</h4>
+                    <p>Unactivated tickets can be refunded within 24 hours with 10% fee. Activated tickets are non-refundable.</p>
+                  </div>
+                </div>
+
+                <div className="tip-item">
+                  <div className="tip-icon">📞</div>
+                  <div className="tip-content">
+                    <h4>Need Help?</h4>
+                    <p>Contact our hotline 1900 6688 or visit Help Center for support.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="tips-actions">
+                <button className="btn-help" onClick={() => navigate('/help')}>
+                  Visit Help Center
+                </button>
+                <button className="btn-timetable" onClick={() => navigate('/timetable')}>
+                  View Timetable
+                </button>
               </div>
             </div>
           </div>
