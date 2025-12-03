@@ -1,69 +1,118 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { metroAPI } from '../services/api'
 import Layout from '../components/Layout'
 import './Timetable.css'
 
 const Timetable = () => {
   const { user } = useAuth()
-  const [selectedLine, setSelectedLine] = useState('Line1')
-  const [scheduleType, setScheduleType] = useState('weekday')
-  const [direction, setDirection] = useState('ben-thanh-suoi-tien')
-  const [timetable, setTimetable] = useState(null)
+  const [currentStation, setCurrentStation] = useState('')
+  const [destinationStation, setDestinationStation] = useState('')
+  const [stations, setStations] = useState([])
+  const [upcomingTrips, setUpcomingTrips] = useState([])
   const [loading, setLoading] = useState(false)
+  const [currentTime, setCurrentTime] = useState(new Date())
+  const [selectedTrip, setSelectedTrip] = useState(null)
 
-  const lines = [
-    { id: 'Line1', name: 'Line 1', route: 'Ben Thanh - Suoi Tien' }
-  ]
-
+  // Update current time every second
   useEffect(() => {
-    fetchTimetable()
-  }, [selectedLine, scheduleType, direction])
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [])
 
-  const fetchTimetable = async () => {
-    setLoading(true)
+  // Fetch stations on mount
+  useEffect(() => {
+    fetchStations()
+  }, [])
+
+  // Fetch upcoming trips when station changes
+  useEffect(() => {
+    if (currentStation) {
+      fetchUpcomingTrips()
+      // Refresh every 30 seconds
+      const interval = setInterval(fetchUpcomingTrips, 30000)
+      return () => clearInterval(interval)
+    }
+  }, [currentStation])
+
+  const fetchStations = async () => {
     try {
-      // Mock data for now - backend endpoint: /api/routes/{lineName}/timetable?type={weekday|weekend}
-      const mockData = {
-        lineName: 'Line1',
-        scheduleType: scheduleType,
-        direction: direction,
-        firstTrain: direction === 'ben-thanh-suoi-tien' ? '05:00' : '05:15',
-        lastTrain: direction === 'ben-thanh-suoi-tien' ? '22:00' : '22:15',
-        frequency: '8-10 phút',
-        stations: direction === 'ben-thanh-suoi-tien' ? [
-          { name: 'Bến Thành', times: ['05:00', '05:10', '05:20', '05:30', '05:40', '05:50', '06:00', '06:10', '06:20', '06:30'] },
-          { name: 'Nhà hát Thành phố', times: ['05:03', '05:13', '05:23', '05:33', '05:43', '05:53', '06:03', '06:13', '06:23', '06:33'] },
-          { name: 'Ba Son', times: ['05:06', '05:16', '05:26', '05:36', '05:46', '05:56', '06:06', '06:16', '06:26', '06:36'] },
-          { name: 'Văn Thánh', times: ['05:09', '05:19', '05:29', '05:39', '05:49', '05:59', '06:09', '06:19', '06:29', '06:39'] },
-          { name: 'Tân Cảng', times: ['05:12', '05:22', '05:32', '05:42', '05:52', '06:02', '06:12', '06:22', '06:32', '06:42'] },
-          { name: 'Thảo Điền', times: ['05:15', '05:25', '05:35', '05:45', '05:55', '06:05', '06:15', '06:25', '06:35', '06:45'] },
-          { name: 'An Phú', times: ['05:18', '05:28', '05:38', '05:48', '05:58', '06:08', '06:18', '06:28', '06:38', '06:48'] },
-          { name: 'Rạch Chiếc', times: ['05:21', '05:31', '05:41', '05:51', '06:01', '06:11', '06:21', '06:31', '06:41', '06:51'] },
-          { name: 'Phước Long', times: ['05:24', '05:34', '05:44', '05:54', '06:04', '06:14', '06:24', '06:34', '06:44', '06:54'] },
-          { name: 'Bình Thái', times: ['05:27', '05:37', '05:47', '05:57', '06:07', '06:17', '06:27', '06:37', '06:47', '06:57'] },
-          { name: 'Thủ Đức', times: ['05:30', '05:40', '05:50', '06:00', '06:10', '06:20', '06:30', '06:40', '06:50', '07:00'] },
-          { name: 'Suối Tiên', times: ['05:35', '05:45', '05:55', '06:05', '06:15', '06:25', '06:35', '06:45', '06:55', '07:05'] }
-        ] : [
-          { name: 'Suối Tiên', times: ['05:15', '05:25', '05:35', '05:45', '05:55', '06:05', '06:15', '06:25', '06:35', '06:45'] },
-          { name: 'Thủ Đức', times: ['05:20', '05:30', '05:40', '05:50', '06:00', '06:10', '06:20', '06:30', '06:40', '06:50'] },
-          { name: 'Bình Thái', times: ['05:23', '05:33', '05:43', '05:53', '06:03', '06:13', '06:23', '06:33', '06:43', '06:53'] },
-          { name: 'Phước Long', times: ['05:26', '05:36', '05:46', '05:56', '06:06', '06:16', '06:26', '06:36', '06:46', '06:56'] },
-          { name: 'Rạch Chiếc', times: ['05:29', '05:39', '05:49', '05:59', '06:09', '06:19', '06:29', '06:39', '06:49', '06:59'] },
-          { name: 'An Phú', times: ['05:32', '05:42', '05:52', '06:02', '06:12', '06:22', '06:32', '06:42', '06:52', '07:02'] },
-          { name: 'Thảo Điền', times: ['05:35', '05:45', '05:55', '06:05', '06:15', '06:25', '06:35', '06:45', '06:55', '07:05'] },
-          { name: 'Tân Cảng', times: ['05:38', '05:48', '05:58', '06:08', '06:18', '06:28', '06:38', '06:48', '06:58', '07:08'] },
-          { name: 'Văn Thánh', times: ['05:41', '05:51', '06:01', '06:11', '06:21', '06:31', '06:41', '06:51', '07:01', '07:11'] },
-          { name: 'Ba Son', times: ['05:44', '05:54', '06:04', '06:14', '06:24', '06:34', '06:44', '06:54', '07:04', '07:14'] },
-          { name: 'Nhà hát Thành phố', times: ['05:47', '05:57', '06:07', '06:17', '06:27', '06:37', '06:47', '06:57', '07:07', '07:17'] },
-          { name: 'Bến Thành', times: ['05:50', '06:00', '06:10', '06:20', '06:30', '06:40', '06:50', '07:00', '07:10', '07:20'] }
-        ]
+      const data = await metroAPI.getStations()
+      setStations(data)
+      if (data.length > 0) {
+        setCurrentStation(data[0].name)
       }
-
-      setTimetable(mockData)
     } catch (error) {
-      console.error('Error fetching timetable:', error)
+      console.error('Error fetching stations:', error)
+    }
+  }
+
+  const fetchUpcomingTrips = async () => {
+    if (!currentStation) return
+    
+    try {
+      setLoading(true)
+      const response = await fetch(`/api/stations/${encodeURIComponent(currentStation)}/arrivals?limit=10`)
+      const data = await response.json()
+      setUpcomingTrips(data)
+    } catch (error) {
+      console.error('Error fetching upcoming trips:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const getTimeUntil = (scheduledTime) => {
+    if (!scheduledTime) return null
+    const scheduled = new Date(scheduledTime)
+    const diff = scheduled - currentTime
+    
+    if (diff < 0) return 'Departing'
+    
+    const minutes = Math.floor(diff / 60000)
+    const seconds = Math.floor((diff % 60000) / 1000)
+    
+    if (minutes === 0) return `${seconds}s`
+    return `${minutes}m ${seconds}s`
+  }
+
+  const formatTime = (dateTime) => {
+    if (!dateTime) return '-'
+    return new Date(dateTime).toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      second: '2-digit'
+    })
+  }
+
+  const getFilteredTrips = () => {
+    if (!destinationStation) return upcomingTrips
+    
+    // Filter trips based on direction to destination
+    return upcomingTrips.filter(trip => {
+      const currentIndex = stations.findIndex(s => s.name === currentStation)
+      const destIndex = stations.findIndex(s => s.name === destinationStation)
+      
+      if (currentIndex === -1 || destIndex === -1) return true
+      
+      // Check if trip direction matches
+      if (destIndex > currentIndex) {
+        return trip.direction === 'FORWARD'
+      } else {
+        return trip.direction === 'BACKWARD'
+      }
+    })
+  }
+
+  const handleViewTripDetails = async (tripId) => {
+    try {
+      const response = await fetch(`/api/trips/${tripId}/stops`)
+      const stops = await response.json()
+      setSelectedTrip({ id: tripId, stops })
+    } catch (error) {
+      console.error('Error fetching trip details:', error)
     }
   }
 
@@ -71,116 +120,217 @@ const Timetable = () => {
     <Layout>
       <div className="timetable-container">
         <div className="timetable-header">
-          <h1>Metro Schedule</h1>
-          <p>Check train times for each station</p>
+          <div className="header-content">
+            <h1>Real-Time Metro Schedule</h1>
+            <p>Live train arrivals and departures</p>
+          </div>
+          <div className="live-clock">
+            <div className="clock-icon">🕐</div>
+            <div className="clock-time">{currentTime.toLocaleTimeString('en-US')}</div>
+          </div>
         </div>
 
-        {/* Controls */}
-        <div className="timetable-controls">
-          <div className="control-group">
-            <label>Line</label>
+        {/* Station Selection */}
+        <div className="station-selector">
+          <div className="selector-card current-station">
+            <div className="selector-header">
+              <div className="icon">📍</div>
+              <label>Current Station</label>
+            </div>
             <select 
-              value={selectedLine} 
-              onChange={(e) => setSelectedLine(e.target.value)}
+              value={currentStation} 
+              onChange={(e) => setCurrentStation(e.target.value)}
+              className="station-select"
             >
-              {lines.map(line => (
-                <option key={line.id} value={line.id}>
-                  {line.name} - {line.route}
+              <option value="">Select your station</option>
+              {stations.map(station => (
+                <option key={station.id} value={station.name}>
+                  {station.name}
                 </option>
               ))}
             </select>
           </div>
 
-          <div className="control-group">
-            <label>Schedule Type</label>
-            <div className="toggle-buttons">
-              <button 
-                className={scheduleType === 'weekday' ? 'active' : ''}
-                onClick={() => setScheduleType('weekday')}
-              >
-                Weekday
-              </button>
-              <button 
-                className={scheduleType === 'weekend' ? 'active' : ''}
-                onClick={() => setScheduleType('weekend')}
-              >
-                Weekend
-              </button>
-            </div>
-          </div>
+          <div className="route-arrow">→</div>
 
-          <div className="control-group">
-            <label>Direction</label>
+          <div className="selector-card destination-station">
+            <div className="selector-header">
+              <div className="icon">🎯</div>
+              <label>Destination (Optional)</label>
+            </div>
             <select 
-              value={direction} 
-              onChange={(e) => setDirection(e.target.value)}
+              value={destinationStation} 
+              onChange={(e) => setDestinationStation(e.target.value)}
+              className="station-select"
             >
-              <option value="ben-thanh-suoi-tien">Ben Thanh → Suoi Tien</option>
-              <option value="suoi-tien-ben-thanh">Suoi Tien → Ben Thanh</option>
+              <option value="">All directions</option>
+              {stations
+                .filter(s => s.name !== currentStation)
+                .map(station => (
+                  <option key={station.id} value={station.name}>
+                    {station.name}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
 
-        {/* Timetable Info */}
-        {timetable && (
-          <div className="timetable-info">
-            <div className="info-card">
-              <div className="info-icon">🚇</div>
-              <div className="info-content">
-                <div className="info-label">First Train</div>
-                <div className="info-value">{timetable.firstTrain}</div>
-              </div>
+        {/* Upcoming Trips */}
+        {currentStation && (
+          <div className="upcoming-section">
+            <div className="section-header">
+              <h2>🚇 Upcoming Trains at {currentStation}</h2>
+              <button className="btn-refresh" onClick={fetchUpcomingTrips}>
+                🔄 Refresh
+              </button>
             </div>
-            <div className="info-card">
-              <div className="info-icon">🌙</div>
-              <div className="info-content">
-                <div className="info-label">Last Train</div>
-                <div className="info-value">{timetable.lastTrain}</div>
+
+            {loading ? (
+              <div className="loading-state">
+                <div className="spinner"></div>
+                <p>Loading train information...</p>
               </div>
-            </div>
-            <div className="info-card">
-              <div className="info-icon">⏱️</div>
-              <div className="info-content">
-                <div className="info-label">Frequency</div>
-                <div className="info-value">{timetable.frequency}</div>
+            ) : getFilteredTrips().length > 0 ? (
+              <div className="trips-list">
+                {getFilteredTrips().map((trip, index) => {
+                  const timeUntil = getTimeUntil(trip.scheduledArrival)
+                  const isImminent = timeUntil && timeUntil !== 'Departing' && parseInt(timeUntil) <= 3
+                  
+                  return (
+                    <div 
+                      key={trip.tripId} 
+                      className={`trip-card ${isImminent ? 'imminent' : ''} ${timeUntil === 'Departing' ? 'departing' : ''}`}
+                    >
+                      <div className="trip-number">#{index + 1}</div>
+                      
+                      <div className="trip-info">
+                        <div className="trip-line">
+                          <div className="line-badge">{trip.lineName}</div>
+                          <div className="direction-badge">
+                            {trip.direction === 'FORWARD' ? '→' : '←'} 
+                            {trip.direction === 'FORWARD' ? ' Ben Thanh → Suoi Tien' : ' Suoi Tien → Ben Thanh'}
+                          </div>
+                        </div>
+                        
+                        <div className="trip-details">
+                          <div className="detail-item">
+                            <span className="label">Scheduled:</span>
+                            <span className="value">{formatTime(trip.scheduledArrival)}</span>
+                          </div>
+                          {trip.actualArrival && (
+                            <div className="detail-item">
+                              <span className="label">Actual:</span>
+                              <span className="value actual">{formatTime(trip.actualArrival)}</span>
+                            </div>
+                          )}
+                          {trip.delayMinutes > 0 && (
+                            <div className="detail-item delay">
+                              <span className="label">Delay:</span>
+                              <span className="value">{trip.delayMinutes} min</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="trip-status">
+                        {timeUntil && (
+                          <div className="countdown">
+                            <div className="countdown-label">Arrives in</div>
+                            <div className="countdown-value">{timeUntil}</div>
+                          </div>
+                        )}
+                        <div className={`status-badge ${trip.status.toLowerCase()}`}>
+                          {trip.status}
+                        </div>
+                      </div>
+
+                      <button 
+                        className="btn-view-route"
+                        onClick={() => handleViewTripDetails(trip.tripId)}
+                      >
+                        View Route
+                      </button>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="empty-state">
+                <div className="empty-icon">🚫</div>
+                <h3>No upcoming trains</h3>
+                <p>There are no scheduled trains at this time. Please check back later.</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Trip Details Modal */}
+        {selectedTrip && (
+          <div className="modal-overlay" onClick={() => setSelectedTrip(null)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Trip Route Details</h3>
+                <button className="btn-close" onClick={() => setSelectedTrip(null)}>✕</button>
+              </div>
+              
+              <div className="route-timeline">
+                {selectedTrip.stops.map((stop, index) => (
+                  <div 
+                    key={index} 
+                    className={`timeline-stop ${stop.stationName === currentStation ? 'current' : ''} ${stop.stationName === destinationStation ? 'destination' : ''}`}
+                  >
+                    <div className="stop-marker">
+                      <div className="marker-dot"></div>
+                      {index < selectedTrip.stops.length - 1 && <div className="marker-line"></div>}
+                    </div>
+                    
+                    <div className="stop-info">
+                      <div className="stop-name">
+                        {stop.stationName}
+                        {stop.stationName === currentStation && <span className="badge-current">Current</span>}
+                        {stop.stationName === destinationStation && <span className="badge-dest">Destination</span>}
+                      </div>
+                      <div className="stop-time">
+                        {formatTime(stop.scheduledArrival)}
+                        {stop.actualArrival && ` (Actual: ${formatTime(stop.actualArrival)})`}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         )}
 
-        {/* Timetable Grid */}
-        {loading ? (
-          <div className="loading">Loading schedule...</div>
-        ) : timetable ? (
-          <div className="timetable-grid">
-            {timetable.stations.map((station, index) => (
-              <div key={index} className="station-schedule">
-                <div className="station-header">
-                  <div className="station-number">{index + 1}</div>
-                  <div className="station-name">{station.name}</div>
-                </div>
-                <div className="time-grid">
-                  {station.times.map((time, timeIndex) => (
-                    <div key={timeIndex} className="time-slot">
-                      {time}
-                    </div>
-                  ))}
-                  <div className="time-slot more">...</div>
-                </div>
+        {/* Quick Info */}
+        <div className="quick-info">
+          <h3>ℹ️ Service Information</h3>
+          <div className="info-grid">
+            <div className="info-item">
+              <div className="info-icon">🌅</div>
+              <div className="info-text">
+                <strong>First Train:</strong> 5:00 AM
               </div>
-            ))}
+            </div>
+            <div className="info-item">
+              <div className="info-icon">🌙</div>
+              <div className="info-text">
+                <strong>Last Train:</strong> 10:00 PM
+              </div>
+            </div>
+            <div className="info-item">
+              <div className="info-icon">⏱️</div>
+              <div className="info-text">
+                <strong>Frequency:</strong> 8-10 minutes
+              </div>
+            </div>
+            <div className="info-item">
+              <div className="info-icon">📞</div>
+              <div className="info-text">
+                <strong>Hotline:</strong> 1900 6688
+              </div>
+            </div>
           </div>
-        ) : null}
-
-        {/* Notes */}
-        <div className="timetable-notes">
-          <h3>📌 Important Notes</h3>
-          <ul>
-            <li>Schedule may change during holidays and Tet</li>
-            <li>Train times may be adjusted based on actual conditions</li>
-            <li>Please arrive at the station at least 5 minutes before departure</li>
-            <li>Contact hotline 1900 6688 for detailed information</li>
-          </ul>
         </div>
       </div>
     </Layout>
