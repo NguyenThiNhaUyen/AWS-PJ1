@@ -1,26 +1,52 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
+import { ticketAPI, scheduleAPI } from '../../services/api'
 import Layout from '../../components/Layout'
-// import { getMyTickets, activateTicket as activateTicketAPI } from '../services/ticketService'
 import './MyTickets.css'
 
 const MyTickets = () => {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [selectedTicket, setSelectedTicket] = useState(null)
   const [tickets, setTickets] = useState([])
+  const [upcomingSchedules, setUpcomingSchedules] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     fetchTickets()
+    fetchSchedules()
   }, [])
 
   const fetchTickets = async () => {
     try {
       setLoading(true)
       setError(null)
-      const data = await getMyTickets()
-      setTickets(data.tickets || [])
+
+      if (!user || !user.id) {
+        setError('Vui lòng đăng nhập để xem vé')
+        setLoading(false)
+        return
+      }
+
+      const data = await ticketAPI.getMyTickets(user.id)
+
+      // Map backend data to UI format
+      const mappedTickets = data.map(ticket => ({
+        id: ticket.id,
+        type: ticket.ticketTypeName || 'Vé lượt',
+        line: 'Bến Thành - Bến xe Suối Tiên',
+        departure: ticket.startStation || 'N/A',
+        arrival: ticket.endStation || 'N/A',
+        price: ticket.price || 0,
+        status: ticket.status || 'PENDING',
+        statusText: getStatusText(ticket.status),
+        activatedDate: ticket.activationTime ? new Date(ticket.activationTime).toLocaleString('vi-VN') : '-',
+        expiryDate: ticket.expirationTime ? new Date(ticket.expirationTime).toLocaleString('vi-VN') : '-'
+      }))
+
+      setTickets(mappedTickets)
     } catch (err) {
       setError(err.message || 'Không thể tải danh sách vé')
       console.error('Error fetching tickets:', err)
@@ -29,41 +55,26 @@ const MyTickets = () => {
     }
   }
 
-  const upcomingSchedules = [
-    {
-      station: 'Bến Thành',
-      line: 'Line 1',
-      status: 'ACTIVE',
-      time: '10:00'
-    },
-    {
-      station: 'Nhà Hát TP',
-      line: 'Line 1',
-      status: 'PRICING',
-      time: '10:55'
-    },
-    {
-      station: 'Vạn Thành',
-      line: 'Line 1',
-      status: 'ACTIVE',
-      time: '8:12'
-    },
-    {
-      station: 'Ba Son',
-      line: 'Line 2',
-      time: '10:32'
-    },
-    {
-      station: 'Tân Cảng',
-      line: 'Line 2',
-      time: '10:43'
-    },
-    {
-      station: 'Thủ Thiêm',
-      line: 'Line 3',
-      time: '10:28'
+  const fetchSchedules = async () => {
+    try {
+      const data = await scheduleAPI.getUpcomingSchedules(6)
+      setUpcomingSchedules(data)
+    } catch (err) {
+      console.error('Error fetching schedules:', err)
+      // Keep empty array if API fails
+      setUpcomingSchedules([])
     }
-  ]
+  }
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case 'ACTIVE': return 'Đang hoạt động'
+      case 'PENDING': return 'Chưa kích hoạt'
+      case 'EXPIRED': return 'Đã hết hạn'
+      case 'USED': return 'Đã sử dụng'
+      default: return status
+    }
+  }
 
   const handleActivateTicket = async (ticketId) => {
     if (!window.confirm('Bạn có chắc chắn muốn kích hoạt vé này?')) {
@@ -72,9 +83,9 @@ const MyTickets = () => {
 
     try {
       setLoading(true)
-      await activateTicketAPI(ticketId)
+      // Note: Backend expects ticketId as query param
+      await ticketAPI.activateTicket(ticketId)
       alert('Kích hoạt vé thành công!')
-      // Refresh list tecket
       await fetchTickets()
     } catch (err) {
       alert(err.message || 'Không thể kích hoạt vé')
@@ -93,7 +104,7 @@ const MyTickets = () => {
   }
 
   const getStatusClass = (status) => {
-    switch(status) {
+    switch (status) {
       case 'ACTIVE': return 'active'
       case 'PENDING': return 'pending'
       case 'EXPIRED': return 'expired'
@@ -132,7 +143,7 @@ const MyTickets = () => {
             {!loading && !error && tickets.length === 0 && (
               <div className="empty-state">
                 <svg width="120" height="120" viewBox="0 0 24 24" fill="none">
-                  <path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h16v11z" fill="rgba(77, 134, 190, 0.3)"/>
+                  <path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h16v11z" fill="rgba(77, 134, 190, 0.3)" />
                 </svg>
                 <h3>Chưa có vé nào</h3>
                 <p>Bạn chưa mua vé nào. Hãy mua vé để bắt đầu hành trình!</p>
@@ -204,7 +215,7 @@ const MyTickets = () => {
 
                     <div className="ticket-footer">
                       {ticket.status === 'PENDING' && (
-                        <button 
+                        <button
                           className="btn-activate"
                           onClick={() => handleActivateTicket(ticket.id)}
                           disabled={loading}
@@ -213,7 +224,7 @@ const MyTickets = () => {
                         </button>
                       )}
                       {ticket.status === 'ACTIVE' && (
-                        <button 
+                        <button
                           className="btn-view-details"
                           onClick={() => handleViewDetails(ticket)}
                         >
@@ -221,7 +232,7 @@ const MyTickets = () => {
                         </button>
                       )}
                       {ticket.status === 'EXPIRED' && (
-                        <button 
+                        <button
                           className="btn-expired"
                           disabled
                         >
@@ -238,7 +249,7 @@ const MyTickets = () => {
           <div className="schedule-sidebar">
             <div className="schedule-card">
               <h3 className="schedule-title">Lịch trình sắp tới</h3>
-              
+
               <div className="schedule-list">
                 {upcomingSchedules.map((schedule, index) => (
                   <div key={index} className="schedule-item">

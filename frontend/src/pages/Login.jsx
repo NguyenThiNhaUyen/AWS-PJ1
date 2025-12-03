@@ -27,13 +27,37 @@ const Login = () => {
     setLoading(true)
     setError('')
 
+    // Validate form
+    if (!formData.email.trim()) {
+      setError('Please enter your email or username')
+      setLoading(false)
+      return
+    }
+
+    if (!formData.password) {
+      setError('Please enter your password')
+      setLoading(false)
+      return
+    }
+
     try {
-      const success = await login({ usernameOrEmail: formData.email, password: formData.password })
+      const success = await login({ 
+        usernameOrEmail: formData.email.trim(), 
+        password: formData.password 
+      })
+      
       if (success) {
-        navigate('/')
+        const user = JSON.parse(localStorage.getItem('user'));
+        console.log('User role:', user?.role);
+        if (user?.role === 'ADMIN') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       }
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.')
+      console.error('Login error:', err)
+      setError(err.message || 'Login failed. Please check your credentials and try again.')
     } finally {
       setLoading(false)
     }
@@ -54,13 +78,13 @@ const Login = () => {
             
             <div className="form-group">
               <input
-                type="email"
-                id="email"
+                type="text"
+                id="usernameOrEmail"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                placeholder="Email"
+                placeholder="Username or Email"
                 className="form-input"
                 disabled={loading}
               />

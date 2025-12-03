@@ -8,6 +8,7 @@ const Register = () => {
   const navigate = useNavigate()
   const { register } = useAuth()
   const [formData, setFormData] = useState({
+    username: '',
     fullName: '',
     email: '',
     password: '',
@@ -38,7 +39,8 @@ const Register = () => {
 
     try {
       const success = await register({
-        username: formData.fullName,
+        username: formData.username,
+        fullName: formData.fullName,
         email: formData.email,
         password: formData.password
       })
@@ -61,10 +63,24 @@ const Register = () => {
             <h1>Create Your Account</h1>
             <p>Join the future of urban mobility</p>
           </div>
-          
+
           <form onSubmit={handleSubmit} className="register-form">
             {error && <div className="error-message">{error}</div>}
-            
+
+            <div className="form-group">
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+                placeholder="Username"
+                className="form-input"
+                disabled={loading}
+              />
+            </div>
+
             <div className="form-group">
               <input
                 type="text"
@@ -121,8 +137,8 @@ const Register = () => {
               />
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="register-button"
               disabled={loading}
             >
@@ -147,7 +163,7 @@ const Register = () => {
 
           <h2>Smart Urban <span className="highlight-accent">Mobility</span> for Ho Chi Minh City</h2>
           <p className="intro-text">
-            Experience the future of public transportation with our state-of-the-art 
+            Experience the future of public transportation with our state-of-the-art
             metro system designed for modern urban living.
           </p>
 
@@ -155,7 +171,7 @@ const Register = () => {
             <div className="benefit-item">
               <div className="benefit-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                 </svg>
               </div>
               <div className="benefit-text">
@@ -167,7 +183,7 @@ const Register = () => {
             <div className="benefit-item">
               <div className="benefit-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
               </div>
               <div className="benefit-text">
@@ -179,7 +195,7 @@ const Register = () => {
             <div className="benefit-item">
               <div className="benefit-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                 </svg>
               </div>
               <div className="benefit-text">

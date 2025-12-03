@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import Layout from '../../components/Layout'
+import axios from 'axios'
 import './Tickets.css'
 
 const Tickets = () => {
@@ -12,18 +13,63 @@ const Tickets = () => {
     arrival: 'Ba Son'
   })
   const [loading, setLoading] = useState(false)
+  const [ticketPrices, setTicketPrices] = useState(null)
 
-  const ticketTypes = [
-    { id: 'single', name: 'Single', price: 2, desc: 'One-time pass allows one journey.' },
-    { id: 'day', name: 'Day Pass', price: 5, desc: 'Unlimited journeys in one day.' },
-    { id: '3day', name: '3-Day Pass', price: 20, desc: 'Unlimited journeys for 3 days.' },
-    { id: 'monthly', name: 'Monthly Pass', price: 50, desc: 'Unlimited journeys for 30 days.' }
-  ]
+  useEffect(() => {
+    const fetchTicketPrices = async () => {
+      try {
+        const response = await axios.get('/api/tickets/ticket-prices')
+        setTicketPrices(response.data)
+      } catch (error) {
+        console.error('Error fetching ticket prices:', error)
+      }
+    }
+
+    fetchTicketPrices()
+  }, [])
+
+  const stationMapping = {
+    'Ben Thanh': 'BEN_THANH',
+    'Nha Hat TP': 'NHA_HAT_TP',
+    'Ba Son': 'BA_SON',
+    'Van Thanh': 'VAN_THANH',
+    'Tan Cang': 'TAN_CANG',
+    'Thao Dien': 'THAO_DIEN',
+    'An Phu': 'AN_PHU',
+    'Rach Chiec': 'RACH_CHIEC',
+    'Phuoc Long': 'PHUOC_LONG',
+    'Binh Thai': 'BINH_THAI',
+    'Thu Duc': 'THU_DUC',
+    'CN cao': 'KHU_CNC',
+    'DH Quoc Gia': 'DH_QUOC_GIA',
+    'BX Suoi Tien': 'BX_SUOI_TIEN'
+  }
 
   const stations = [
-    'Ben Thanh', 'Nha Hat Thanh Pho', 'Ba Son', 'Van Thanh', 
-    'Tan Cang', 'Thu Thiem', 'Landmark', 'Suoi Tien'
+    'Ben Thanh', 'Nha Hat TP', 'Ba Son', 'Van Thanh', 
+    'Tan Cang', 'Thao Dien', 'An Phu', 'Rach Chiec',
+    'Phuoc Long', 'Binh Thai', 'Thu Duc', 'CN cao',
+    'DH Quoc Gia', 'BX Suoi Tien'
   ]
+
+  const calculateSinglePrice = useMemo(() => {
+    if (!ticketPrices) return 0
+    const departureKey = stationMapping[selectedRoute.departure]
+    const arrivalKey = stationMapping[selectedRoute.arrival]
+    if (!departureKey || !arrivalKey) return 0
+    
+    const departurePrices = ticketPrices[departureKey]
+    const arrivalIndex = Object.keys(stationMapping).indexOf(selectedRoute.arrival)
+    
+    return departurePrices ? departurePrices[arrivalIndex] * 1000 : 0
+  }, [ticketPrices, selectedRoute])
+
+  const ticketTypes = useMemo(() => [
+    { id: 'single', name: 'Single', price: calculateSinglePrice, desc: 'One-time pass allows one journey.' },
+    { id: 'day', name: 'Day Pass', price: 5000, desc: 'Unlimited journeys in one day.' },
+    { id: '3day', name: '3-Day Pass', price: 20000, desc: 'Unlimited journeys for 3 days.' },
+    { id: 'monthly', name: 'Monthly Pass', price: 50000, desc: 'Unlimited journeys for 30 days.' }
+  ], [calculateSinglePrice])
 
   const handleTicketSelect = (ticket) => {
     setSelectedTicket(ticket)
@@ -61,6 +107,13 @@ const Tickets = () => {
     // In your actual app, use: navigate('/my-tickets')
   }
 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(price)
+  }
+
   return (
     <Layout>
       <div className="tickets-page">
@@ -82,7 +135,7 @@ const Tickets = () => {
                         <h3>{ticket.name}</h3>
                         <p>{ticket.desc}</p>
                       </div>
-                      <div className="ticket-price">${ticket.price}</div>
+                      <div className="ticket-price">{formatPrice(ticket.price)}</div>
                     </div>
                   ))}
                 </div>
@@ -160,6 +213,24 @@ const Tickets = () => {
                       <circle cx="550" cy="225" r="8" fill="white" stroke="#4d86be" strokeWidth="2" />
                     </svg>
                   </div>
+
+                  {/* Display price for selected route */}
+                  {selectedTicket?.id === 'single' && (
+                    <div style={{
+                      marginTop: '20px',
+                      padding: '15px',
+                      backgroundColor: 'rgba(77, 134, 190, 0.1)',
+                      borderRadius: '8px',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ fontSize: '14px', color: '#a0a0a0', marginBottom: '5px' }}>
+                        {selectedRoute.departure} → {selectedRoute.arrival}
+                      </div>
+                      <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#4d86be' }}>
+                        {formatPrice(calculateSinglePrice)}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <button className="btn-next" onClick={handleNext}>
@@ -177,18 +248,18 @@ const Tickets = () => {
                 
                 <div className="order-summary">
                   <div className="summary-row">
-                    <span className="summary-label">{selectedRoute.departure}</span>
-                    <span className="summary-value">${selectedTicket?.price}</span>
+                    <span className="summary-label">{selectedRoute.departure} → {selectedRoute.arrival}</span>
+                    <span className="summary-value">{formatPrice(selectedTicket?.price || 0)}</span>
                   </div>
                   
                   <div className="summary-row">
-                    <span className="summary-label">Day Pass</span>
+                    <span className="summary-label">Ticket Type</span>
                     <span className="summary-value">{selectedTicket?.name}</span>
                   </div>
                   
                   <div className="summary-row total">
-                    <span className="summary-label">{selectedTicket?.name}</span>
-                    <span className="summary-value">${selectedTicket?.price}</span>
+                    <span className="summary-label">Total</span>
+                    <span className="summary-value">{formatPrice(selectedTicket?.price || 0)}</span>
                   </div>
 
                   <div className="payment-method">

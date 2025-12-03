@@ -6,9 +6,15 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Tickets from './pages/Tickets'
-import MyTickets from './pages/MyTickets'
-
+import BookTicket from './pages/BookTicket'
+import MyTickets from './pages/user/MyTickets'
+import UserDashboard from './pages/user/UserDashboard'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import PaymentSuccess from './pages/PaymentSuccess'
+import PaymentFailed from './pages/PaymentFailed'
+import Help from './pages/Help'
+import ResetPassword from './pages/ResetPassword'
+import Timetable from './pages/Timetable'
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -83,16 +89,22 @@ function App() {
           />
 
           {/* Protected Routes - Only accessible when logged in */}
-          {/* Add your protected routes here */}
           <Route
             path="/tickets"
             element={
               <ProtectedRoute>
-                <Tickets />
+                <BookTicket />
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/book-ticket"
+            element={
+              <ProtectedRoute>
+                <BookTicket />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/my-tickets"
             element={
@@ -101,6 +113,30 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Additional Routes */}
+          <Route path="/book-ticket" element={<BookTicket />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/timetable" element={<Timetable />} />
 
           {/* Catch all route */}
           <Route path="*" element={<Navigate to="/" replace />} />

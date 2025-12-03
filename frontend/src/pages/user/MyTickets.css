@@ -1,8 +1,8 @@
-/* My Tickets Page Styles */
+/* My Tickets Page Styles - Neutral Light Theme (Match BookTicket) */
 .my-tickets-page {
   min-height: 100vh;
-  background: #0a0c20;
-  font-family: 'Poppins', 'Inter', sans-serif;
+  background: #f5f7fa;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .my-tickets-container {
@@ -23,8 +23,8 @@
 .loading-state .spinner {
   width: 60px;
   height: 60px;
-  border: 4px solid rgba(77, 134, 190, 0.2);
-  border-top-color: #4d86be;
+  border: 4px solid #e5e7eb;
+  border-top-color: #4F46E5;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1.5rem;
@@ -35,7 +35,7 @@
 }
 
 .loading-state p {
-  color: rgba(207, 216, 220, 0.7);
+  color: #6B7280;
   font-size: 0.95rem;
 }
 
@@ -43,8 +43,8 @@
 .error-state {
   text-align: center;
   padding: 4rem 2rem;
-  background: rgba(244, 67, 54, 0.05);
-  border: 1px solid rgba(244, 67, 54, 0.2);
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
   border-radius: 16px;
 }
 
@@ -57,8 +57,8 @@
 .btn-retry {
   padding: 0.75rem 1.5rem;
   background: transparent;
-  color: #4d86be;
-  border: 1px solid #4d86be;
+  color: #4F46E5;
+  border: 1px solid #4F46E5;
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 500;
@@ -68,15 +68,15 @@
 }
 
 .btn-retry:hover {
-  background: rgba(77, 134, 190, 0.1);
+  background: rgba(79, 70, 229, 0.1);
 }
 
 /* Empty State */
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
-  background: rgba(17, 21, 46, 0.8);
-  border: 1px solid rgba(77, 134, 190, 0.2);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
   border-radius: 16px;
 }
 
@@ -86,14 +86,14 @@
 }
 
 .empty-state h3 {
-  color: #cfd8dc;
+  color: #1F2937;
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
 .empty-state p {
-  color: rgba(207, 216, 220, 0.6);
+  color: #6B7280;
   font-size: 0.95rem;
   margin-bottom: 2rem;
 }
@@ -112,28 +112,33 @@
 }
 
 .page-title {
-  color: #cfd8dc;
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 2.75rem !important;
+  font-weight: 900 !important;
+  color: #0D47A1 !important;
+  margin-bottom: 0.75rem;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 8px rgba(13, 71, 161, 0.2);
+  background: none !important;
+  -webkit-text-fill-color: #0D47A1 !important;
 }
 
 .btn-buy-new {
   padding: 0.875rem 1.5rem;
-  background: linear-gradient(135deg, #4d86be 0%, #6aa9ff 100%);
+  background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(77, 134, 190, 0.2);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.25);
 }
 
 .btn-buy-new:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(77, 134, 190, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(25, 118, 210, 0.4);
 }
 
 /* Tickets List */
@@ -149,16 +154,17 @@
 
 /* Ticket Card */
 .ticket-card {
-  background: rgba(17, 21, 46, 0.8);
-  border: 1px solid rgba(77, 134, 190, 0.2);
+  background: #FFFFFF;
+  border: 1px solid #C5D7EB;
   border-radius: 16px;
   padding: 2rem;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .ticket-card:hover {
-  border-color: rgba(77, 134, 190, 0.4);
-  box-shadow: 0 4px 20px rgba(77, 134, 190, 0.1);
+  border-color: #1976D2;
+  box-shadow: 0 8px 25px rgba(25, 118, 210, 0.15);
 }
 
 .ticket-header {
@@ -167,7 +173,7 @@
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(77, 134, 190, 0.2);
+  border-bottom: 1px solid #C5D7EB;
 }
 
 .ticket-id {
@@ -177,12 +183,12 @@
 }
 
 .ticket-id .label {
-  color: rgba(207, 216, 220, 0.6);
+  color: #628BB0;
   font-size: 0.9rem;
 }
 
 .ticket-id .value {
-  color: #cfd8dc;
+  color: #1A1A1A;
   font-size: 1rem;
   font-weight: 600;
 }
@@ -196,20 +202,20 @@
 }
 
 .ticket-status.active {
-  background: rgba(76, 175, 80, 0.2);
-  color: #4caf50;
+  background: rgba(76, 175, 80, 0.1);
+  color: #2E7D32;
   border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
 .ticket-status.pending {
-  background: rgba(255, 193, 7, 0.2);
-  color: #ffc107;
+  background: rgba(255, 193, 7, 0.1);
+  color: #F57C00;
   border: 1px solid rgba(255, 193, 7, 0.3);
 }
 
 .ticket-status.expired {
-  background: rgba(244, 67, 54, 0.2);
-  color: #f44336;
+  background: rgba(244, 67, 54, 0.1);
+  color: #C62828;
   border: 1px solid rgba(244, 67, 54, 0.3);
 }
 
@@ -228,37 +234,37 @@
 }
 
 .ticket-row.route {
-  background: rgba(10, 12, 32, 0.6);
+  background: #F5F7FA;
   padding: 1rem;
   border-radius: 8px;
-  border: 1px solid rgba(77, 134, 190, 0.1);
+  border: 1px solid #C5D7EB;
 }
 
 .row-label {
-  color: rgba(207, 216, 220, 0.6);
+  color: #628BB0;
   font-size: 0.9rem;
   min-width: 140px;
 }
 
 .row-value {
-  color: #cfd8dc;
+  color: #1A1A1A;
   font-size: 0.95rem;
   font-weight: 500;
 }
 
 .row-value.price {
-  color: #4d86be;
+  color: #1976D2;
   font-weight: 600;
   font-size: 1.1rem;
 }
 
 .row-value.status-active {
-  color: #4caf50;
+  color: #2E7D32;
   font-weight: 600;
 }
 
 .arrow {
-  color: #4d86be;
+  color: #1976D2;
   font-size: 1.2rem;
   font-weight: bold;
   margin: 0 0.5rem;
@@ -269,35 +275,36 @@
   display: flex;
   gap: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(77, 134, 190, 0.1);
+  border-top: 1px solid #C5D7EB;
 }
 
 .btn-activate,
 .btn-view-details {
   flex: 1;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #4d86be 0%, #6aa9ff 100%);
+  background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.25);
 }
 
 .btn-activate:hover,
 .btn-view-details:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(77, 134, 190, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(25, 118, 210, 0.4);
 }
 
 .btn-expired {
   flex: 1;
   padding: 0.75rem 1.5rem;
-  background: rgba(244, 67, 54, 0.1);
-  color: rgba(244, 67, 54, 0.6);
+  background: rgba(244, 67, 54, 0.05);
+  color: #C62828;
   border: 1px solid rgba(244, 67, 54, 0.2);
   border-radius: 8px;
   font-size: 0.9rem;
@@ -312,18 +319,19 @@
 }
 
 .schedule-card {
-  background: rgba(17, 21, 46, 0.8);
-  border: 1px solid rgba(77, 134, 190, 0.2);
+  background: #FFFFFF;
+  border: 1px solid #C5D7EB;
   border-radius: 16px;
   padding: 2rem;
   position: sticky;
   top: 100px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .schedule-title {
-  color: #cfd8dc;
+  color: #0D47A1;
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 1.5rem;
 }
 
@@ -338,15 +346,16 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: rgba(10, 12, 32, 0.6);
-  border: 1px solid rgba(77, 134, 190, 0.1);
+  background: #F5F7FA;
+  border: 1px solid #C5D7EB;
   border-radius: 8px;
   transition: all 0.3s ease;
 }
 
 .schedule-item:hover {
-  border-color: rgba(77, 134, 190, 0.3);
-  background: rgba(10, 12, 32, 0.8);
+  border-color: #1976D2;
+  background: #EAF0F6;
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.1);
 }
 
 .schedule-info {
@@ -356,14 +365,15 @@
 }
 
 .station-name {
-  color: #cfd8dc;
+  color: #1A1A1A;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .station-line {
-  color: rgba(207, 216, 220, 0.5);
+  color: #628BB0;
   font-size: 0.8rem;
+  font-weight: 500;
 }
 
 .schedule-status {
@@ -382,19 +392,19 @@
 }
 
 .status-badge.active {
-  background: rgba(76, 175, 80, 0.2);
-  color: #4caf50;
+  background: rgba(76, 175, 80, 0.1);
+  color: #2E7D32;
   border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
 .status-badge.pricing {
-  background: rgba(255, 152, 0, 0.2);
-  color: #ff9800;
+  background: rgba(255, 152, 0, 0.1);
+  color: #E65100;
   border: 1px solid rgba(255, 152, 0, 0.3);
 }
 
 .time {
-  color: #cfd8dc;
+  color: #628BB0;
   font-size: 0.9rem;
   font-weight: 500;
 }

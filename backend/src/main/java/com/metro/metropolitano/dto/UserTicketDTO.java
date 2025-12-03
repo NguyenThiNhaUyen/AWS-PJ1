@@ -1,12 +1,13 @@
 package com.metro.metropolitano.dto;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+
 @NoArgsConstructor
 public class UserTicketDTO {
     private Long id;
@@ -24,4 +25,5 @@ public class UserTicketDTO {
         this.status = status;
         this.purchaseDate = purchaseDate;
     }// dùng để hiển thị
+
 }
