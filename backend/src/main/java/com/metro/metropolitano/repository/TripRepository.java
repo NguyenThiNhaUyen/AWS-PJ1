@@ -2,7 +2,9 @@ package com.metro.metropolitano.repository;
 
 import com.metro.metropolitano.model.Trip;
 import com.metro.metropolitano.enums.TripStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,4 +38,9 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
             LocalDate from,
             LocalDate to
     );
+
+    @Query("SELECT t FROM Trip t WHERE t.scheduledDeparture > CURRENT_TIMESTAMP ORDER BY t.scheduledDeparture ASC")
+    List<Trip> findAllUpcoming(Pageable pageable);
+
+    List<Trip> findByLineName(String lineName);
 }

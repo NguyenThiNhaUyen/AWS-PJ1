@@ -76,11 +76,14 @@ public class AccountService {
         // Create new account
         Account account = new Account();
         account.setUsername(request.getUsername());
+        if (request.getFullName() == null || request.getFullName().trim().isEmpty()) {
+            throw new RuntimeException("Full name cannot be blank");
+        }
         account.setFullName(request.getFullName());
         account.setEmail(request.getEmail());
         account.setPassword(passwordEncoder.encode(request.getPassword()));
         account.setRole(Role.CUSTOMER);
-    account.setProvider(Provider.LOCAL);
+        account.setProvider(Provider.LOCAL);
     // Keep original behavior: new accounts are active immediately
     account.setIsActive(true);
         
@@ -122,7 +125,7 @@ public class AccountService {
         
         // Authenticate user (email verification is optional for login)
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getUsernameOrEmail(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(account.getEmail(), request.getPassword())
         );
         
         SecurityContextHolder.getContext().setAuthentication(authentication);
