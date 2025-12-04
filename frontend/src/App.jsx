@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import RouteMetro from './pages/RouteMetro'
 import BookTicket from './pages/BookTicket'
 import MyTickets from './pages/user/MyTickets'
 import UserDashboard from './pages/user/UserDashboard'
@@ -39,7 +40,7 @@ const ProtectedRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/login" replace />
 }
 
-// Public Route (redirect to home if already logged in)
+// Public Route Component
 const PublicRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth()
 
@@ -67,10 +68,9 @@ function App() {
     <AuthProvider>
       <div className="App">
         <Routes>
-          {/* Public Routes */}
+          {/* Public */}
           <Route path="/" element={<Home />} />
 
-          {/* Auth Routes - Only accessible when not logged in */}
           <Route
             path="/login"
             element={
@@ -87,16 +87,16 @@ function App() {
               </PublicRoute>
             }
           />
-
-          {/* Protected Routes - Only accessible when logged in */}
           <Route
-            path="/tickets"
+            path="/routemetro"
             element={
-              <ProtectedRoute>
-                <BookTicket />
-              </ProtectedRoute>
+              <PublicRoute>
+                <RouteMetro />
+              </PublicRoute>
             }
           />
+
+          {/* Protected */}
           <Route
             path="/book-ticket"
             element={
@@ -130,15 +130,14 @@ function App() {
             }
           />
 
-          {/* Additional Routes */}
-          <Route path="/book-ticket" element={<BookTicket />} />
+          {/* Normal Public Routes */}
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-failed" element={<PaymentFailed />} />
           <Route path="/help" element={<Help />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/timetable" element={<Timetable />} />
 
-          {/* Catch all route */}
+          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
