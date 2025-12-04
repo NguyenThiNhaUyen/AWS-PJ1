@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import RouteMetro from './pages/RouteMetro'
 import Tickets from './pages/user/Tickets'
 import MyTickets from './pages/user/MyTickets'
 
@@ -78,6 +79,14 @@ function App() {
             element={
               <PublicRoute>
                 <Register />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/routemetro"
+            element={
+              <PublicRoute>
+                <RouteMetro />
               </PublicRoute>
             }
           />
