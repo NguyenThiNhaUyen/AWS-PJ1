@@ -1,18 +1,25 @@
 package com.metro.metropolitano.utils;
 
-import com.metro.metropolitano.model.*;
-import com.metro.metropolitano.repository.*;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import com.metro.metropolitano.model.Account;
+import com.metro.metropolitano.model.FareRule;
+import com.metro.metropolitano.model.Provider;
+import com.metro.metropolitano.model.Role;
+import com.metro.metropolitano.model.Station;
+import com.metro.metropolitano.model.TicketType;
+import com.metro.metropolitano.repository.AccountRepository;
+import com.metro.metropolitano.repository.FareRuleRepository;
+import com.metro.metropolitano.repository.StationRepository;
+import com.metro.metropolitano.repository.TicketTypeRepository;
 
-import static java.util.Map.entry;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -71,31 +78,28 @@ public class DataSeeder implements CommandLineRunner {
     private void seedFareRules() {
         if (fareRuleRepository.count() > 0) return;
 
-        Station benThanh = stationRepository.findByName("Ben Thanh")
-                .orElseThrow(() -> new RuntimeException("Ben Thanh not found"));
+        // Lấy tất cả các ga, đã được sắp xếp theo orderIndex
+        List<Station> allStations = stationRepository.findAll();
+        allStations.sort((s1, s2) -> Integer.compare(s1.getOrderIndex(), s2.getOrderIndex()));
 
-        Map<String, Double> prices = Map.ofEntries(
-                entry("Nha Hat TP", 6000.0),
-                entry("Ba Son", 6000.0),
-                entry("Van Thanh", 6000.0),
-                entry("Tan Cang", 6000.0),
-                entry("Thao Dien", 6000.0),
-                entry("An Phu", 6000.0),
-                entry("Rach Chiec", 8000.0),
-                entry("Phuoc Long", 9000.0),
-                entry("Binh Thai", 11000.0),
-                entry("Thu Duc", 13000.0),
-                entry("Khu CNC", 15000.0),
-                entry("DH Quoc Gia", 17000.0),
-                entry("BX Suoi Tien", 19000.0)
-        );
+        // Tạo fare rule cho mọi cặp ga (i, j) với i != j
+        for (int i = 0; i < allStations.size(); i++) {
+            for (int j = 0; j < allStations.size(); j++) {
+                if (i == j) continue; // Bỏ qua cùng ga
 
-        prices.forEach((name, price) -> {
-            Station end = stationRepository.findByName(name)
-                    .orElseThrow(() -> new RuntimeException("Station not found: " + name));
+                Station start = allStations.get(i);
+                Station end = allStations.get(j);
 
-            fareRuleRepository.save(new FareRule(benThanh, end, price, "Line 1"));
-        });
+                // Tính khoảng cách giữa 2 ga
+                int distance = Math.abs(start.getOrderIndex() - end.getOrderIndex());
+
+                // Tính giá dựa trên khoảng cách
+                // 1 ga: 6000đ, mỗi ga tiếp theo +1000đ
+                double price = 5000.0 + (distance * 1000.0);
+
+                fareRuleRepository.save(new FareRule(start, end, price, "Line 1"));
+            }
+        }
     }
 
     // ============================
@@ -108,7 +112,7 @@ public class DataSeeder implements CommandLineRunner {
         ticketTypeRepository.save(new TicketType("Ve 3 ngay", 90000.0, 72, false));
         ticketTypeRepository.save(new TicketType("Ve thang", 300000.0, 720, false));
         ticketTypeRepository.save(new TicketType("Ve thang HSSV", 150000.0, 720, false));
-        ticketTypeRepository.save(new TicketType("Ve tuyen", 0.0, 0, true));
+        ticketTypeRepository.save(new TicketType("Ve luot", 0.0, 0, true));
     }
 
     // ============================

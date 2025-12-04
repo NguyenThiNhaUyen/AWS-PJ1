@@ -8,7 +8,7 @@ const Header = () => {
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    if (window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+    if (window.confirm('Are you sure you want to logout?')) {
       logout()
       navigate('/')
     }
@@ -27,19 +27,22 @@ const Header = () => {
           {/* Navigation */}
           <nav className="nav">
             <Link to="/" className="nav-link">Home</Link>
-            <Link to="/routes" className="nav-link">Routes</Link>
-            <Link to="/tickets" className="nav-link">Tickets</Link>
-            <Link to="/about" className="nav-link">About</Link>
-            <Link to="/contact" className="nav-link">Contact</Link>
+            {user && (
+              <Link to={user.role === 'ADMIN' ? '/admin/dashboard' : '/dashboard'} className="nav-link">
+                Dashboard
+              </Link>
+            )}
+            <Link to="/book-ticket" className="nav-link">Tickets</Link>
+            <Link to="/timetable" className="nav-link">Timetable</Link>
+            <Link to="/help" className="nav-link">Help</Link>
           </nav>
 
           {/* Auth Section */}
           <div className="auth-section">
             {user ? (
               <div className="user-menu">
-                <span className="user-name">Xin chào, {user.fullName || user.username}</span>
                 <button onClick={handleLogout} className="btn btn-outline">
-                  Đăng xuất
+                  Logout
                 </button>
               </div>
             ) : (

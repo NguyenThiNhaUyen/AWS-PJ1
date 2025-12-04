@@ -1,0 +1,583 @@
+/* ===== PaymentSuccess - Metro Light Theme ===== */
+/* Design System: Matches BookTicket neutral theme with green success accents */
+
+.payment-success-container {
+  min-height: 100vh;
+  background: #EAF0F6;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  color: #1A1A1A;
+  padding: 2rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Override global dark theme styles */
+.payment-success-container * {
+  color: inherit;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+.payment-success-container h1,
+.payment-success-container h2,
+.payment-success-container h3,
+.payment-success-container h4,
+.payment-success-container h5,
+.payment-success-container h6 {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+/* ===== Loading State ===== */
+.payment-loading {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #FFFFFF;
+  border-radius: 20px;
+  border: 2px solid #C5D7EB;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 400px;
+  width: 100%;
+}
+
+.payment-loading .spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid #E3E8EF;
+  border-top-color: #1976D2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1.5rem;
+}
+
+.payment-loading p {
+  color: #4C6A8D !important;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* ===== Success Icon ===== */
+.success-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.success-icon {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3);
+  animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.success-icon::before {
+  content: "✓";
+  font-size: 4rem;
+  color: #FFFFFF;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* ===== Success Content Card ===== */
+.success-content {
+  background: #FFFFFF;
+  border-radius: 20px;
+  border: 2px solid #C5D7EB;
+  max-width: 950px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 3rem 2.5rem;
+  position: relative;
+  animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.success-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4CAF50 0%, #66BB6A 100%);
+  border-radius: 20px 20px 0 0;
+}
+
+/* ===== Title Section ===== */
+.success-title {
+  text-align: center;
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: #4CAF50 !important;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.success-subtitle {
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #4C6A8D !important;
+  margin: 0 0 1rem 0;
+}
+
+.auto-redirect-notice {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #64748B !important;
+  margin: 0 0 2rem 0;
+  padding: 0.75rem 1rem;
+  background: #F1F5F9;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+}
+
+.auto-redirect-notice strong {
+  color: #1976D2 !important;
+  font-weight: 700;
+}
+
+/* ===== Ticket Details Section ===== */
+.ticket-details {
+  background: #F8FAFC;
+  border-radius: 16px;
+  border: 1px solid #E3E8EF;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.ticket-details h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1A1A1A !important;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ticket-details h3::before {
+  content: "🎫";
+  font-size: 1.75rem;
+}
+
+/* ===== Detail Rows ===== */
+.detail-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #E3E8EF;
+  align-items: center;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row .label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #4C6A8D !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail-row .label::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #1976D2;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.detail-row .value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1A1A1A !important;
+  text-align: right;
+}
+
+/* ===== Special Values ===== */
+.ticket-code {
+  font-family: 'Courier New', 'Consolas', monospace;
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  padding: 0.375rem 0.875rem;
+  border-radius: 8px;
+  color: #1976D2 !important;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.value.price {
+  color: #4CAF50 !important;
+  font-size: 1.375rem;
+  font-weight: 900;
+}
+
+.value.highlight {
+  color: #1976D2 !important;
+  font-weight: 800;
+}
+
+/* ===== Status Badges ===== */
+.value.status {
+  padding: 0.375rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status.pending,
+.status.not_activated {
+  background: linear-gradient(135deg, #FFF3CD 0%, #FFE69C 100%);
+  color: #856404 !important;
+  border: 1px solid #FFE082;
+}
+
+.status.activated {
+  background: linear-gradient(135deg, #D4EDDA 0%, #C3E6CB 100%);
+  color: #155724 !important;
+  border: 1px solid #C3E6CB;
+}
+
+/* ===== Transaction Info ===== */
+.transaction-info {
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid #90CAF9;
+}
+
+.transaction-info h4 {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #0D47A1 !important;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.transaction-info h4::before {
+  content: "💳";
+  font-size: 1.25rem;
+}
+
+.transaction-info p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.75rem 0;
+  font-size: 0.9375rem;
+}
+
+.transaction-info p strong {
+  font-weight: 600;
+  color: #1565C0 !important;
+}
+
+.transaction-info p span {
+  font-weight: 700;
+  color: #0D47A1 !important;
+}
+
+/* ===== QR Code Section ===== */
+.qr-code-section {
+  text-align: center;
+  padding: 2rem 0;
+  border-top: 2px dashed #C5D7EB;
+  margin-top: 2rem;
+}
+
+.qr-code-section h4 {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #1A1A1A !important;
+  margin: 0 0 1.5rem 0;
+}
+
+.qr-code-placeholder {
+  display: inline-block;
+  background: #FFFFFF;
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 2px solid #C5D7EB;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  margin-bottom: 1rem;
+}
+
+.qr-code-placeholder img {
+  display: block;
+  max-width: 200px;
+  height: auto;
+}
+
+.qr-instruction {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #628BB0 !important;
+  line-height: 1.5;
+}
+
+/* ===== Action Buttons ===== */
+.success-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.success-actions button {
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(25, 118, 210, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+.btn-outline {
+  background: #FFFFFF;
+  color: #1976D2 !important;
+  border: 2px solid #1976D2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-outline:hover {
+  background: #1976D2;
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(25, 118, 210, 0.3);
+}
+
+.btn-outline:active {
+  transform: translateY(0);
+}
+
+/* ===== Additional Info ===== */
+.additional-info {
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+  border-left: 4px solid #4CAF50;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.additional-info h3 {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #2E7D32 !important;
+  margin: 0 0 1rem 0;
+}
+
+.additional-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.additional-info li {
+  color: #1B5E20 !important;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  padding: 0.625rem 0;
+  padding-left: 1.75rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+.additional-info li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #4CAF50;
+  font-weight: 900;
+  font-size: 1.125rem;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .payment-success-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .success-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .success-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .success-icon::before {
+    font-size: 3rem;
+  }
+
+  .success-title {
+    font-size: 1.75rem;
+  }
+
+  .success-subtitle {
+    font-size: 1rem;
+  }
+
+  .ticket-details {
+    padding: 1.5rem;
+  }
+
+  .ticket-details h3 {
+    font-size: 1.25rem;
+  }
+
+  .success-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-row .value {
+    font-size: 0.9375rem;
+  }
+
+  .value.price {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .success-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .success-icon::before {
+    font-size: 2.5rem;
+  }
+
+  .success-title {
+    font-size: 1.5rem;
+  }
+
+  .success-subtitle {
+    font-size: 0.9375rem;
+  }
+
+  .ticket-details {
+    padding: 1.25rem;
+  }
+
+  .detail-row {
+    grid-template-columns: 1fr;
+    gap: 0.375rem;
+  }
+
+  .detail-row .value {
+    text-align: left;
+  }
+
+  .success-actions button {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .transaction-info p {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}

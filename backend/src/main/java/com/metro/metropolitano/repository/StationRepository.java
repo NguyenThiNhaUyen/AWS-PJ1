@@ -17,4 +17,9 @@ public interface StationRepository extends JpaRepository<Station, Long> {
     // Lấy danh sách tên tuyến (lineName) không trùng
     @Query("SELECT DISTINCT s.lineName FROM Station s")
     List<String> findDistinctLineNames();
+
+    @Query("SELECT DISTINCT s.lineName FROM Station s")
+    List<String> findAllLineNames();
+
+    int countByLineName(String lineName);
 }

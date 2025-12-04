@@ -1,0 +1,440 @@
+/* ===== PaymentFailed - Metro Light Theme ===== */
+/* Design System: Matches BookTicket neutral theme with red error accents */
+
+.payment-failed-container {
+  min-height: 100vh;
+  background: #EAF0F6;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  color: #1A1A1A;
+  padding: 2rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Override global dark theme styles */
+.payment-failed-container * {
+  color: inherit;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+.payment-failed-container h1,
+.payment-failed-container h2,
+.payment-failed-container h3,
+.payment-failed-container h4,
+.payment-failed-container h5,
+.payment-failed-container h6 {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+/* ===== Failed Content Card ===== */
+.failed-content {
+  background: #FFFFFF;
+  border-radius: 20px;
+  border: 2px solid #C5D7EB;
+  max-width: 950px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 3rem 2.5rem;
+  position: relative;
+  animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.failed-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #EF5350 0%, #E53935 100%);
+  border-radius: 20px 20px 0 0;
+}
+
+/* ===== Failed Icon ===== */
+.failed-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.failed-icon {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #EF5350 0%, #E53935 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(239, 83, 80, 0.3);
+  animation: shake 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.failed-icon svg {
+  width: 80px;
+  height: 80px;
+}
+
+/* ===== Title Section ===== */
+.failed-title {
+  text-align: center;
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: #EF5350 !important;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+.error-code {
+  text-align: center;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #628BB0 !important;
+  background: linear-gradient(135deg, #E3E8EF 0%, #D1D9E6 100%);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: 0.05em;
+}
+
+.error-message {
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1A1A1A !important;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.5;
+}
+
+.support-message {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #4C6A8D !important;
+  margin: 0 0 2.5rem 0;
+  line-height: 1.5;
+}
+
+/* ===== Error Details Section ===== */
+.error-details {
+  background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+  border-left: 4px solid #EF5350;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.error-details h3 {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #C62828 !important;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error-details h3::before {
+  content: "⚠️";
+  font-size: 1.25rem;
+}
+
+.error-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.error-details li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+  color: #B71C1C !important;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.error-details .icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  line-height: 1.5;
+}
+
+/* ===== Action Buttons ===== */
+.failed-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.failed-actions button {
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-retry {
+  background: linear-gradient(135deg, #EF5350 0%, #E53935 100%);
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(239, 83, 80, 0.3);
+}
+
+.btn-retry:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(239, 83, 80, 0.4);
+}
+
+.btn-retry:active {
+  transform: translateY(0);
+}
+
+.btn-contact {
+  background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+}
+
+.btn-contact:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(25, 118, 210, 0.4);
+}
+
+.btn-contact:active {
+  transform: translateY(0);
+}
+
+.btn-home {
+  background: #FFFFFF;
+  color: #1976D2 !important;
+  border: 2px solid #1976D2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  grid-column: 1 / -1;
+}
+
+.btn-home:hover {
+  background: #1976D2;
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(25, 118, 210, 0.3);
+}
+
+.btn-home:active {
+  transform: translateY(0);
+}
+
+/* ===== Support Info ===== */
+.support-info {
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  border: 1px solid #90CAF9;
+}
+
+.support-info h3 {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #0D47A1 !important;
+  margin: 0 0 1.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.support-info h3::before {
+  content: "🆘";
+  font-size: 1.25rem;
+}
+
+/* ===== Contact Methods ===== */
+.contact-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #C5D7EB;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.contact-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.contact-icon {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+
+.contact-info {
+  flex: 1;
+  text-align: left;
+}
+
+.contact-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #628BB0 !important;
+  margin: 0 0 0.25rem 0;
+}
+
+.contact-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1A1A1A !important;
+  margin: 0;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px) rotate(-5deg);
+  }
+  50% {
+    transform: translateX(8px) rotate(5deg);
+  }
+  75% {
+    transform: translateX(-4px) rotate(-2deg);
+  }
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .payment-failed-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .failed-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .failed-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .failed-icon svg {
+    width: 64px;
+    height: 64px;
+  }
+
+  .failed-title {
+    font-size: 1.75rem;
+  }
+
+  .error-message {
+    font-size: 1rem;
+  }
+
+  .support-message {
+    font-size: 0.9375rem;
+  }
+
+  .error-details {
+    padding: 1.25rem;
+  }
+
+  .failed-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-home {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .failed-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .failed-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .failed-icon svg {
+    width: 52px;
+    height: 52px;
+  }
+
+  .failed-title {
+    font-size: 1.5rem;
+  }
+
+  .error-message {
+    font-size: 0.9375rem;
+  }
+
+  .support-message {
+    font-size: 0.875rem;
+  }
+
+  .error-details {
+    padding: 1rem;
+  }
+
+  .failed-actions button {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .contact-item {
+    padding: 0.875rem;
+  }
+
+  .contact-icon {
+    font-size: 1.5rem;
+  }
+}

@@ -45,22 +45,22 @@ const Footer = () => {
             <h4>Quick Links</h4>
             <ul className="footer-links">
               <li><a href="/">Home</a></li>
-              <li><a href="/routes">Routes</a></li>
-              <li><a href="/schedule">Schedule</a></li>
-              <li><a href="/tickets">Tickets</a></li>
-              <li><a href="/stations">Stations</a></li>
+              <li><a href="/dashboard">Dashboard</a></li>
+              <li><a href="/book-ticket">Book Tickets</a></li>
+              <li><a href="/my-tickets">My Tickets</a></li>
+              <li><a href="/timetable">Timetable</a></li>
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Features */}
           <div className="footer-section">
-            <h4>Services</h4>
+            <h4>Features</h4>
             <ul className="footer-links">
-              <li><a href="/support">Customer Support</a></li>
-              <li><a href="/lost-found">Lost & Found</a></li>
-              <li><a href="/accessibility">Accessibility</a></li>
-              <li><a href="/mobile-app">Mobile App</a></li>
-              <li><a href="/api">Developer API</a></li>
+              <li><a href="/help">Help & Support</a></li>
+              <li><a href="/payment-success">Payment</a></li>
+              <li><a href="/login">Login</a></li>
+              <li><a href="/register">Register</a></li>
+              <li><a href="/reset-password">Reset Password</a></li>
             </ul>
           </div>
 

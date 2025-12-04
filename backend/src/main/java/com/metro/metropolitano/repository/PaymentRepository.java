@@ -1,8 +1,11 @@
 package com.metro.metropolitano.repository;
 
 import com.metro.metropolitano.model.Payment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -31,4 +34,12 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             AND  p.paymentTime BETWEEN :start AND :end
     """)
     long countPaidTicketsBetween(LocalDateTime start, LocalDateTime end);
+
+    @Query("""
+        SELECT p FROM Payment p
+        JOIN p.ticket t
+        JOIN t.account a
+        WHERE (:status IS NULL OR p.status = :status)
+        """)
+    Page<Payment> filter(@Param("status") String status, Pageable pageable);
 }

@@ -1,3 +1,4 @@
+/* Route Page Styles - Metro TP.HCM System */
 .route-container {
   min-height: 100vh;
   background: #0a0c20;
@@ -11,6 +12,7 @@
   margin: 0 auto;
 }
 
+/* Header Section */
 .route-header {
   text-align: center;
   margin-bottom: 3rem;
@@ -51,6 +53,7 @@
   margin-top: 0.5rem;
 }
 
+/* Metro Lines Grid */
 .metro-lines-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -146,6 +149,7 @@
   color: rgba(207, 216, 220, 0.7);
 }
 
+/* Map Section */
 .map-section {
   background: rgba(17, 21, 46, 0.8);
   border: 2px solid rgba(77, 134, 190, 0.2);
@@ -154,7 +158,7 @@
   margin-bottom: 3rem;
 }
 
-.section-title {
+.section-titler {
   font-size: 1.75rem;
   font-weight: 700;
   color: #cfd8dc;
@@ -326,14 +330,14 @@
   flex: 1;
 }
 
-.station-name {
+.station-namer {
   font-size: 1rem;
   font-weight: 600;
   color: #cfd8dc;
   margin-bottom: 0.15rem;
 }
 
-.station-name-en {
+.station-namer-en {
   font-size: 0.75rem;
   color: rgba(207, 216, 220, 0.6);
 }

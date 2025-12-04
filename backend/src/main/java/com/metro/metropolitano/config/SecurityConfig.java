@@ -68,6 +68,7 @@ public class SecurityConfig {
 
                         // ======= PUBLIC (NO LOGIN) =======
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/tickets/ticket-prices").permitAll()
                         .requestMatchers("/api/stations/**").permitAll()
                         .requestMatchers("/api/routes/**").permitAll()
                         .requestMatchers("/api/fares/**").permitAll()
@@ -101,7 +102,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/account/upload-avatar").authenticated()
 
                         // ======= ADMIN AREA =======
-//                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         // Default: require auth
                         .anyRequest().authenticated()
@@ -117,10 +118,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(Arrays.asList("*"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
-        config.setAllowCredentials(false);
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

@@ -7,9 +7,15 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import RouteMetro from './pages/RouteMetro'
-import Tickets from './pages/user/Tickets'
+import BookTicket from './pages/BookTicket'
 import MyTickets from './pages/user/MyTickets'
-
+import UserDashboard from './pages/user/UserDashboard'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import PaymentSuccess from './pages/PaymentSuccess'
+import PaymentFailed from './pages/PaymentFailed'
+import Help from './pages/Help'
+import ResetPassword from './pages/ResetPassword'
+import Timetable from './pages/Timetable'
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -34,7 +40,7 @@ const ProtectedRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/login" replace />
 }
 
-// Public Route (redirect to home if already logged in)
+// Public Route Component
 const PublicRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth()
 
@@ -62,10 +68,9 @@ function App() {
     <AuthProvider>
       <div className="App">
         <Routes>
-          {/* Public Routes */}
+          {/* Public */}
           <Route path="/" element={<Home />} />
 
-          {/* Auth Routes - Only accessible when not logged in */}
           <Route
             path="/login"
             element={
@@ -91,17 +96,15 @@ function App() {
             }
           />
 
-          {/* Protected Routes - Only accessible when logged in */}
-          {/* Add your protected routes here */}
+          {/* Protected */}
           <Route
-            path="/tickets"
+            path="/book-ticket"
             element={
               <ProtectedRoute>
-                <Tickets />
+                <BookTicket />
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/my-tickets"
             element={
@@ -110,8 +113,31 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Catch all route */}
+          {/* Normal Public Routes */}
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/timetable" element={<Timetable />} />
+
+          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

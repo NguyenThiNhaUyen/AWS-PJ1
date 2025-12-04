@@ -235,9 +235,8 @@ const RouteMetro = () => {
           </div>
         </div>
 
-        {/* Station List */}
         <div className="stations-section">
-          <h2 className="section-title">
+          <h2 className="section-titler">
             <span className="section-icon">🚉</span>
             14 Stations of Metro Line 1
           </h2>
@@ -252,8 +251,8 @@ const RouteMetro = () => {
               >
                 <div className="station-number">{station.id}</div>
                 <div className="station-info">
-                  <div className="station-name">{station.name}</div>
-                  <div className="station-name-en">{station.nameEn}</div>
+                  <div className="station-namer">{station.name}</div>
+                  <div className="station-namer-en">{station.nameEn}</div>
                 </div>
                 <div className="station-zone">{station.zone}</div>
               </div>
