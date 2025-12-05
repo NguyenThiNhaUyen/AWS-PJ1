@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Layout from '../components/Layout';
 import './RouteMetro.css';
 
 const RouteMetro = () => {
@@ -122,17 +123,18 @@ const RouteMetro = () => {
   };
 
   return (
-    <div className="route-container">
-      <div className="route-wrapper">
-        <div className="route-header">
-          <div className="route-title-container">
-            <div className="route-logo">M</div>
-            <h1 className="route-title">Ho Chi Minh City Metro System</h1>
+    <Layout>
+      <div className="route-container">
+        <div className="route-wrapper">
+          <div className="route-header">
+            <div className="route-title-container">
+              <div className="route-logo">M</div>
+              <h1 className="route-title">Ho Chi Minh City Metro System</h1>
+            </div>
+            <p className="route-subtitle">
+              8 modern Metro lines connecting the entire city
+            </p>
           </div>
-          <p className="route-subtitle">
-            8 modern Metro lines connecting the entire city
-          </p>
-        </div>
 
         <div className="metro-lines-grid">
           {metroLines.map((line) => (
@@ -261,7 +263,8 @@ const RouteMetro = () => {
         </div>
 
       </div>
-    </div>
+      </div>
+    </Layout>
   );
 };
 

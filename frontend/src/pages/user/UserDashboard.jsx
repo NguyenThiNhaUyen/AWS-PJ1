@@ -38,17 +38,22 @@ const UserDashboard = () => {
       setLoading(true)
       setError(null)
       
+      console.log('Fetching dashboard data for user:', user.id)
+      
       // Call API endpoints
       const [statsData, ticketsData] = await Promise.all([
         userStatsAPI.getStats(user.id),
         userStatsAPI.getRecentTickets(user.id, 3)
       ])
       
+      console.log('Stats data:', statsData)
+      console.log('Tickets data:', ticketsData)
+      
       setStats(statsData)
       setTickets(ticketsData)
     } catch (err) {
-      setError(err.message || 'Không thể tải dữ liệu')
       console.error('Error fetching dashboard data:', err)
+      setError(err.response?.data?.message || err.message || 'Không thể tải dữ liệu')
     } finally {
       setLoading(false)
     }
@@ -194,20 +199,6 @@ const UserDashboard = () => {
         </aside>
         
         <div className="dashboard-container">
-          {/* Greeting Section */}
-          {user && (
-            <div className="greeting-section">
-              <div className="greeting-card">
-                <div className="greeting-icon">👋</div>
-                <div className="greeting-content">
-                  <h3 className="greeting-title">Hello!</h3>
-                  <p className="greeting-name">{user.fullName || user.username}</p>
-                  <p className="greeting-message">Welcome back</p>
-                </div>
-              </div>
-            </div>
-          )}
-          
           <div className="dashboard-header">
             <h1 className="dashboard-title">
               {activeMenu === 'dashboard' && 'Dashboard'}
@@ -252,28 +243,34 @@ const UserDashboard = () => {
                 <h2 className="section-title">Recent Tickets</h2>
                 
                 <div className="tickets-list">
-                  {tickets.map((ticket) => (
-                    <div key={ticket.id} className="ticket-card">
-                      <div className="ticket-header">
-                        <h3>{ticket.route}</h3>
-                        <span className={`badge badge-${ticket.status.toLowerCase()}`}>
-                          {ticket.status === 'PAID' && 'Paid'}
-                          {ticket.status === 'ACTIVE' && 'Active'}
-                          {ticket.status === 'USED' && 'Used'}
-                        </span>
-                      </div>
-                      <div className="ticket-body">
-                        <div className="ticket-info">
-                          <span className="info-label">Price:</span>
-                          <span className="info-value">{formatCurrency(ticket.price)}</span>
+                  {tickets.length > 0 ? (
+                    tickets.map((ticket) => (
+                      <div key={ticket.id} className="ticket-card">
+                        <div className="ticket-header">
+                          <h3>{ticket.route}</h3>
+                          <span className={`badge badge-${ticket.status.toLowerCase()}`}>
+                            {ticket.status === 'PAID' && 'Paid'}
+                            {ticket.status === 'ACTIVE' && 'Active'}
+                            {ticket.status === 'USED' && 'Used'}
+                          </span>
                         </div>
-                        <div className="ticket-info">
-                          <span className="info-label">Purchase Date:</span>
-                          <span className="info-value">{ticket.purchaseDate}</span>
+                        <div className="ticket-body">
+                          <div className="ticket-info">
+                            <span className="info-label">Price:</span>
+                            <span className="info-value">{formatCurrency(ticket.price)}</span>
+                          </div>
+                          <div className="ticket-info">
+                            <span className="info-label">Purchase Date:</span>
+                            <span className="info-value">{ticket.purchaseDateStr || 'N/A'}</span>
+                          </div>
                         </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="empty-state">
+                      <p>No recent tickets found.</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </>

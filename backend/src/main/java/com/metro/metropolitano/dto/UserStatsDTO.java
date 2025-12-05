@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserStatsDTO {
-    private long totalTickets;
-    private long activeTickets;
-    private long usedTickets;
+    private Long totalTickets;
+    private Long activeTickets;
+    private Long usedTickets;
     private Double totalSpent;
 }

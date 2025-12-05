@@ -9,7 +9,7 @@ import Register from './pages/Register'
 import RouteMetro from './pages/RouteMetro'
 import BookTicket from './pages/BookTicket'
 import MyTickets from './pages/user/MyTickets'
-// import UserDashboard from './pages/user/UserDashboard'
+import UserDashboard from './pages/user/UserDashboard'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import PaymentSuccess from './pages/PaymentSuccess'
 import PaymentFailed from './pages/PaymentFailed'
@@ -87,14 +87,9 @@ function App() {
               </PublicRoute>
             }
           />
-          <Route
-            path="/routemetro"
-            element={
-              <PublicRoute>
-                <RouteMetro />
-              </PublicRoute>
-            }
-          />
+          
+          {/* Public Routes - Accessible by everyone */}
+          <Route path="/routemetro" element={<RouteMetro />} />
 
           {/* Protected */}
           <Route
@@ -113,14 +108,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-          {/* <Route
+          <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
                 <UserDashboard />
               </ProtectedRoute>
             }
-          /> */}
+          />
           <Route
             path="/admin/dashboard"
             element={

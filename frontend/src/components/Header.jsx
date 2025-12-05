@@ -34,6 +34,7 @@ const Header = () => {
             )}
             <Link to="/book-ticket" className="nav-link">Tickets</Link>
             <Link to="/timetable" className="nav-link">Timetable</Link>
+            <Link to="/routemetro" className="nav-link">Route</Link>
             <Link to="/help" className="nav-link">Help</Link>
           </nav>
 
