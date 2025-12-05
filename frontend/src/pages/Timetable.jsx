@@ -56,9 +56,12 @@ const Timetable = () => {
       setLoading(true)
       const response = await fetch(`/api/stations/${encodeURIComponent(currentStation)}/arrivals?limit=10`)
       const data = await response.json()
+      console.log('API Response:', data)
+      console.log('Current Station:', currentStation)
       setUpcomingTrips(data)
     } catch (error) {
       console.error('Error fetching upcoming trips:', error)
+      setUpcomingTrips([])
     } finally {
       setLoading(false)
     }
@@ -87,22 +90,41 @@ const Timetable = () => {
     })
   }
 
+  // Lấy tên chuyến đi dựa vào hướng
+  const getTripDirection = (direction) => {
+    if (direction === 'A_TO_B') {
+      return 'Chuyến đi Suối Tiên'
+    } else {
+      return 'Chuyến đi Bến Thành'
+    }
+  }
+
   const getFilteredTrips = () => {
+    console.log('Filtering trips, total:', upcomingTrips.length, 'destination:', destinationStation)
     if (!destinationStation) return upcomingTrips
     
-    // Filter trips based on direction to destination
+    // Filter trips based on line and direction
     return upcomingTrips.filter(trip => {
-      const currentIndex = stations.findIndex(s => s.name === currentStation)
-      const destIndex = stations.findIndex(s => s.name === destinationStation)
+      // Check if the line serves both current and destination stations
+      const currentStationObj = stations.find(s => s.name === currentStation)
+      const destStationObj = stations.find(s => s.name === destinationStation)
       
-      if (currentIndex === -1 || destIndex === -1) return true
+      if (!currentStationObj || !destStationObj) return true
       
-      // Check if trip direction matches
-      if (destIndex > currentIndex) {
-        return trip.direction === 'FORWARD'
-      } else {
-        return trip.direction === 'BACKWARD'
+      // If they're on the same line, check direction
+      if (currentStationObj.lineName === destStationObj.lineName && trip.lineName === currentStationObj.lineName) {
+        const currentIndex = currentStationObj.orderIndex
+        const destIndex = destStationObj.orderIndex
+        
+        // A_TO_B means increasing order, B_TO_A means decreasing order
+        if (destIndex > currentIndex) {
+          return trip.direction === 'A_TO_B'
+        } else {
+          return trip.direction === 'B_TO_A'
+        }
       }
+      
+      return true
     })
   }
 
@@ -185,7 +207,14 @@ const Timetable = () => {
               </button>
             </div>
 
-            {loading ? (
+            {/* Validation: Same station selected */}
+            {destinationStation && currentStation === destinationStation ? (
+              <div className="validation-warning">
+                <div className="warning-icon">⚠️</div>
+                <h3>Invalid Route Selection</h3>
+                <p>Please select a different destination station.</p>
+              </div>
+            ) : loading ? (
               <div className="loading-state">
                 <div className="spinner"></div>
                 <p>Loading train information...</p>
@@ -204,14 +233,9 @@ const Timetable = () => {
                       <div className="trip-number">#{index + 1}</div>
                       
                       <div className="trip-info">
-                        <div className="trip-line">
-                          <div className="line-badge">{trip.lineName}</div>
-                          <div className="direction-badge">
-                            {trip.direction === 'FORWARD' ? '→' : '←'} 
-                            {trip.direction === 'FORWARD' ? ' Ben Thanh → Suoi Tien' : ' Suoi Tien → Ben Thanh'}
-                          </div>
+                        <div className="trip-direction-info">
+                          <div className="direction-label">🚇 {getTripDirection(trip.direction)}</div>
                         </div>
-                        
                         <div className="trip-details">
                           <div className="detail-item">
                             <span className="label">Scheduled:</span>
@@ -309,7 +333,7 @@ const Timetable = () => {
             <div className="info-item">
               <div className="info-icon">🌅</div>
               <div className="info-text">
-                <strong>First Train:</strong> 5:00 AM
+                <strong>First Train:</strong> 6:00 AM
               </div>
             </div>
             <div className="info-item">
