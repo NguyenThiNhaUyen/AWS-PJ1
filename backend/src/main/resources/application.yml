@@ -1,0 +1,11 @@
+aws:
+  region: ap-southeast-1
+  s3:
+    bucket: metro-app-bucket
+    kinesis: metro-stream
+    eventbridge:
+      bus: default
+    sns:
+      topicArn: arn:aws:sns:ap-southeast-1:759262713060:metro-topic
+    sqs:
+      queueUrl: https://sqs.ap-southeast-1.amazonaws.com/759262713060/metro-queue

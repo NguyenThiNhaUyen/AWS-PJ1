@@ -1,29 +1,31 @@
 package com.metro.metropolitano.dto;
 
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
-
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserTicketDTO {
     private Long id;
-    private String route;
+    private String routeName;
     private Double price;
     private String status;
-    private LocalDateTime purchaseDate; // giữ LocalDateTime
+
+    private LocalDateTime activationTime; // thêm để đúng JPQL
+    private LocalDateTime purchaseDate;
+
     private String purchaseDateStr;
 
 
-    public UserTicketDTO(Long id, String route, Double price, String status, LocalDateTime purchaseDate) {
+    public UserTicketDTO(Long id, String routeName, Double price, String status, LocalDateTime activationTime) {
         this.id = id;
-        this.route = route;
+        this.routeName = routeName;
         this.price = price;
         this.status = status;
-        this.purchaseDate = purchaseDate;
-    }// dùng để hiển thị
-
+        this.activationTime = activationTime;
+    }
 }

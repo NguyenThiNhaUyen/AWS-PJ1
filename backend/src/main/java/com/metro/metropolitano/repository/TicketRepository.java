@@ -51,17 +51,18 @@ public interface TicketRepository extends JpaRepository<Ticket,Long> {
 
     @Query("""
     SELECT new com.metro.metropolitano.dto.UserTicketDTO(
-        t.id,
-        CONCAT(t.startStation.name, ' → ', t.endStation.name),
-        t.price,
-        t.status,
-        t.activationTime
-    )
-    FROM Ticket t
-    WHERE t.account.id = :accountId
-    ORDER BY t.activationTime DESC
+                    t.id,
+                    CONCAT(t.startStation.name, ' → ', t.endStation.name),
+                    t.price,
+                    t.status,
+                    t.activationTime
+                )
+                FROM Ticket t
+                WHERE t.account.id = :accountId
+                ORDER BY t.activationTime DESC
 """)
     List<UserTicketDTO> getRecentTickets(@Param("accountId") Long accountId);
+
 
     @Query("""
         SELECT t FROM Ticket t

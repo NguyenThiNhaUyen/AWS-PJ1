@@ -32,7 +32,6 @@ public class DataSeeder implements CommandLineRunner {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     @Override
     public void run(String... args) {
         seedStations();
@@ -78,26 +77,31 @@ public class DataSeeder implements CommandLineRunner {
     private void seedFareRules() {
         if (fareRuleRepository.count() > 0) return;
 
-        // Lấy tất cả các ga, đã được sắp xếp theo orderIndex
-        List<Station> allStations = stationRepository.findAll();
-        allStations.sort((s1, s2) -> Integer.compare(s1.getOrderIndex(), s2.getOrderIndex()));
+        List<Station> stations = stationRepository.findAll();
+        stations.sort((a, b) -> Integer.compare(a.getOrderIndex(), b.getOrderIndex()));
 
-        // Tạo fare rule cho mọi cặp ga (i, j) với i != j
-        for (int i = 0; i < allStations.size(); i++) {
-            for (int j = 0; j < allStations.size(); j++) {
-                if (i == j) continue; // Bỏ qua cùng ga
+        for (int i = 0; i < stations.size(); i++) {
+            for (int j = 0; j < stations.size(); j++) {
 
-                Station start = allStations.get(i);
-                Station end = allStations.get(j);
+                if (i == j) continue;
 
-                // Tính khoảng cách giữa 2 ga
+                Station start = stations.get(i);
+                Station end = stations.get(j);
+
                 int distance = Math.abs(start.getOrderIndex() - end.getOrderIndex());
 
-                // Tính giá dựa trên khoảng cách
-                // 1 ga: 6000đ, mỗi ga tiếp theo +1000đ
-                double price = 5000.0 + (distance * 1000.0);
+                // Giá vé thực tế (tham khảo metro HCMC)
+                double price;
+                if (distance <= 3) price = 8000;
+                else if (distance <= 7) price = 10000;
+                else price = 15000;
 
-                fareRuleRepository.save(new FareRule(start, end, price, "Line 1"));
+                fareRuleRepository.save(new FareRule(
+                        start,
+                        end,
+                        price,
+                        "Line 1"
+                ));
             }
         }
     }
@@ -108,11 +112,11 @@ public class DataSeeder implements CommandLineRunner {
     private void seedTicketTypes() {
         if (ticketTypeRepository.count() > 0) return;
 
-        ticketTypeRepository.save(new TicketType("Ve 1 ngay", 40000.0, 24, false));
-        ticketTypeRepository.save(new TicketType("Ve 3 ngay", 90000.0, 72, false));
-        ticketTypeRepository.save(new TicketType("Ve thang", 300000.0, 720, false));
-        ticketTypeRepository.save(new TicketType("Ve thang HSSV", 150000.0, 720, false));
-        ticketTypeRepository.save(new TicketType("Ve luot", 0.0, 0, true));
+        ticketTypeRepository.save(new TicketType("Vé 1 ngày", 40000.0, 24, false));
+        ticketTypeRepository.save(new TicketType("Vé 3 ngày", 90000.0, 72, false));
+        ticketTypeRepository.save(new TicketType("Vé tháng", 300000.0, 720, false));
+        ticketTypeRepository.save(new TicketType("Vé tháng HSSV", 150000.0, 720, false));
+        ticketTypeRepository.save(new TicketType("Vé lượt (tính theo lộ trình)", 0.0, 0, true));
     }
 
     // ============================
@@ -121,22 +125,23 @@ public class DataSeeder implements CommandLineRunner {
     private void seedAccounts() {
         if (accountRepository.count() > 0) return;
 
-        // Constructor đã set isActive = true → không cần set thêm
+        // PASSWORD THẬT → 123456
+        String rawPassword = "123456";
+
         Account admin = new Account(
-                "Admin",
+                "Administrator",
                 "admin",
-                passwordEncoder.encode("adminpass"),
+                passwordEncoder.encode(rawPassword),   // Mã hóa đúng cách
                 "admin@metro.local",
                 Role.ADMIN,
                 Provider.LOCAL
         );
         accountRepository.save(admin);
 
-
         Account demo = new Account(
                 "Nguyen Van A",
                 "ngu1",
-                "password",
+                passwordEncoder.encode(rawPassword),
                 "a@gmail.com",
                 Role.CUSTOMER,
                 Provider.LOCAL

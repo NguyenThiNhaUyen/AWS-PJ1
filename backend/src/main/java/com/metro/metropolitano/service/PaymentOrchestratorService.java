@@ -18,25 +18,46 @@ public class PaymentOrchestratorService {
     private final PaymentService paymentService; // của bạn
     private final VNPayService vnPayService;
 
-    /** Nhận PurchaseRequestDTO → tạo Ticket → Payment → tạo URL VNPay */
     @Transactional
     public Map<String, Object> createPayment(PurchaseRequestDTO request, String clientIp) {
 
-        // 1. Tính giá vé
-        double fare = fareService.calculateFare(
-                request.getStartStation(),
-                request.getEndStation()
-        );
+        double fare;
 
+        // ====== Xác định loại vé ======
+        switch (request.getTicketTypeName()) {
+
+            case "Ve tuyen":  // Vé lượt
+                if (request.getStartStation() == null || request.getEndStation() == null) {
+                    throw new RuntimeException("Start and end station required for SINGLE ticket");
+                }
+                fare = fareService.calculateFare(
+                        request.getStartStation(),
+                        request.getEndStation()
+                );
+                break;
+
+            case "Ve 1 ngay": // Vé ngày không cần station
+                fare = 30000; // bạn tự đặt giá
+                break;
+
+            case "Ve 3 ngay": // Vé 3 ngày
+                fare = 75000; // bạn tự đặt giá
+                break;
+
+            default:
+                throw new RuntimeException("Invalid ticket type: " + request.getTicketTypeName());
+        }
+
+        // ====== Tạo Ticket ======
         Ticket ticket = ticketService.createTicket(request, fare);
 
-        // 3. Tạo Payment pending (dùng service sẵn có của bạn)
+        // ====== Tạo Payment ======
         Payment payment = paymentService.createOrUpdatePending(ticket, fare);
 
-        // 4. Tạo URL VNPay
+        // ====== Tạo URL VNPay ======
         String payUrl = vnPayService.createPaymentUrl(payment, clientIp);
 
-        // 5. Trả lại FE
+        // ====== Trả lại FE ======
         return Map.of(
                 "ticketId", ticket.getId(),
                 "amount", fare,
