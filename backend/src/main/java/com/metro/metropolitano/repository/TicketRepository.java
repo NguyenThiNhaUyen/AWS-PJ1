@@ -40,8 +40,8 @@ public interface TicketRepository extends JpaRepository<Ticket,Long> {
     @Query("""
     SELECT new com.metro.metropolitano.dto.UserStatsDTO(
         COUNT(t),
-        SUM(CASE WHEN t.status = 'ACTIVE' THEN 1 ELSE 0 END),
-        SUM(CASE WHEN t.status = 'USED' THEN 1 ELSE 0 END),
+        SUM(CASE WHEN t.status = 'ACTIVE' THEN 1L ELSE 0L END),
+        SUM(CASE WHEN t.status = 'USED' THEN 1L ELSE 0L END),
         SUM(t.price)
     )
     FROM Ticket t

@@ -107,6 +107,12 @@ export const accountAPI = {
   updateProfile: async (profileData) => {
     const response = await api.put('/account/profile', profileData)
     return response.data
+  },
+
+  // Change password
+  changePassword: async (passwordData) => {
+    const response = await api.post('/account/change-password', passwordData)
+    return response.data
   }
 }
 

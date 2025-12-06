@@ -1,16 +1,27 @@
 package com.metro.metropolitano.utils;
 
-import com.metro.metropolitano.enums.TripStatus;
-import com.metro.metropolitano.model.*;
-import com.metro.metropolitano.repository.*;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
+import com.metro.metropolitano.enums.TripStatus;
+import com.metro.metropolitano.model.Station;
+import com.metro.metropolitano.model.Trip;
+import com.metro.metropolitano.model.TripStop;
+import com.metro.metropolitano.repository.StationRepository;
+import com.metro.metropolitano.repository.TripRepository;
+import com.metro.metropolitano.repository.TripStopRepository;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -31,7 +42,7 @@ public class TripSeeder implements CommandLineRunner {
 
         System.out.println("=== TripSeeder: START ===");
 
-        // Seed cho 8 tuyến metro
+        // Seed trips cho hôm nay và ngày mai
         seedLineTrips();
 
         System.out.println("=== TripSeeder DONE ===");
@@ -39,22 +50,16 @@ public class TripSeeder implements CommandLineRunner {
 
     private void seedLineTrips() {
 
-        LocalDate date = LocalDate.now();
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
 
         Map<String, List<String>> metroLines = new LinkedHashMap<>();
+        // Chỉ có Line 1: Bến Thành - Suối Tiên
         metroLines.put("Line 1", Arrays.asList(
                 "Ben Thanh", "Nha Hat TP", "Ba Son", "Van Thanh", "Tan Cang",
                 "Thao Dien", "An Phu", "Rach Chiec", "Phuoc Long", "Binh Thai",
                 "Thu Duc", "Khu CNC", "DH Quoc Gia", "BX Suoi Tien"
         ));
-        metroLines.put("Line 2", Arrays.asList("Ben Thanh", "Tan Dinh", "Hoa Hung", "Tham Luong"));
-        metroLines.put("Line 3A", Arrays.asList("Ben Thanh", "Vo Van Kiet", "Binh Tay", "Tan Kien"));
-        metroLines.put("Line 3B", Arrays.asList("Cong Hoa", "Hoang Van Thu", "Quang Trung", "Go Vap"));
-        metroLines.put("Line 4", Arrays.asList("Thanh Xuan", "Phan Dinh Phung", "Quang Trung", "Hiep Binh Phuoc"));
-        metroLines.put("Line 5", Arrays.asList("Canh Dong", "Tan Phu", "Thuan Kieu", "Cho Lon"));
-        metroLines.put("Line 6", Arrays.asList("Ba Queo", "Tan Binh", "Tan Son Nhat"));
-        metroLines.put("Line 7", Arrays.asList("Thu Duc", "Pham Van Dong", "Binh Trieu", "Go Vap"));
-        metroLines.put("Line 8", Arrays.asList("Ho Hoc Lam", "Binh Phu", "Ba Hom", "An Suong"));
 
         metroLines.forEach((lineName, stationNames) -> {
             System.out.println("Seeding trips for: " + lineName);
@@ -65,22 +70,39 @@ public class TripSeeder implements CommandLineRunner {
                 stationRepository.findByName(s).ifPresent(stations::add);
             }
 
-            if (stations.isEmpty()) return;
+            if (stations.isEmpty()) {
+                return;
+            }
 
-            // Trip A: 05:30
-            Trip tripA = createTrip(lineName, date, 5, 30, TripStatus.SCHEDULED);
-            createTripStops(tripA, stations, 5 * 60 + 30, 0);
+            // Tạo trips cho hôm nay - mỗi 15 phút từ 6:00 đến 23:00
+            seedTripsForDay(today, lineName, stations);
 
-            // Trip B: 05:45
-            Trip tripB = createTrip(lineName, date, 5, 45, TripStatus.SCHEDULED);
-            createTripStops(tripB, stations, 5 * 60 + 45, 3);
+            // Tạo trips cho ngày mai
+            seedTripsForDay(tomorrow, lineName, stations);
         });
     }
 
-    private Trip createTrip(String line, LocalDate date, int hour, int minute, TripStatus status) {
+    private void seedTripsForDay(LocalDate date, String lineName, List<Station> stations) {
+        // Tạo trips từ 6:00 AM đến 11:00 PM, mỗi 15 phút
+        for (int hour = 6; hour < 23; hour++) {
+            for (int minute = 0; minute < 60; minute += 15) {
+                // Direction A to B
+                Trip tripAB = createTrip(lineName, date, hour, minute, TripStatus.SCHEDULED, "A_TO_B");
+                createTripStops(tripAB, stations, hour * 60 + minute, 0);
+
+                // Direction B to A (reverse stations)
+                Trip tripBA = createTrip(lineName, date, hour, minute, TripStatus.SCHEDULED, "B_TO_A");
+                List<Station> reversedStations = new ArrayList<>(stations);
+                Collections.reverse(reversedStations);
+                createTripStops(tripBA, reversedStations, hour * 60 + minute, 0);
+            }
+        }
+    }
+
+    private Trip createTrip(String line, LocalDate date, int hour, int minute, TripStatus status, String direction) {
         Trip t = new Trip();
         t.setLineName(line);
-        t.setDirection("A_TO_B");
+        t.setDirection(direction);
         t.setServiceDate(date);
         t.setScheduledDeparture(date.atTime(hour, minute));
         t.setStatus(status);
@@ -89,10 +111,11 @@ public class TripSeeder implements CommandLineRunner {
 
     /**
      * Tạo toàn bộ TripStops dựa trên danh sách ga của tuyến
+     *
      * @param delayBase mỗi ga sẽ trễ delayBase phút (vd 3 phút)
      */
     private void createTripStops(Trip trip, List<Station> stations,
-                                 int startMinutes, int delayBase) {
+            int startMinutes, int delayBase) {
 
         int between = 3; // 3 phút giữa 2 ga
 

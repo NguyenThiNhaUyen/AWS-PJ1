@@ -47,7 +47,7 @@ const ResetPassword = () => {
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/forgot-password', {
+      const response = await fetch('/api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email })
@@ -57,13 +57,13 @@ const ResetPassword = () => {
 
       if (response.ok) {
         setStep('verify')
-        setMessage('Mã xác nhận đã được gửi đến email của bạn')
+        setMessage('Verification code has been sent to your email')
         setCountdown(60)
       } else {
-        setError(data.message || 'Có lỗi xảy ra. Vui lòng thử lại.')
+        setError(data.message || 'An error occurred. Please try again.')
       }
     } catch (err) {
-      setError('Không thể kết nối đến server. Vui lòng thử lại sau.')
+      setError('Cannot connect to server. Please try again later.')
     } finally {
       setLoading(false)
     }
@@ -73,7 +73,7 @@ const ResetPassword = () => {
     e.preventDefault()
     
     if (formData.code.length !== 6) {
-      setError('Mã xác nhận phải có 6 số')
+      setError('Verification code must be 6 digits')
       return
     }
 
@@ -85,11 +85,11 @@ const ResetPassword = () => {
       // For now, simulate success
       setTimeout(() => {
         setStep('reset')
-        setMessage('Mã xác nhận hợp lệ. Vui lòng đặt mật khẩu mới.')
+        setMessage('Valid verification code. Please set a new password.')
         setLoading(false)
       }, 1000)
     } catch (err) {
-      setError('Mã xác nhận không hợp lệ hoặc đã hết hạn')
+      setError('Invalid or expired verification code')
       setLoading(false)
     }
   }
@@ -100,19 +100,19 @@ const ResetPassword = () => {
 
     // Validation
     if (formData.newPassword.length < 8) {
-      setError('Mật khẩu phải có ít nhất 8 ký tự')
+      setError('Password must be at least 8 characters')
       return
     }
 
     if (formData.newPassword !== formData.confirmPassword) {
-      setError('Mật khẩu xác nhận không khớp')
+      setError('Passwords do not match')
       return
     }
 
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/reset-password', {
+      const response = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -127,10 +127,10 @@ const ResetPassword = () => {
         setStep('success')
         setTimeout(() => navigate('/login'), 3000)
       } else {
-        setError(data.message || 'Có lỗi xảy ra. Vui lòng thử lại.')
+        setError(data.message || 'An error occurred. Please try again.')
       }
     } catch (err) {
-      setError('Không thể kết nối đến server. Vui lòng thử lại sau.')
+      setError('Cannot connect to server. Please try again later.')
     } finally {
       setLoading(false)
     }
@@ -143,19 +143,19 @@ const ResetPassword = () => {
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/forgot-password', {
+      const response = await fetch('/api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email })
       })
 
       if (response.ok) {
-        setMessage('Mã xác nhận mới đã được gửi')
+        setMessage('New verification code sent')
         setCountdown(60)
         setTimeout(() => setMessage(''), 3000)
       }
     } catch (err) {
-      setError('Không thể gửi lại mã. Vui lòng thử lại sau.')
+      setError('Cannot resend code. Please try again later.')
     } finally {
       setLoading(false)
     }
@@ -175,12 +175,12 @@ const ResetPassword = () => {
               <div className="step-line"></div>
               <div className={`step ${step === 'verify' ? 'active' : step === 'reset' ? 'completed' : ''}`}>
                 <div className="step-circle">2</div>
-                <div className="step-label">Xác nhận</div>
+                <div className="step-label">Verify</div>
               </div>
               <div className="step-line"></div>
               <div className={`step ${step === 'reset' ? 'active' : ''}`}>
                 <div className="step-circle">3</div>
-                <div className="step-label">Đặt lại</div>
+                <div className="step-label">Reset</div>
               </div>
             </div>
           )}
@@ -188,8 +188,8 @@ const ResetPassword = () => {
           {/* Request Reset */}
           {step === 'request' && (
             <>
-              <h2>Quên mật khẩu?</h2>
-              <p className="subtitle">Nhập email đã đăng ký để nhận mã xác nhận</p>
+              <h2>Forgot Password?</h2>
+              <p className="subtitle">Enter your registered email to receive verification code</p>
 
               <form onSubmit={handleRequestReset}>
                 <div className="form-group">
@@ -207,12 +207,12 @@ const ResetPassword = () => {
                 {error && <div className="error-message">{error}</div>}
 
                 <button type="submit" className="btn-primary" disabled={loading}>
-                  {loading ? 'Đang gửi...' : 'Gửi mã xác nhận'}
+                  {loading ? 'Sending...' : 'Send Verification Code'}
                 </button>
               </form>
 
               <div className="form-footer">
-                <a href="/login">Quay lại đăng nhập</a>
+                <a href="/login">Back to Login</a>
               </div>
             </>
           )}
@@ -220,14 +220,14 @@ const ResetPassword = () => {
           {/* Verify Code */}
           {step === 'verify' && (
             <>
-              <h2>Xác nhận mã</h2>
-              <p className="subtitle">Nhập mã 6 số đã được gửi đến {formData.email}</p>
+              <h2>Verify Code</h2>
+              <p className="subtitle">Enter the 6-digit code sent to {formData.email}</p>
 
               {message && <div className="success-message">{message}</div>}
 
               <form onSubmit={handleVerifyCode}>
                 <div className="form-group">
-                  <label>Mã xác nhận</label>
+                  <label>Verification Code</label>
                   <input
                     type="text"
                     name="code"
@@ -243,7 +243,7 @@ const ResetPassword = () => {
                 {error && <div className="error-message">{error}</div>}
 
                 <button type="submit" className="btn-primary" disabled={loading}>
-                  {loading ? 'Đang xác nhận...' : 'Xác nhận'}
+                  {loading ? 'Verifying...' : 'Verify'}
                 </button>
               </form>
 
@@ -253,7 +253,7 @@ const ResetPassword = () => {
                   onClick={handleResendCode}
                   disabled={countdown > 0}
                 >
-                  {countdown > 0 ? `Gửi lại sau ${countdown}s` : 'Gửi lại mã'}
+                  {countdown > 0 ? `Resend in ${countdown}s` : 'Resend Code'}
                 </button>
               </div>
             </>
@@ -262,33 +262,33 @@ const ResetPassword = () => {
           {/* Reset Password */}
           {step === 'reset' && (
             <>
-              <h2>Đặt mật khẩu mới</h2>
-              <p className="subtitle">Tạo mật khẩu mới cho tài khoản của bạn</p>
+              <h2>Set New Password</h2>
+              <p className="subtitle">Create a new password for your account</p>
 
               {message && <div className="success-message">{message}</div>}
 
               <form onSubmit={handleResetPassword}>
                 <div className="form-group">
-                  <label>Mật khẩu mới</label>
+                  <label>New Password</label>
                   <input
                     type="password"
                     name="newPassword"
                     value={formData.newPassword}
                     onChange={handleChange}
-                    placeholder="Tối thiểu 8 ký tự"
+                    placeholder="Minimum 8 characters"
                     required
                   />
-                  <small>Mật khẩu phải có ít nhất 8 ký tự</small>
+                  <small>Password must be at least 8 characters</small>
                 </div>
 
                 <div className="form-group">
-                  <label>Xác nhận mật khẩu</label>
+                  <label>Confirm Password</label>
                   <input
                     type="password"
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    placeholder="Nhập lại mật khẩu mới"
+                    placeholder="Re-enter new password"
                     required
                   />
                 </div>
@@ -296,7 +296,7 @@ const ResetPassword = () => {
                 {error && <div className="error-message">{error}</div>}
 
                 <button type="submit" className="btn-primary" disabled={loading}>
-                  {loading ? 'Đang đặt lại...' : 'Đặt lại mật khẩu'}
+                  {loading ? 'Resetting...' : 'Reset Password'}
                 </button>
               </form>
             </>
@@ -306,9 +306,9 @@ const ResetPassword = () => {
           {step === 'success' && (
             <div className="success-state">
               <div className="success-icon">✓</div>
-              <h2>Đặt lại mật khẩu thành công!</h2>
-              <p>Bạn có thể đăng nhập bằng mật khẩu mới</p>
-              <p className="redirect-text">Đang chuyển đến trang đăng nhập...</p>
+              <h2>Password Reset Successful!</h2>
+              <p>You can now log in with your new password</p>
+              <p className="redirect-text">Redirecting to login page...</p>
             </div>
           )}
         </div>

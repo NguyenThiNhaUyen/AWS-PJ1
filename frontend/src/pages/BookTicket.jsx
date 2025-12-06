@@ -32,50 +32,50 @@ const BookTicket = () => {
   const ticketTypes = [
     {
       id: 'Ve luot',
-      name: 'Vé Lượt',
-      description: 'Một lần di chuyển duy nhất',
+      name: 'Single Trip',
+      description: 'One-time journey only',
       icon: '🎫',
-      duration: 'Một lượt',
-      priceNote: '6.000 - 19.000 VNĐ',
-      priceRange: 'Theo quãng đường',
+      duration: 'One trip',
+      priceNote: '6,000 - 19,000 VND',
+      priceRange: 'By distance',
       popular: true
     },
     {
       id: 'Ve ngay',
-      name: 'Vé Ngày',
-      description: 'Đi lại không giới hạn trong 1 ngày',
+      name: 'Day Pass',
+      description: 'Unlimited travel for 1 day',
       icon: '📅',
-      duration: '1 ngày',
+      duration: '1 day',
       price: '40,000',
       fixedPrice: 40000,
       popular: false
     },
     {
       id: 'Ve 3 ngay',
-      name: 'Vé 3 Ngày',
-      description: 'Đi lại không giới hạn trong 3 ngày liên tiếp',
+      name: '3-Day Pass',
+      description: 'Unlimited travel for 3 consecutive days',
       icon: '🗓️',
-      duration: '3 ngày',
+      duration: '3 days',
       price: '90,000',
       fixedPrice: 90000,
       popular: false
     },
     {
       id: 'Ve thang',
-      name: 'Vé Tháng Phổ Thông',
-      description: 'Đi lại không giới hạn trong 30 ngày',
+      name: 'Monthly Pass',
+      description: 'Unlimited travel for 30 days',
       icon: '📆',
-      duration: '30 ngày',
+      duration: '30 days',
       price: '300,000',
       fixedPrice: 300000,
       popular: false
     },
     {
       id: 'Ve thang HSSV',
-      name: 'Vé Tháng HSSV',
-      description: 'Dành cho học sinh, sinh viên (30 ngày)',
+      name: 'Student Pass',
+      description: 'For students (30 days)',
       icon: '🎓',
-      duration: '30 ngày',
+      duration: '30 days',
       price: '150,000',
       fixedPrice: 150000,
       popular: false
@@ -239,22 +239,22 @@ const BookTicket = () => {
 
     if (stepNumber === 1) {
       if (!formData.ticketType) {
-        newErrors.ticketType = 'Vui lòng chọn loại vé'
+        newErrors.ticketType = 'Please select a ticket type'
       }
     }
 
     if (stepNumber === 2 && formData.ticketType === 'Ve luot') {
       if (!formData.selectedLine) {
-        newErrors.selectedLine = 'Vui lòng chọn tuyến metro'
+        newErrors.selectedLine = 'Please select a metro line'
       }
       if (!formData.startStation) {
-        newErrors.startStation = 'Vui lòng chọn ga đi'
+        newErrors.startStation = 'Please select departure station'
       }
       if (!formData.endStation) {
-        newErrors.endStation = 'Vui lòng chọn ga đến'
+        newErrors.endStation = 'Please select arrival station'
       }
       if (formData.startStation === formData.endStation) {
-        newErrors.endStation = 'Ga đến phải khác ga đi'
+        newErrors.endStation = 'Arrival station must be different from departure'
       }
     }
 
@@ -334,23 +334,23 @@ const BookTicket = () => {
     <Layout>
       <div className="book-ticket-container">
         <div className="book-ticket-header">
-          <h1>Đặt Vé Metro</h1>
-          <p>Chọn loại vé và tuyến đường phù hợp với bạn</p>
+          <h1>Book Metro Ticket</h1>
+          <p>Choose the ticket type and route that suits you</p>
         </div>
 
         {/* Progress Steps */}
         <div className="booking-steps">
           <div className={`step ${step >= 1 ? 'active' : ''}`}>
             <div className="step-number">1</div>
-            <span>Chọn loại vé</span>
+            <span>Select Ticket</span>
           </div>
           <div className={`step ${step >= 2 ? 'active' : ''}`}>
             <div className="step-number">2</div>
-            <span>Tuyến đường</span>
+            <span>Route</span>
           </div>
           <div className={`step ${step >= 3 ? 'active' : ''}`}>
             <div className="step-number">3</div>
-            <span>Xác nhận</span>
+            <span>Confirm</span>
           </div>
         </div>
 
@@ -358,7 +358,7 @@ const BookTicket = () => {
           {/* Step 1: Select Ticket Type */}
           {step === 1 && (
             <div className="step-content">
-              <h2>Chọn loại vé</h2>
+              <h2>Select ticket type</h2>
               <div className="ticket-types-grid">
                 {ticketTypes.map(ticket => (
                   <div 
@@ -366,7 +366,7 @@ const BookTicket = () => {
                     className={`ticket-type-card ${formData.ticketType === ticket.id ? 'selected' : ''} ${ticket.popular ? 'popular' : ''}`}
                     onClick={() => handleInputChange('ticketType', ticket.id)}
                   >
-                    {ticket.popular && <div className="popular-badge">Phổ biến</div>}
+                    {ticket.popular && <div className="popular-badge">Popular</div>}
                     <div className="ticket-icon">{ticket.icon}</div>
                     <div className="ticket-content">
                       <h3>{ticket.name}</h3>
@@ -389,12 +389,12 @@ const BookTicket = () => {
           {/* Step 2: Select Route (only for route-based tickets) */}
           {step === 2 && (
             <div className="step-content">
-              <h2>Chọn tuyến đường</h2>
+              <h2>Select route</h2>
               {formData.ticketType === 'Ve luot' ? (
                 <div className="route-selection">
                   {/* Select Metro Line */}
                   <div className="line-selection">
-                    <h3>Tuyến Metro số 1: Bến Thành - Suối Tiên</h3>
+                    <h3>Metro Line 1: Ben Thanh - Suoi Tien</h3>
                     <div className="line-options">
                       {routes.map((route) => {
                         const color = '#0066cc' // Blue cho Line 1
@@ -418,8 +418,8 @@ const BookTicket = () => {
                               {code}
                             </div>
                             <div className="line-info">
-                              <span className="line-title">Bến Thành - Suối Tiên</span>
-                              <span className="line-stations">14 ga: 3 ga ngầm + 11 ga trên cao</span>
+                              <span className="line-title">Ben Thanh - Suoi Tien</span>
+                              <span className="line-stations">14 stations: 3 underground + 11 elevated</span>
                             </div>
                             {formData.selectedLine === route.lineName && (
                               <div className="line-check">✓</div>
@@ -435,13 +435,13 @@ const BookTicket = () => {
                   {formData.selectedLine && (
                     <div className="route-inputs">
                       <div className="input-group">
-                        <label>Ga đi</label>
+                        <label>Departure Station</label>
                         <select 
                           value={formData.startStation}
                           onChange={(e) => handleInputChange('startStation', e.target.value)}
                           className={errors.startStation ? 'error' : ''}
                         >
-                          <option value="">Chọn ga đi</option>
+                          <option value="">Select departure station</option>
                           {stations.map(station => (
                             <option key={station.id} value={station.name}>
                               {station.name}
@@ -454,13 +454,13 @@ const BookTicket = () => {
                       <div className="route-arrow">↓</div>
 
                       <div className="input-group">
-                        <label>Ga đến</label>
+                        <label>Arrival Station</label>
                         <select 
                           value={formData.endStation}
                           onChange={(e) => handleInputChange('endStation', e.target.value)}
                           className={errors.endStation ? 'error' : ''}
                         >
-                          <option value="">Chọn ga đến</option>
+                          <option value="">Select arrival station</option>
                           {stations.map(station => (
                             <option key={station.id} value={station.name}>
                               {station.name}
@@ -475,9 +475,9 @@ const BookTicket = () => {
                   {/* Fare Preview */}
                   {(formData.startStation && formData.endStation) && (
                     <div className="fare-preview">
-                      <h3>Thông tin giá vé</h3>
+                      <h3>Fare Information</h3>
                       {loadingFare ? (
-                        <div className="loading">Đang tính giá...</div>
+                        <div className="loading">Calculating fare...</div>
                       ) : fare ? (
                         <div className="fare-details">
                           <div className="route-info">
@@ -507,36 +507,36 @@ const BookTicket = () => {
           {/* Step 3: Confirmation */}
           {step === 3 && (
             <div className="step-content">
-              <h2>Xác nhận thông tin</h2>
+              <h2>Confirm Information</h2>
               <div className="confirmation-content">
                 <div className="summary-card">
                   <div className="summary-header">
-                    <h3>Thông tin vé</h3>
+                    <h3>Ticket Information</h3>
                     <span className="ticket-badge">{getSelectedTicketType()?.name}</span>
                   </div>
                   <div className="summary-details">
                     <div className="summary-row">
-                      <label>Loại vé</label>
+                      <label>Ticket Type</label>
                       <span className="value">{getSelectedTicketType()?.name}</span>
                     </div>
                     {formData.ticketType === 'Ve luot' && (
                       <div className="summary-row">
-                        <label>Tuyến đường</label>
+                        <label>Route</label>
                         <span className="value">{formData.startStation} → {formData.endStation}</span>
                       </div>
                     )}
                     <div className="summary-row">
-                      <label>Thời hạn</label>
+                      <label>Validity</label>
                       <span className="value">{getSelectedTicketType()?.duration}</span>
                     </div>
                     <div className="summary-row total">
-                      <label>Tổng tiền</label>
+                      <label>Total</label>
                       <span className="value">{getFinalPrice()} VND</span>
                     </div>
                   </div>
 
                   <div className="payment-section">
-                    <h3>Phương thức thanh toán</h3>
+                    <h3>Payment Method</h3>
                     <div className="payment-methods">
                       <div 
                         className={`payment-method ${formData.paymentMethod === 'VNPay' ? 'selected' : ''}`}
@@ -552,7 +552,7 @@ const BookTicket = () => {
                         />
                         <div className="payment-info">
                           <h4>VNPay</h4>
-                          <p>Thanh toán qua ví điện tử VNPay</p>
+                          <p>Pay via VNPay e-wallet</p>
                         </div>
                         <img src="https://vnpay.vn/assets/images/logo-icon/logo-primary.svg" alt="VNPay" style={{ width: '60px', height: 'auto' }} />
                       </div>
@@ -575,7 +575,7 @@ const BookTicket = () => {
               onClick={prevStep}
               disabled={loading}
             >
-              Quay lại
+              Back
             </button>
           )}
           
@@ -585,7 +585,7 @@ const BookTicket = () => {
               className="btn-primary"
               onClick={nextStep}
             >
-              Tiếp tục
+              Continue
             </button>
           ) : (
             <button 
@@ -594,7 +594,7 @@ const BookTicket = () => {
               onClick={handleSubmit}
               disabled={loading}
             >
-              {loading ? 'Đang xử lý...' : 'Thanh toán'}
+              {loading ? 'Processing...' : 'Pay Now'}
             </button>
           )}
         </div>

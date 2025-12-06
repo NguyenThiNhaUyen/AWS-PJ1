@@ -25,7 +25,7 @@ const Home = () => {
             <div className="hero-buttons">
               {isAuthenticated ? (
                 <Link to="/book-ticket" className="btn-primary">
-                  Đặt Vé Ngay
+                  Book Ticket Now
                 </Link>
               ) : (
                 <Link to="/register" className="btn-primary">

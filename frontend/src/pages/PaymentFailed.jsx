@@ -12,33 +12,33 @@ const PaymentFailed = () => {
 
   const getErrorMessage = (code) => {
     const errorMessages = {
-      '07': 'Giao dịch bị nghi ngờ gian lận',
-      '09': 'Thẻ/Tài khoản chưa đăng ký dịch vụ InternetBanking',
-      '10': 'Xác thực thông tin thẻ/tài khoản không đúng quá 3 lần',
-      '11': 'Đã hết hạn chờ thanh toán',
-      '12': 'Thẻ/Tài khoản bị khóa',
-      '13': 'Mật khẩu xác thực OTP không chính xác',
-      '24': 'Giao dịch bị hủy',
-      '51': 'Tài khoản không đủ số dư',
-      '65': 'Vượt quá giới hạn giao dịch',
-      '75': 'Ngân hàng thanh toán đang bảo trì',
-      '79': 'Giao dịch vượt quá số lần nhập sai mật khẩu',
-      '99': 'Giao dịch thất bại'
+      '07': 'Transaction suspected of fraud',
+      '09': 'Card/Account not registered for InternetBanking',
+      '10': 'Card/Account authentication failed 3 times',
+      '11': 'Payment timeout expired',
+      '12': 'Card/Account is locked',
+      '13': 'Incorrect OTP verification code',
+      '24': 'Transaction cancelled',
+      '51': 'Insufficient account balance',
+      '65': 'Transaction limit exceeded',
+      '75': 'Payment bank under maintenance',
+      '79': 'Too many incorrect password attempts',
+      '99': 'Transaction failed'
     }
-    return errorMessages[code] || 'Giao dịch không thành công'
+    return errorMessages[code] || 'Transaction unsuccessful'
   }
 
   const getSupportAction = (code) => {
     if (['09', '12', '51', '65'].includes(code)) {
-      return 'Vui lòng liên hệ ngân hàng của bạn để được hỗ trợ.'
+      return 'Please contact your bank for support.'
     }
     if (['11', '24'].includes(code)) {
-      return 'Bạn có thể thử lại giao dịch.'
+      return 'You can try the transaction again.'
     }
     if (['10', '13', '79'].includes(code)) {
-      return 'Vui lòng kiểm tra lại thông tin và thử lại sau ít phút.'
+      return 'Please check your information and try again in a few minutes.'
     }
-    return 'Nếu vấn đề vẫn tiếp diễn, vui lòng liên hệ bộ phận hỗ trợ.'
+    return 'If the problem persists, please contact support.'
   }
 
   return (
@@ -56,8 +56,8 @@ const PaymentFailed = () => {
           </div>
 
           {/* Error Message */}
-          <h1 className="failed-title">Thanh toán không thành công</h1>
-          <p className="error-code">Mã lỗi: {responseCode || 'N/A'}</p>
+          <h1 className="failed-title">Payment Unsuccessful</h1>
+          <p className="error-code">Error Code: {responseCode || 'N/A'}</p>
           <p className="error-message">
             {message || getErrorMessage(responseCode)}
           </p>
@@ -67,27 +67,27 @@ const PaymentFailed = () => {
 
           {/* Possible Reasons */}
           <div className="error-details">
-            <h3>Có thể do các nguyên nhân sau:</h3>
+            <h3>Possible reasons:</h3>
             <ul>
               <li>
                 <span className="icon">💳</span>
-                <span>Thông tin thẻ không chính xác</span>
+                <span>Incorrect card information</span>
               </li>
               <li>
                 <span className="icon">💰</span>
-                <span>Số dư tài khoản không đủ</span>
+                <span>Insufficient account balance</span>
               </li>
               <li>
                 <span className="icon">🔒</span>
-                <span>Thẻ chưa kích hoạt thanh toán online</span>
+                <span>Card not activated for online payments</span>
               </li>
               <li>
                 <span className="icon">⏰</span>
-                <span>Phiên giao dịch đã hết hạn</span>
+                <span>Transaction session expired</span>
               </li>
               <li>
                 <span className="icon">🌐</span>
-                <span>Lỗi kết nối mạng</span>
+                <span>Network connection error</span>
               </li>
             </ul>
           </div>
@@ -102,7 +102,7 @@ const PaymentFailed = () => {
                 <path d="M1 4v6h6M23 20v-6h-6" strokeWidth="2" strokeLinecap="round"/>
                 <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" strokeWidth="2" strokeLinecap="round"/>
               </svg>
-              Thử lại
+              Retry
             </button>
             <button 
               className="btn-contact"
@@ -113,19 +113,19 @@ const PaymentFailed = () => {
                 <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" strokeWidth="2" strokeLinecap="round"/>
                 <circle cx="12" cy="17" r="0.5" fill="currentColor"/>
               </svg>
-              Liên hệ hỗ trợ
+              Contact Support
             </button>
             <button 
               className="btn-home"
               onClick={() => navigate('/')}
             >
-              Về trang chủ
+              Go to Homepage
             </button>
           </div>
 
           {/* Support Info */}
           <div className="support-info">
-            <h3>Cần trợ giúp?</h3>
+            <h3>Need Help?</h3>
             <div className="contact-methods">
               <div className="contact-item">
                 <span className="contact-icon">📞</span>
@@ -145,7 +145,7 @@ const PaymentFailed = () => {
                 <span className="contact-icon">💬</span>
                 <div>
                   <p className="contact-label">Live Chat</p>
-                  <p className="contact-value">8:00 - 22:00 hàng ngày</p>
+                  <p className="contact-value">8:00 AM - 10:00 PM daily</p>
                 </div>
               </div>
             </div>

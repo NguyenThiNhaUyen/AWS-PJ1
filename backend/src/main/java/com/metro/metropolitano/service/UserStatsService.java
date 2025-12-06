@@ -20,9 +20,9 @@ public class UserStatsService {
 
         if (stats == null) {
             return UserStatsDTO.builder()
-                    .totalTickets(0)
-                    .activeTickets(0)
-                    .usedTickets(0)
+                    .totalTickets(0L)
+                    .activeTickets(0L)
+                    .usedTickets(0L)
                     .totalSpent(0.0)
                     .build();
         }

@@ -8,7 +8,7 @@ const Header = () => {
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    if (window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+    if (window.confirm('Are you sure you want to logout?')) {
       logout()
       navigate('/')
     }
@@ -34,6 +34,7 @@ const Header = () => {
             )}
             <Link to="/book-ticket" className="nav-link">Tickets</Link>
             <Link to="/timetable" className="nav-link">Timetable</Link>
+            <Link to="/routemetro" className="nav-link">Route</Link>
             <Link to="/help" className="nav-link">Help</Link>
           </nav>
 
@@ -42,7 +43,7 @@ const Header = () => {
             {user ? (
               <div className="user-menu">
                 <button onClick={handleLogout} className="btn btn-outline">
-                  Đăng xuất
+                  Logout
                 </button>
               </div>
             ) : (

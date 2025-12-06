@@ -8,7 +8,6 @@ import lombok.Builder;
 @NoArgsConstructor
 @Builder
 public class UserStatsDTO {
-
     private long totalTickets;
     private long activeTickets;
     private long usedTickets;
